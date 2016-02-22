@@ -1,0 +1,12 @@
+/liquid-democracy-api/target
+/liquid-democracy-model/target
+/liquid-democracy-api/.settings
+/liquid-democracy-model/.settings
+/liquid-democracy-api/.project
+/liquid-democracy-model/.project
+/liquid-democracy-api/.classpath
+/liquid-democracy-model/.classpath
+/liquid-democracy-front
+RemoteSystemsTempFiles
+.metadata
+.recommenders
