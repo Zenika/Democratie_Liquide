@@ -25,6 +25,8 @@ public class Subject {
 	private List<Proposition> propositions;
 	
 	private List<Vote> votes;
+	
+	private List<Power> powers;
 
 	public Long getId() {
 		return id;
@@ -88,6 +90,14 @@ public class Subject {
 
 	public void setVotes(List<Vote> votes) {
 		this.votes = votes;
+	}
+
+	public List<Power> getPowers() {
+		return powers;
+	}
+
+	public void setPowers(List<Power> powers) {
+		this.powers = powers;
 	}
 
 }

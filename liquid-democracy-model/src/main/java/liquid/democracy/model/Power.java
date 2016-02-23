@@ -1,36 +1,29 @@
 package liquid.democracy.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Power {
 
 	@Id
-	private Long id;
-	
-	@DBRef
-	private Subject subject;
+	private ObjectId id;
 	
 	private Long collaborateurIdFrom;
 	
 	private Long collaborateurIdTo;
 
-	public Long getId() {
+	public Power() {
+		id = new ObjectId();
+	}
+
+	public ObjectId getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(ObjectId id) {
 		this.id = id;
-	}
-
-	public Subject getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
 	}
 
 	public Long getCollaborateurIdFrom() {
