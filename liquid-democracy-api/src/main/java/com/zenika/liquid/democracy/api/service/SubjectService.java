@@ -1,5 +1,8 @@
 package com.zenika.liquid.democracy.api.service;
 
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,11 @@ public class SubjectService {
 			throw new MalformedSubjectException();
 		}
 		return subjectRepository.save(s);
+	}
+
+	public List<Subject> getSubjectsInProgress() {
+		List<Subject> out = subjectRepository.findByDeadLineGreaterThanOrDeadLineIsNull(new Date());
+		return out;
 	}
 
 	private boolean checkIfSubjectIsWellFormed(Subject s) {

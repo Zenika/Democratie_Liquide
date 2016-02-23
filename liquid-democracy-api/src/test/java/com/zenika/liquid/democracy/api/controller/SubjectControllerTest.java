@@ -3,6 +3,9 @@ package com.zenika.liquid.democracy.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +86,67 @@ public class SubjectControllerTest {
 		addResp = template.postForEntity("http://localhost:" + serverPort + "api/subjects/", l, Void.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.CREATED.value(), addResp.getStatusCode().value());
+	}
+
+	@Test
+	public void getSubjectsInProgressTest() {
+
+		Subject l = new Subject();
+		l.setTitle("Title");
+		l.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		l.getPropositions().add(p1);
+		l.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		repository.save(l);
+
+		ResponseEntity<List> addResp = addResp = template
+				.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress", List.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+		assertEquals(1, addResp.getBody().size());
+
+		Subject l2 = new Subject();
+		l2.setTitle("Title");
+		l2.setDescription("Description");
+		Proposition p3 = new Proposition();
+		Proposition p4 = new Proposition();
+		l2.getPropositions().add(p3);
+		l2.getPropositions().add(p4);
+		p3.setTitle("P1 title");
+		p4.setTitle("P2 title");
+		Calendar d = Calendar.getInstance();
+		d.add(Calendar.DAY_OF_MONTH, +2);
+		l2.setDeadLine(d.getTime());
+		repository.save(l2);
+
+		addResp = addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress",
+				List.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+		assertEquals(2, addResp.getBody().size());
+
+		Subject l3 = new Subject();
+		l3.setTitle("Title");
+		l3.setDescription("Description");
+		Proposition p5 = new Proposition();
+		Proposition p6 = new Proposition();
+		l3.getPropositions().add(p5);
+		l3.getPropositions().add(p6);
+		p5.setTitle("P1 title");
+		p6.setTitle("P2 title");
+		d = Calendar.getInstance();
+		d.add(Calendar.DAY_OF_MONTH, -1);
+		l3.setDeadLine(d.getTime());
+		repository.save(l3);
+
+		addResp = addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress",
+				List.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+		assertEquals(2, addResp.getBody().size());
 	}
 
 }

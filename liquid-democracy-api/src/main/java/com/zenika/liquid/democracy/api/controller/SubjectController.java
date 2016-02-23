@@ -1,8 +1,11 @@
 package com.zenika.liquid.democracy.api.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +38,20 @@ public class SubjectController {
 		return ResponseEntity.created(
 				ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
 				.build();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, path = "/inprogress")
+	public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
+
+		LOG.info("getSubjectsInProgress");
+
+		List<Subject> out = subjectService.getSubjectsInProgress();
+
+		if (out.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
+		}
+
+		return ResponseEntity.ok(out);
 	}
 
 }
