@@ -6,7 +6,7 @@
 	<version>0.0.1</version>
 
 	<properties>
-		<docker.image.prefix>si-zenik</docker.image.prefix>
+		<docker.image.prefix>si-zenika</docker.image.prefix>
 		<project.build.finalName>liquid-democracy-api</project.build.finalName>
 	</properties>
 
@@ -54,11 +54,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.zenika</groupId>
 			<artifactId>liquid-democracy-model</artifactId>
 			<version>0.0.1</version>
-		</dependency> -->
+		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

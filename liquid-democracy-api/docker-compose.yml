@@ -1,0 +1,8 @@
+liquidDemocracyApi:
+  image: si-zenika/liquid-democracy-api:latest
+  ports:
+   - "8080:8080"
+  links:
+   - mongoliquidDemocracy:mongoliquidDemocracy
+mongoliquidDemocracy:
+  image: mongo:3.2.3
