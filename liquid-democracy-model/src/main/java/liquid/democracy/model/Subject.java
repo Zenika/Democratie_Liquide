@@ -1,39 +1,50 @@
 package liquid.democracy.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.StringUtils;
 
 @Document
 public class Subject {
-	
+
 	@Id
-	private Long id;
-	
+	private String uuid;
+
 	private String title;
-	
+
 	private String description;
-	
+
 	private int maxPoints;
-	
+
 	private Date deadLine;
-	
+
+	private Date submitDate;
+
 	private Long collaborateurId;
-	
+
 	private List<Proposition> propositions;
-	
+
 	private List<Vote> votes;
-	
+
 	private List<Power> powers;
 
-	public Long getId() {
-		return id;
+	public Subject() {
+		maxPoints = 1;
+		propositions = new ArrayList<>();
+		votes = new ArrayList<>();
+		powers = new ArrayList<>();
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setId(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public String getTitle() {
@@ -68,6 +79,14 @@ public class Subject {
 		this.deadLine = deadLine;
 	}
 
+	public Date getSubmitDate() {
+		return submitDate;
+	}
+
+	public void setSubmitDate(Date submitDate) {
+		this.submitDate = submitDate;
+	}
+
 	public Long getCollaborateurId() {
 		return collaborateurId;
 	}
@@ -98,6 +117,18 @@ public class Subject {
 
 	public void setPowers(List<Power> powers) {
 		this.powers = powers;
+	}
+
+	public boolean isWellFormed() {
+		boolean result = !StringUtils.isEmpty(title) && !StringUtils.isEmpty(description);
+
+		result = result && propositions.size() >= 2;
+
+		for (Proposition proposition : propositions) {
+			result = result && proposition.isWellFormed();
+		}
+
+		return result;
 	}
 
 }

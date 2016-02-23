@@ -2,20 +2,21 @@ package liquid.democracy.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.util.StringUtils;
 
 public class Proposition {
-	
+
 	@Id
 	private ObjectId id;
-	
+
 	private String title;
-	
+
 	private String description;
-	
+
 	public Proposition() {
 		id = new ObjectId();
 	}
-	
+
 	public ObjectId getId() {
 		return id;
 	}
@@ -38,6 +39,12 @@ public class Proposition {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isWellFormed() {
+		boolean result = !StringUtils.isEmpty(title);
+
+		return result;
 	}
 
 }
