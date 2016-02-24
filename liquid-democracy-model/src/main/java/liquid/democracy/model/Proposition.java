@@ -47,4 +47,16 @@ public class Proposition {
 		return result;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder strB = new StringBuilder();
+
+		strB.append("Proposition : ").append(getTitle());
+		strB.append("\n \t Id : ").append(getId());
+		strB.append("\n \t Title : ").append(getTitle());
+		strB.append("\n \t Description : ").append(getDescription());
+
+		return strB.toString();
+	}
+
 }

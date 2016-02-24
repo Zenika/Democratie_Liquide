@@ -28,14 +28,13 @@ public class Subject {
 
 	private List<Proposition> propositions;
 
-	private List<Vote> votes;
+	private Vote vote;
 
 	private List<Power> powers;
 
 	public Subject() {
 		maxPoints = 1;
 		propositions = new ArrayList<>();
-		votes = new ArrayList<>();
 		powers = new ArrayList<>();
 	}
 
@@ -103,12 +102,12 @@ public class Subject {
 		this.propositions = propositions;
 	}
 
-	public List<Vote> getVotes() {
-		return votes;
+	public Vote getVote() {
+		return vote;
 	}
 
-	public void setVotes(List<Vote> votes) {
-		this.votes = votes;
+	public void setVote(Vote vote) {
+		this.vote = vote;
 	}
 
 	public List<Power> getPowers() {
@@ -129,6 +128,30 @@ public class Subject {
 		}
 
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder strB = new StringBuilder();
+
+		strB.append("Subject : ").append(getTitle());
+		strB.append("\n \t Id : ").append(getUuid());
+		strB.append("\n \t Description : ").append(getDescription());
+		strB.append("\n \t MaxPoints : ").append(getMaxPoints());
+		strB.append("\n \t SubmitDate : ").append(getSubmitDate());
+		strB.append("\n \t CollaborateurId : ").append(getCollaborateurId());
+
+		for (Proposition proposition : propositions) {
+			strB.append("\n \t").append(proposition);
+		}
+
+		for (Power power : powers) {
+			strB.append("\n \t").append(power);
+		}
+
+		strB.append("\n \t").append(vote);
+
+		return strB.toString();
 	}
 
 }
