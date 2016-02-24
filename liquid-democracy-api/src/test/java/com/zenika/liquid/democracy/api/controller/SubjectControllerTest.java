@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zenika.liquid.democracy.api.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 
@@ -40,8 +39,6 @@ public class SubjectControllerTest {
 	private int serverPort;
 
 	private RestTemplate template;
-
-	private ObjectMapper mapper = new ObjectMapper();
 
 	@Before
 	public void setUp() throws Exception {
@@ -102,7 +99,7 @@ public class SubjectControllerTest {
 		p2.setTitle("P2 title");
 		repository.save(l);
 
-		ResponseEntity<List> addResp = addResp = template
+		ResponseEntity<List> addResp = template
 				.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress", List.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
@@ -122,8 +119,7 @@ public class SubjectControllerTest {
 		l2.setDeadLine(d.getTime());
 		repository.save(l2);
 
-		addResp = addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress",
-				List.class);
+		addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress", List.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 		assertEquals(2, addResp.getBody().size());
@@ -142,8 +138,7 @@ public class SubjectControllerTest {
 		l3.setDeadLine(d.getTime());
 		repository.save(l3);
 
-		addResp = addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress",
-				List.class);
+		addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/inprogress", List.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 		assertEquals(2, addResp.getBody().size());

@@ -22,19 +22,21 @@ public class SubjectService {
 	private SubjectRepository subjectRepository;
 
 	public Subject addSubject(Subject s) throws MalformedSubjectException {
-		if (!checkIfSubjectIsWellFormed(s)) {
+		LOG.info("Trying to add subject {}", s);
+
+		if (!s.isWellFormed()) {
 			throw new MalformedSubjectException();
 		}
+
+		LOG.info("Adding subject {}", s);
 		return subjectRepository.save(s);
 	}
 
 	public List<Subject> getSubjectsInProgress() {
+		LOG.info("Getting subjectsInProgress");
+
 		List<Subject> out = subjectRepository.findByDeadLineGreaterThanOrDeadLineIsNull(new Date());
 		return out;
-	}
-
-	private boolean checkIfSubjectIsWellFormed(Subject s) {
-		return s.isWellFormed();
 	}
 
 }
