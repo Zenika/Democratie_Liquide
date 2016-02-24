@@ -13,6 +13,16 @@ spring:
     mongodb:
       host: localhost
 
+---
+spring:
+  profiles: test
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
+  data:
+    mongodb:
+      host: localhost
+      database: dbliqdem
+
 ---      
 spring:
   profiles: docker

@@ -11,4 +11,5 @@ public interface SubjectRepository extends MongoRepository<Subject, Long> {
 
 	List<Subject> findByDeadLineGreaterThanOrDeadLineIsNull(Date d);
 
+	Subject findSubjectByUuid(String subjectUuid);
 }

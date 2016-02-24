@@ -8,6 +8,7 @@
 	<properties>
 		<docker.image.prefix>si-zenika</docker.image.prefix>
 		<project.build.finalName>liquid-democracy-api</project.build.finalName>
+		<java.version>1.8</java.version>
 	</properties>
 
 	<build>
@@ -39,6 +40,14 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
