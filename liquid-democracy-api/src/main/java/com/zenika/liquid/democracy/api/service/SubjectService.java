@@ -28,6 +28,8 @@ public class SubjectService {
 			throw new MalformedSubjectException();
 		}
 
+		s.setSubmitDate(new Date());
+
 		LOG.info("Adding subject {}", s);
 		return subjectRepository.save(s);
 	}

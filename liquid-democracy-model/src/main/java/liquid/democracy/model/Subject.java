@@ -28,7 +28,7 @@ public class Subject {
 
 	private List<Proposition> propositions;
 
-	private Vote vote;
+	private List<Vote> votes;
 
 	private List<Power> powers;
 
@@ -102,12 +102,12 @@ public class Subject {
 		this.propositions = propositions;
 	}
 
-	public Vote getVote() {
-		return vote;
+	public List<Vote> getVotes() {
+		return votes;
 	}
 
-	public void setVote(Vote vote) {
-		this.vote = vote;
+	public void setVotes(List<Vote> votes) {
+		this.votes = votes;
 	}
 
 	public List<Power> getPowers() {
@@ -149,7 +149,9 @@ public class Subject {
 			strB.append("\n \t").append(power);
 		}
 
-		strB.append("\n \t").append(vote);
+		for (Vote vote : votes) {
+			strB.append("\n \t").append(vote);
+		}
 
 		return strB.toString();
 	}

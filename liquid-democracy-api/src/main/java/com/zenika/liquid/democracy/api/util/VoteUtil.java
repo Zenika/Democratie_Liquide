@@ -48,6 +48,6 @@ public class VoteUtil {
 			});
 		}
 
-		s.setVote(vote);
+		s.getVotes().add(vote);
 	}
 }
