@@ -1,4 +1,4 @@
-package liquid.democracy.model;
+package com.zenika.liquid.democracy.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -7,21 +7,21 @@ import org.springframework.util.StringUtils;
 public class Proposition {
 
 	@Id
-	private ObjectId id;
+	private String id;
 
 	private String title;
 
 	private String description;
 
 	public Proposition() {
-		id = new ObjectId();
+		id = new ObjectId().toString();
 	}
 
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

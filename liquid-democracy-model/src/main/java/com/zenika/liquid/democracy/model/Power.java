@@ -1,17 +1,15 @@
-package liquid.democracy.model;
+package com.zenika.liquid.democracy.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 public class Power {
 
 	@Id
 	private ObjectId id;
-	
+
 	private Long collaborateurIdFrom;
-	
+
 	private Long collaborateurIdTo;
 
 	public Power() {
@@ -41,5 +39,5 @@ public class Power {
 	public void setCollaborateurIdTo(Long collaborateurIdTo) {
 		this.collaborateurIdTo = collaborateurIdTo;
 	}
-	
+
 }

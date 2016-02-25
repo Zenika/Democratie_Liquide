@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import liquid.democracy.model.Subject;
+import com.zenika.liquid.democracy.model.Subject;
 
 public interface SubjectRepository extends MongoRepository<Subject, Long> {
 

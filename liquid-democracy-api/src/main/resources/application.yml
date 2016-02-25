@@ -5,6 +5,21 @@ logging:
   level:
     ROOT: INFO
     com.zenika.liquid.democracy: DEBUG
+    org.springframework.security: DEBUG
+    
+security:
+  user:
+    password: password
+  oauth2:
+    client:
+      clientId: 142442864494-a61tnmr041dj375o5cks9fkjq43qdd4h.apps.googleusercontent.com
+      clientSecret: CCBYpaLX-U5zLPFkxuoPmMxP
+      accessTokenUri: https://accounts.google.com/o/oauth2/v2/auth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://accounts.google.com/o
 
 ---
 spring:
@@ -13,15 +28,21 @@ spring:
     mongodb:
       host: localhost
 
+
 ---
 spring:
-  profiles: test
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
+  profiles: test-unitaire
   data:
     mongodb:
       host: localhost
-      database: dbliqdem
+
+
+---
+spring:
+  profiles: test-prod
+  data:
+    mongodb:
+      host: localhost
 
 ---      
 spring:

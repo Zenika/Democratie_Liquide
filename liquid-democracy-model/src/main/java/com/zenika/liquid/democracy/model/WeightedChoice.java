@@ -1,4 +1,4 @@
-package liquid.democracy.model;
+package com.zenika.liquid.democracy.model;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 

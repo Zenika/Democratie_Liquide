@@ -19,18 +19,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.zenika.liquid.democracy.api.Application;
+import com.zenika.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
-
-import liquid.democracy.model.Proposition;
-import liquid.democracy.model.Subject;
-import liquid.democracy.model.Vote;
-import liquid.democracy.model.WeightedChoice;
+import com.zenika.liquid.democracy.model.Proposition;
+import com.zenika.liquid.democracy.model.Subject;
+import com.zenika.liquid.democracy.model.Vote;
+import com.zenika.liquid.democracy.model.WeightedChoice;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
-@ActiveProfiles("dev")
+@ActiveProfiles("test-unitaire")
 public class VoteControllerTest {
 
 	@Autowired

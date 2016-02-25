@@ -1,4 +1,4 @@
-package liquid.democracy.model;
+package com.zenika.liquid.democracy.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +36,7 @@ public class Subject {
 		maxPoints = 1;
 		propositions = new ArrayList<>();
 		powers = new ArrayList<>();
+		votes = new ArrayList<>();
 	}
 
 	public String getUuid() {

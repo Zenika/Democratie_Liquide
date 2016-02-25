@@ -9,9 +9,8 @@ import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectExcept
 import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.util.VoteUtil;
-
-import liquid.democracy.model.Subject;
-import liquid.democracy.model.Vote;
+import com.zenika.liquid.democracy.model.Subject;
+import com.zenika.liquid.democracy.model.Vote;
 
 @Service
 public class VoteService {

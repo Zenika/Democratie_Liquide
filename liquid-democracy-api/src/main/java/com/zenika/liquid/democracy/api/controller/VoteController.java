@@ -19,8 +19,7 @@ import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectExcept
 import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
 import com.zenika.liquid.democracy.api.exception.VotePropositionIncorrectException;
 import com.zenika.liquid.democracy.api.service.VoteService;
-
-import liquid.democracy.model.Vote;
+import com.zenika.liquid.democracy.model.Vote;
 
 @RestController
 @RequestMapping("/api/votes")

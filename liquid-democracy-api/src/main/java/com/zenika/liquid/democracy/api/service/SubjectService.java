@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
-
-import liquid.democracy.model.Subject;
+import com.zenika.liquid.democracy.model.Subject;
 
 @Service
 public class SubjectService {

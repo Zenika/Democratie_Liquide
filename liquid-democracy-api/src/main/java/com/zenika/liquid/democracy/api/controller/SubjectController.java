@@ -18,8 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.service.SubjectService;
-
-import liquid.democracy.model.Subject;
+import com.zenika.liquid.democracy.model.Subject;
 
 @RestController
 @RequestMapping("/api/subjects")

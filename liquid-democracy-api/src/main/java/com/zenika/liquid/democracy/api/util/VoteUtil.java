@@ -6,11 +6,10 @@ import java.util.stream.Stream;
 
 import com.zenika.liquid.democracy.api.exception.TooManyPointsException;
 import com.zenika.liquid.democracy.api.exception.VotePropositionIncorrectException;
-
-import liquid.democracy.model.Proposition;
-import liquid.democracy.model.Subject;
-import liquid.democracy.model.Vote;
-import liquid.democracy.model.WeightedChoice;
+import com.zenika.liquid.democracy.model.Proposition;
+import com.zenika.liquid.democracy.model.Subject;
+import com.zenika.liquid.democracy.model.Vote;
+import com.zenika.liquid.democracy.model.WeightedChoice;
 
 public class VoteUtil {
 
