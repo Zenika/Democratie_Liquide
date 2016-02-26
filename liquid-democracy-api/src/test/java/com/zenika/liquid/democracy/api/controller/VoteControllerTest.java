@@ -52,6 +52,32 @@ public class VoteControllerTest {
 	}
 
 	@Test
+	public void voteForSubjectTest() {
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		repository.save(s);
+
+		Vote v = new Vote();
+		WeightedChoice c1 = new WeightedChoice();
+		c1.setPoints(1);
+		c1.setProposition(p2);
+		v.getChoices().add(c1);
+
+		ResponseEntity<Object> addResp = template.exchange(
+				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+				Object.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+	}
+
+	@Test
 	public void voteForNonExistingSubjectTest() {
 		Subject s = new Subject();
 		s.setTitle("Title");

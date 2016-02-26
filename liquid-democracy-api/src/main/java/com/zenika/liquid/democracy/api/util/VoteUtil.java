@@ -24,12 +24,12 @@ public class VoteUtil {
 
 		for (WeightedChoice c : vote.getChoices()) {
 			Optional<Proposition> propositionFound = s.getPropositions().stream()
-					.filter(p -> p.getTitle() == c.getProposition().getTitle()).findFirst();
+					.filter(p -> p.getId().equals(c.getProposition().getId())).findFirst();
 
 			propositionFound.orElseThrow(VotePropositionIncorrectException::new);
 
 			Stream<WeightedChoice> propositionsFound = vote.getChoices().stream()
-					.filter(cTmp -> cTmp.getProposition().getTitle() == c.getProposition().getTitle());
+					.filter(cTmp -> cTmp.getProposition().getId().equals(c.getProposition().getId()));
 
 			if (propositionsFound.count() != 1) {
 				throw new VotePropositionIncorrectException();
