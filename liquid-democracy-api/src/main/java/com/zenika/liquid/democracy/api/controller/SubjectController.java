@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
+import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.service.SubjectService;
 import com.zenika.liquid.democracy.model.Subject;
 
@@ -53,6 +55,22 @@ public class SubjectController {
 		}
 
 		return ResponseEntity.ok(out);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
+	public ResponseEntity<Subject> getSubjectByUuid(@PathVariable String subjectUuid)
+			throws UnexistingSubjectException {
+
+		LOG.info("getSubject with id {} ", subjectUuid);
+
+		Subject s = subjectService.getSubjectByUuid(subjectUuid);
+
+		return ResponseEntity.ok().body(s);
+	}
+
+	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Subject doesn't exist")
+	@ExceptionHandler(UnexistingSubjectException.class)
+	public void unexistingSubjectHandler() {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject is not complete")

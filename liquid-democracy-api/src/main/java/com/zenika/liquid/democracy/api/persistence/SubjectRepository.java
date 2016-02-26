@@ -2,6 +2,7 @@ package com.zenika.liquid.democracy.api.persistence;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -11,5 +12,5 @@ public interface SubjectRepository extends MongoRepository<Subject, Long> {
 
 	List<Subject> findByDeadLineGreaterThanOrDeadLineIsNull(Date d);
 
-	Subject findSubjectByUuid(String subjectUuid);
+	Optional<Subject> findSubjectByUuid(String subjectUuid);
 }

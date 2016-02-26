@@ -1,5 +1,7 @@
 package com.zenika.liquid.democracy.api.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +27,19 @@ public class VoteService {
 
 		LOG.info("Trying to vote for subject {} with {}", subjectUuid, vote);
 
-		Subject s = subjectRepository.findSubjectByUuid(subjectUuid);
-		if (s == null) {
+		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+		if (!s.isPresent()) {
 			throw new VoteForNonExistingSubjectException();
 		}
 
 		LOG.info("Checking vote for subject {} with {}", subjectUuid, vote);
-		VoteUtil.checkVotes(vote, s);
+		VoteUtil.checkVotes(vote, s.get());
 
 		LOG.info("Preparing vote for subject {} with {}", subjectUuid, vote);
-		VoteUtil.prepareVotes(vote, s);
+		VoteUtil.prepareVotes(vote, s.get());
 
 		LOG.info("Voting to vote for subject {} with {}", subjectUuid, vote);
-		subjectRepository.save(s);
+		subjectRepository.save(s.get());
 	}
 
 }

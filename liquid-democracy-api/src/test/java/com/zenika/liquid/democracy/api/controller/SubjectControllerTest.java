@@ -143,4 +143,29 @@ public class SubjectControllerTest {
 		assertEquals(2, addResp.getBody().size());
 	}
 
+	@Test
+	public void getSubjectTest() {
+		Subject l = new Subject();
+		l.setTitle("Title");
+		l.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		l.getPropositions().add(p1);
+		l.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		l = repository.save(l);
+
+		ResponseEntity<Subject> addResp = template
+				.getForEntity("http://localhost:" + serverPort + "api/subjects/" + l.getUuid(), Subject.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+		assertEquals(l.getUuid(), addResp.getBody().getUuid());
+
+		addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/" + l.getUuid() + 1,
+				Subject.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.NOT_FOUND.value(), addResp.getStatusCode().value());
+	}
+
 }

@@ -41,7 +41,7 @@ public class VoteUtil {
 	public static void prepareVotes(Vote vote, Subject s) {
 		for (WeightedChoice c : vote.getChoices()) {
 			Optional<Proposition> propositionFound = s.getPropositions().stream()
-					.filter(p -> p.getTitle() == c.getProposition().getTitle()).findFirst();
+					.filter(p -> p.getId().equals(c.getProposition().getId())).findFirst();
 			propositionFound.ifPresent(p -> {
 				c.setProposition(p);
 			});
