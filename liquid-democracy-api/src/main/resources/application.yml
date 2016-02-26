@@ -12,12 +12,11 @@ security:
     sso:
       login-path: /login_success
     client:
-      clientId: 142442864494-a61tnmr041dj375o5cks9fkjq43qdd4h.apps.googleusercontent.com
-      clientSecret: CCBYpaLX-U5zLPFkxuoPmMxP
+      clientId: TO GENERATE
+      clientSecret: TO GENERATE
       accessTokenUri: https://www.googleapis.com/oauth2/v3/token
-      userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/auth?hd=zenika.com
       clientAuthenticationScheme: query
-      hd: zenika.com
       scope: profile email
     resource:
       userInfoUri: https://www.googleapis.com/plus/v1/people/me

@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
 	@RequestMapping("/login_success")
-	public String hello(OAuth2Authentication authentication) {
-		return authentication.getName();
+	public String hello(OAuth2Authentication info) {
+		// TODO : connexion bdd
+		return "";
 	}
 
 	@RequestMapping("/")
-	public String helloRacine(OAuth2Authentication authentication, Model model) {
-		model.addAttribute("user", authentication.getName());
-		model.addAttribute("authentication", authentication.getUserAuthentication());
-		return authentication.getUserAuthentication().toString();
+	public String helloRacine(OAuth2Authentication info, Model model) {
+		model.addAttribute("user", info.getName());
+		return info.getUserAuthentication().toString();
 	}
 
 }
