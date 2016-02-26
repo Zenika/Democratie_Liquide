@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class ConnectionController {
 
 	@RequestMapping("/login_success")
 	public String hello(OAuth2Authentication info) {
-		// TODO : connexion bdd
+		// if (info.getUserAuthentication().getDetails().)
 		return "";
 	}
 
