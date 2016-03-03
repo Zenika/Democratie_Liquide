@@ -11,7 +11,7 @@ public class Vote {
 	@Id
 	private ObjectId id;
 
-	private Long collaborateurId;
+	private String collaborateurId;
 
 	private List<WeightedChoice> choices;
 
@@ -28,11 +28,11 @@ public class Vote {
 		this.id = id;
 	}
 
-	public Long getCollaborateurId() {
+	public String getCollaborateurId() {
 		return collaborateurId;
 	}
 
-	public void setCollaborateurId(Long collaborateurId) {
+	public void setCollaborateurId(String collaborateurId) {
 		this.collaborateurId = collaborateurId;
 	}
 

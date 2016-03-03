@@ -4,8 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -14,6 +20,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -21,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.zenika.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
 import com.zenika.liquid.democracy.model.Vote;
@@ -30,7 +38,11 @@ import com.zenika.liquid.democracy.model.WeightedChoice;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("test-unitaire")
+@PrepareForTest(AuthenticationUtil.class)
 public class VoteControllerTest {
+
+	@Rule
+	public PowerMockRule rule = new PowerMockRule();
 
 	@Autowired
 	SubjectRepository repository;
@@ -49,10 +61,15 @@ public class VoteControllerTest {
 			}
 		});
 		repository.deleteAll();
+		MockitoAnnotations.initMocks(this);
+		PowerMockito.mockStatic(AuthenticationUtil.class);
+		PowerMockito.when(AuthenticationUtil.getUserIdentifiant(Mockito.any(OAuth2Authentication.class)))
+				.thenReturn("sandra.parlant@zenika.com");
 	}
 
 	@Test
 	public void voteForSubjectTest() {
+
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
@@ -75,6 +92,36 @@ public class VoteControllerTest {
 				Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+	}
+
+	@Test
+	public void voteForSubjectAgainTest() {
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+
+		Vote v = new Vote();
+		v.setCollaborateurId("sandra.parlant@zenika.com");
+		WeightedChoice c1 = new WeightedChoice();
+		c1.setPoints(1);
+		c1.setProposition(p2);
+		v.getChoices().add(c1);
+		s.getVotes().add(v);
+
+		repository.save(s);
+
+		ResponseEntity<Object> addResp = template.exchange(
+				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+				Object.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
+		assertEquals(true, addResp.getBody().toString().contains("User has already voted"));
 	}
 
 	@Test

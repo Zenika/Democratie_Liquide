@@ -22,8 +22,10 @@ public class SubjectService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public Subject addSubject(Subject s) throws MalformedSubjectException {
+	public Subject addSubject(Subject s, String userId) throws MalformedSubjectException {
 		LOG.info("Trying to add subject {}", s);
+
+		s.setCollaborateurId(userId);
 
 		if (!s.isWellFormed()) {
 			throw new MalformedSubjectException();

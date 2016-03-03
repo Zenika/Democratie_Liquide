@@ -7,14 +7,21 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -22,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.zenika.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
 
@@ -29,7 +37,11 @@ import com.zenika.liquid.democracy.model.Subject;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("test-unitaire")
+@PrepareForTest(AuthenticationUtil.class)
 public class SubjectControllerTest {
+
+	@Rule
+	public PowerMockRule rule = new PowerMockRule();
 
 	@Autowired
 	SubjectRepository repository;
@@ -48,6 +60,10 @@ public class SubjectControllerTest {
 			}
 		});
 		repository.deleteAll();
+		MockitoAnnotations.initMocks(this);
+		PowerMockito.mockStatic(AuthenticationUtil.class);
+		PowerMockito.when(AuthenticationUtil.getUserIdentifiant(Mockito.any(OAuth2Authentication.class)))
+				.thenReturn("sandra.parlant@zenika.com");
 	}
 
 	@Test

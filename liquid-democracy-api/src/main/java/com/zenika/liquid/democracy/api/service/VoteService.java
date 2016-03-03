@@ -22,7 +22,7 @@ public class VoteService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public void voteForSubject(String subjectUuid, Vote vote)
+	public void voteForSubject(String subjectUuid, Vote vote, String userId)
 			throws VoteForNonExistingSubjectException, VoteIsNotCorrectException {
 
 		LOG.info("Trying to vote for subject {} with {}", subjectUuid, vote);
@@ -33,10 +33,10 @@ public class VoteService {
 		}
 
 		LOG.info("Checking vote for subject {} with {}", subjectUuid, vote);
-		VoteUtil.checkVotes(vote, s.get());
+		VoteUtil.checkVotes(vote, s.get(), userId);
 
 		LOG.info("Preparing vote for subject {} with {}", subjectUuid, vote);
-		VoteUtil.prepareVotes(vote, s.get());
+		VoteUtil.prepareVotes(vote, s.get(), userId);
 
 		LOG.info("Voting to vote for subject {} with {}", subjectUuid, vote);
 		subjectRepository.save(s.get());

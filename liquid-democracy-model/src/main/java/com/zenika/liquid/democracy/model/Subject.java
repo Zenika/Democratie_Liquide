@@ -24,7 +24,7 @@ public class Subject {
 
 	private Date submitDate;
 
-	private Long collaborateurId;
+	private String collaborateurId;
 
 	private List<Proposition> propositions;
 
@@ -87,11 +87,11 @@ public class Subject {
 		this.submitDate = submitDate;
 	}
 
-	public Long getCollaborateurId() {
+	public String getCollaborateurId() {
 		return collaborateurId;
 	}
 
-	public void setCollaborateurId(Long collaborateurId) {
+	public void setCollaborateurId(String collaborateurId) {
 		this.collaborateurId = collaborateurId;
 	}
 
