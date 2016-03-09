@@ -31,17 +31,16 @@ import org.springframework.web.client.RestTemplate;
 import com.zenika.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
+import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Vote;
-import com.zenika.liquid.democracy.model.WeightedChoice;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("test-unitaire")
 @PrepareForTest(AuthenticationUtil.class)
-public class VoteControllerTest {
+public class PowerControllerTest {
 
 	@Rule
 	public PowerMockRule rule = new PowerMockRule();
@@ -70,8 +69,7 @@ public class VoteControllerTest {
 	}
 
 	@Test
-	public void voteForSubjectTest() {
-
+	public void addPowerOnSubjectTest() {
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
@@ -83,25 +81,23 @@ public class VoteControllerTest {
 		p2.setTitle("P2 title");
 		repository.save(s);
 
-		Vote v = new Vote();
-		WeightedChoice c1 = new WeightedChoice();
-		c1.setPoints(1);
-		c1.setProposition(p2);
-		v.getChoices().add(c1);
+		Power p = new Power();
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
 				Object.class);
+
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 
 		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
 		assertEquals(true, savedSubject.isPresent());
-		assertEquals(true, savedSubject.get().findVote("sandra.parlant@zenika.com").isPresent());
+		assertEquals(true, savedSubject.get().findPower("sandra.parlant@zenika.com").isPresent());
 	}
 
 	@Test
-	public void voteForSubjectAgainTest() {
+	public void addPowerOnSubjectAgainTest() {
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
@@ -112,26 +108,24 @@ public class VoteControllerTest {
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
 
-		Vote v = new Vote();
-		v.setCollaborateurId("sandra.parlant@zenika.com");
-		WeightedChoice c1 = new WeightedChoice();
-		c1.setPoints(1);
-		c1.setProposition(p2);
-		v.getChoices().add(c1);
-		s.getVotes().add(v);
+		Power p = new Power();
+		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
 
+		s.getPowers().add(p);
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
 				Object.class);
+
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("User has already voted"));
+		assertEquals(true, addResp.getBody().toString().contains("User has already given his power"));
 	}
 
 	@Test
-	public void voteForNonExistingSubjectTest() {
+	public void addPowerOnNonExistingSubjectTest() {
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
@@ -143,22 +137,20 @@ public class VoteControllerTest {
 		p2.setTitle("P2 title");
 		repository.save(s);
 
-		Vote v = new Vote();
-		WeightedChoice c1 = new WeightedChoice();
-		c1.setPoints(1);
-		c1.setProposition(p2);
-		v.getChoices().add(c1);
+		Power p = new Power();
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(v),
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(p),
 				Object.class);
+
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 		assertEquals(true, addResp.getBody().toString().contains("Subject doesn't exist"));
 	}
 
 	@Test
-	public void voteForSubjectWithTooManyPointsTest() {
+	public void addPowerOnSubjectToHimselfTest() {
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
@@ -170,52 +162,22 @@ public class VoteControllerTest {
 		p2.setTitle("P2 title");
 		repository.save(s);
 
-		Vote v = new Vote();
-		WeightedChoice c1 = new WeightedChoice();
-		c1.setPoints(2);
-		c1.setProposition(p1);
-		v.getChoices().add(c1);
+		Power p = new Power();
+		p.setCollaborateurIdTo("sandra.parlant@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
 				Object.class);
+
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Too many points used"));
+		assertEquals(true, addResp.getBody().toString().contains("User gave his power to himself"));
 	}
 
 	@Test
-	public void voteForSubjectWithUnexistingPropositionTest() {
+	public void deletePowerOnSubjectTest() {
 		Subject s = new Subject();
 		s.setTitle("Title");
-		s.setDescription("Description");
-		Proposition p1 = new Proposition();
-		s.getPropositions().add(p1);
-		p1.setTitle("P1 title");
-		repository.save(s);
-
-		Proposition p2 = new Proposition();
-		p2.setTitle("P2 title");
-
-		Vote v = new Vote();
-		WeightedChoice c1 = new WeightedChoice();
-		c1.setPoints(1);
-		c1.setProposition(p2);
-		v.getChoices().add(c1);
-
-		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
-		assertNotNull(addResp);
-		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Propositions voted are not correct"));
-	}
-
-	@Test
-	public void voteForSubjectWithRepeatedPropositionTest() {
-		Subject s = new Subject();
-		s.setTitle("Title");
-		s.setMaxPoints(2);
 		s.setDescription("Description");
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
@@ -223,26 +185,76 @@ public class VoteControllerTest {
 		s.getPropositions().add(p2);
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
+
+		Power p = new Power();
+		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+
+		s.getPowers().add(p);
 		repository.save(s);
 
-		Vote v = new Vote();
-		WeightedChoice c1 = new WeightedChoice();
-		c1.setPoints(1);
-		c1.setProposition(p1);
+		ResponseEntity<Object> addResp = template.exchange(
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
+				new HttpEntity<>(null), Object.class);
 
-		WeightedChoice c2 = new WeightedChoice();
-		c2.setPoints(1);
-		c2.setProposition(p1);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+	}
 
-		v.getChoices().add(c1);
-		v.getChoices().add(c2);
+	@Test
+	public void deleteNonExistingPowerOnSubjectTest() {
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+
+		Power p = new Power();
+		p.setCollaborateurIdFrom("sandra.parlantt@zenika.com");
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+
+		s.getPowers().add(p);
+		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
+				new HttpEntity<>(null), Object.class);
+
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Propositions voted are not correct"));
+		assertEquals(true, addResp.getBody().toString().contains("User hasn't given any power on this subject"));
+	}
+
+	@Test
+	public void deletePowerOnNonExistingSubjectTest() {
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+
+		Power p = new Power();
+		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+
+		s.getPowers().add(p);
+		repository.save(s);
+
+		ResponseEntity<Object> addResp = template.exchange(
+				"http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.DELETE,
+				new HttpEntity<>(null), Object.class);
+
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
+		assertEquals(true, addResp.getBody().toString().contains("Subject doesn't exist"));
 	}
 
 }

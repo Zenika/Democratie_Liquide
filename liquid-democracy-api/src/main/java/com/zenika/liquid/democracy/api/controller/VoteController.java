@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.TooManyPointsException;
 import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectException;
@@ -35,7 +36,8 @@ public class VoteController {
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{subjectUuid}")
 	public ResponseEntity<Void> voteForSubject(OAuth2Authentication authentication, @PathVariable String subjectUuid,
-			@Validated @RequestBody Vote vote) throws VoteForNonExistingSubjectException, VoteIsNotCorrectException {
+			@Validated @RequestBody Vote vote)
+					throws VoteForNonExistingSubjectException, VoteIsNotCorrectException, CloseSubjectException {
 
 		LOG.info("voteForSubject {} with {} ", subjectUuid, vote);
 
@@ -44,6 +46,11 @@ public class VoteController {
 		voteService.voteForSubject(subjectUuid, vote, userId);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject is closed")
+	@ExceptionHandler(CloseSubjectException.class)
+	public void voteForClosedSubjectHandler() {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject doesn't exist")

@@ -3,6 +3,7 @@ package com.zenika.liquid.democracy.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -117,6 +118,28 @@ public class Subject {
 
 	public void setPowers(List<Power> powers) {
 		this.powers = powers;
+	}
+
+	public Optional<Power> findPower(String userId) {
+		Optional<Power> foundPower = getPowers().stream().filter(p -> {
+			return userId.equals(p.getCollaborateurIdFrom());
+		}).findFirst();
+
+		return foundPower;
+	}
+
+	public Optional<Vote> findVote(String userId) {
+		return getVotes().stream().filter(v -> v.getCollaborateurId().equals(userId)).findFirst();
+	}
+
+	public void removePower(Power p) {
+		powers.remove(p);
+
+	}
+
+	public boolean isClosed() {
+		Date today = new Date();
+		return getDeadLine() != null && getDeadLine().before(today);
 	}
 
 	public boolean isWellFormed() {
