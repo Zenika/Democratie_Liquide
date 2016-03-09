@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.TooManyPointsException;
+import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
@@ -36,8 +37,8 @@ public class VoteController {
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{subjectUuid}")
 	public ResponseEntity<Void> voteForSubject(OAuth2Authentication authentication, @PathVariable String subjectUuid,
-			@Validated @RequestBody Vote vote)
-					throws VoteForNonExistingSubjectException, VoteIsNotCorrectException, CloseSubjectException {
+			@Validated @RequestBody Vote vote) throws VoteForNonExistingSubjectException, VoteIsNotCorrectException,
+					CloseSubjectException, UserAlreadyGavePowerException {
 
 		LOG.info("voteForSubject {} with {} ", subjectUuid, vote);
 
@@ -71,6 +72,11 @@ public class VoteController {
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User has already voted")
 	@ExceptionHandler(UserAlreadyVoteException.class)
 	public void userAlreadyVoteHandler() {
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User has given his power for this subject")
+	@ExceptionHandler(UserAlreadyGavePowerException.class)
+	public void userAlreadyGavePowerHandler() {
 	}
 
 }

@@ -6,8 +6,10 @@ import java.util.stream.Stream;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.TooManyPointsException;
+import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.exception.VotePropositionIncorrectException;
+import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
 import com.zenika.liquid.democracy.model.Vote;
@@ -16,7 +18,7 @@ import com.zenika.liquid.democracy.model.WeightedChoice;
 public class VoteUtil {
 
 	public static void checkVotes(Vote vote, Subject s, String userId) throws VotePropositionIncorrectException,
-			TooManyPointsException, UserAlreadyVoteException, CloseSubjectException {
+			TooManyPointsException, UserAlreadyVoteException, CloseSubjectException, UserAlreadyGavePowerException {
 
 		if (s.isClosed()) {
 			throw new CloseSubjectException();
@@ -26,6 +28,12 @@ public class VoteUtil {
 
 		if (foundVote.isPresent()) {
 			throw new UserAlreadyVoteException();
+		}
+
+		Optional<Power> foundPower = s.findPower(userId);
+
+		if (foundPower.isPresent()) {
+			throw new UserAlreadyGavePowerException();
 		}
 
 		int pointsVoted = vote.getChoices().stream().collect(Collectors.summingInt(WeightedChoice::getPoints));

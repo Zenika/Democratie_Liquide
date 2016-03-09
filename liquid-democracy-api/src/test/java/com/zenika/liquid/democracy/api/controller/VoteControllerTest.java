@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 import com.zenika.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
+import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
 import com.zenika.liquid.democracy.model.Vote;
@@ -98,6 +99,38 @@ public class VoteControllerTest {
 		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
 		assertEquals(true, savedSubject.isPresent());
 		assertEquals(true, savedSubject.get().findVote("sandra.parlant@zenika.com").isPresent());
+	}
+
+	@Test
+	public void voteForDelegatedSubjectTest() {
+
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		Power p = new Power();
+		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
+		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		s.getPowers().add(p);
+		repository.save(s);
+
+		Vote v = new Vote();
+		WeightedChoice c1 = new WeightedChoice();
+		c1.setPoints(1);
+		c1.setProposition(p2);
+		v.getChoices().add(c1);
+
+		ResponseEntity<Object> addResp = template.exchange(
+				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+				Object.class);
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
+		assertEquals(true, addResp.getBody().toString().contains("User has given his power for this subject"));
 	}
 
 	@Test

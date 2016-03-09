@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
@@ -23,8 +24,8 @@ public class VoteService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public void voteForSubject(String subjectUuid, Vote vote, String userId)
-			throws VoteForNonExistingSubjectException, VoteIsNotCorrectException, CloseSubjectException {
+	public void voteForSubject(String subjectUuid, Vote vote, String userId) throws VoteForNonExistingSubjectException,
+			VoteIsNotCorrectException, CloseSubjectException, UserAlreadyGavePowerException {
 
 		LOG.info("Trying to vote for subject {} with {}", subjectUuid, vote);
 
