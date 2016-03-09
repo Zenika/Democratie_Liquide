@@ -12,8 +12,8 @@ security:
     sso:
       login-path: /login_success
     client:
-      clientId: TO GENERATE
-      clientSecret: TO GENERATE
+      clientId: TODO
+      clientSecret: TODO
       accessTokenUri: https://www.googleapis.com/oauth2/v3/token
       userAuthorizationUri: https://accounts.google.com/o/oauth2/auth?hd=zenika.com
       clientAuthenticationScheme: query
@@ -32,14 +32,6 @@ spring:
 
 ---
 spring:
-  profiles: test-unitaire
-  data:
-    mongodb:
-      host: localhost
-
-
----
-spring:
   profiles: test-prod
   data:
     mongodb:
@@ -48,6 +40,16 @@ spring:
 ---      
 spring:
   profiles: docker
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
+  data:
+    mongodb:
+      host: mongoliquidDemocracy
+      database: dbliqdem
+
+---      
+spring:
+  profiles: docker-test
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
   data:

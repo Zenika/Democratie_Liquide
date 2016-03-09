@@ -39,7 +39,7 @@ import com.zenika.liquid.democracy.model.WeightedChoice;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
-@ActiveProfiles("test-unitaire")
+@ActiveProfiles("dev")
 @PrepareForTest(AuthenticationUtil.class)
 public class VoteControllerTest {
 

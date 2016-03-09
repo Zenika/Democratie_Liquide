@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-@Profile({ "test-unitaire", "dev", "docker" })
+@Profile({ "dev", "docker-test" })
 public class DevWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override

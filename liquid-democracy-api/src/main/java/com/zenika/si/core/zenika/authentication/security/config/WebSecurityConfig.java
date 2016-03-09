@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Profile({ "test-prod" })
+@Profile({ "test-prod", "docker" })
 public class WebSecurityConfig extends ResourceServerConfigurerAdapter {
 
 	@Override
