@@ -4,10 +4,13 @@ info:
 logging:
   level:
     ROOT: INFO
-    com.zenika.liquid.democracy: DEBUG
+    com.zenika.liquid.democracy: INFO
     org.springframework.security: DEBUG
     
 security:
+  user:
+    name: sparlant
+    password: pwd
   oauth2:
     sso:
       login-path: /login_success
@@ -36,6 +39,12 @@ spring:
   data:
     mongodb:
       host: localhost
+logging:
+  level:
+    ROOT: INFO
+    com.zenika.liquid.democracy: INFO
+    org.springframework.security: ERROR     
+  file: ./logs/liquid_democracy_api.log
 
 ---      
 spring:
