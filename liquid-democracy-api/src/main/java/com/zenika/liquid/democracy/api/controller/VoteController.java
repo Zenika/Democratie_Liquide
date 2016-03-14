@@ -26,7 +26,7 @@ import com.zenika.liquid.democracy.model.Vote;
 
 @RestController
 @RequestMapping("/api/votes")
-public class VoteController {
+public class VoteController extends SecuredController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(VoteController.class);
 
@@ -40,7 +40,7 @@ public class VoteController {
 
 		LOG.info("voteForSubject {} with {} ", subjectUuid, vote);
 
-		String userId = "";
+		String userId = currentUser().getEmail();
 
 		voteService.voteForSubject(subjectUuid, vote, userId);
 

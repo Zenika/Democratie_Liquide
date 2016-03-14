@@ -25,7 +25,7 @@ import com.zenika.liquid.democracy.model.Power;
 
 @RestController
 @RequestMapping("/api/powers")
-public class PowerController {
+public class PowerController extends SecuredController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PowerController.class);
 
@@ -39,7 +39,7 @@ public class PowerController {
 
 		LOG.info("addPowerOnSubject {} ", p);
 
-		String userId = "";
+		String userId = currentUser().getEmail();
 
 		powerService.addPowerOnSubject(subjectUuid, p, userId);
 
@@ -51,7 +51,7 @@ public class PowerController {
 			throws DeletePowerOnNonExistingSubjectException, DeleteNonExistingPowerException, CloseSubjectException,
 			UserAlreadyVoteException {
 
-		String userId = "";
+		String userId = currentUser().getEmail();
 
 		LOG.info("deletePowerOnSubject for {} ", userId);
 
