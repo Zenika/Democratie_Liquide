@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,6 @@ import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.exception.UserGivePowerToHimselfException;
 import com.zenika.liquid.democracy.api.service.PowerService;
-import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
 import com.zenika.liquid.democracy.model.Power;
 
 @RestController
@@ -35,14 +33,13 @@ public class PowerController {
 	private PowerService powerService;
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{subjectUuid}")
-	public ResponseEntity<Void> addPowerOnSubject(OAuth2Authentication authentication, @RequestBody Power p,
-			@PathVariable String subjectUuid)
-					throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-					UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+	public ResponseEntity<Void> addPowerOnSubject(@RequestBody Power p, @PathVariable String subjectUuid)
+			throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
+			UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
 
 		LOG.info("addPowerOnSubject {} ", p);
 
-		String userId = AuthenticationUtil.getUserIdentifiant(authentication);
+		String userId = "";
 
 		powerService.addPowerOnSubject(subjectUuid, p, userId);
 
@@ -50,11 +47,11 @@ public class PowerController {
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{subjectUuid}")
-	public ResponseEntity<Void> deletePowerOnSubject(OAuth2Authentication authentication,
-			@PathVariable String subjectUuid) throws DeletePowerOnNonExistingSubjectException,
-					DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException {
+	public ResponseEntity<Void> deletePowerOnSubject(@PathVariable String subjectUuid)
+			throws DeletePowerOnNonExistingSubjectException, DeleteNonExistingPowerException, CloseSubjectException,
+			UserAlreadyVoteException {
 
-		String userId = AuthenticationUtil.getUserIdentifiant(authentication);
+		String userId = "";
 
 		LOG.info("deletePowerOnSubject for {} ", userId);
 

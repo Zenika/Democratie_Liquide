@@ -8,9 +8,6 @@ logging:
     org.springframework.security: DEBUG
     
 security:
-  user:
-    name: sparlant
-    password: pwd
   oauth2:
     sso:
       login-path: /login_success
@@ -41,9 +38,9 @@ spring:
       host: localhost
 logging:
   level:
-    ROOT: INFO
+    ROOT: ERROR
     com.zenika.liquid.democracy: INFO
-    org.springframework.security: ERROR     
+    org.springframework.security: DEBUG     
   file: ./logs/liquid_democracy_api.log
 
 ---      

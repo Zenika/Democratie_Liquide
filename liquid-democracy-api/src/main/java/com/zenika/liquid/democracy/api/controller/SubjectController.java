@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.service.SubjectService;
-import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
 import com.zenika.liquid.democracy.model.Subject;
 
 @RestController
@@ -34,10 +32,9 @@ public class SubjectController {
 	private SubjectService subjectService;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> addSubject(OAuth2Authentication authentication, @Validated @RequestBody Subject s)
-			throws MalformedSubjectException {
+	public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s) throws MalformedSubjectException {
 
-		String userId = AuthenticationUtil.getUserIdentifiant(authentication);
+		String userId = "";
 
 		Subject out = subjectService.addSubject(s, userId);
 
@@ -47,8 +44,7 @@ public class SubjectController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/inprogress")
-	public ResponseEntity<List<Subject>> getSubjectsInProgress(OAuth2Authentication authentication)
-			throws MalformedSubjectException {
+	public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
 
 		LOG.info("getSubjectsInProgress");
 

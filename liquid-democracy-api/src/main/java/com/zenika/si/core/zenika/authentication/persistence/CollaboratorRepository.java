@@ -8,4 +8,6 @@ public interface CollaboratorRepository extends MongoRepository<Collaborator, Lo
 
 	Collaborator findCollaboratorByUsername(String collaboratorUsername);
 
+	Collaborator findCollaboratorByEmail(String email);
+
 }

@@ -3,6 +3,7 @@ package com.zenika.liquid.democracy.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -22,7 +23,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -66,7 +66,7 @@ public class VoteControllerTest {
 		repository.deleteAll();
 		MockitoAnnotations.initMocks(this);
 		PowerMockito.mockStatic(AuthenticationUtil.class);
-		PowerMockito.when(AuthenticationUtil.getUserIdentifiant(Mockito.any(OAuth2Authentication.class)))
+		PowerMockito.when(AuthenticationUtil.getUserIdentifiant(Mockito.any(Map.class)))
 				.thenReturn("sandra.parlant@zenika.com");
 	}
 
