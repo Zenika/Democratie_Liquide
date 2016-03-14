@@ -6,21 +6,21 @@ import org.springframework.data.annotation.Id;
 public class Power {
 
 	@Id
-	private ObjectId id;
+	private String id;
 
 	private String collaborateurIdFrom;
 
 	private String collaborateurIdTo;
 
 	public Power() {
-		id = new ObjectId();
+		id = new ObjectId().toString();
 	}
 
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

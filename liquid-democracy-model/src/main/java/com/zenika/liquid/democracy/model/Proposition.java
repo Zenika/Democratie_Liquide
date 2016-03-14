@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Proposition {
 
 	@Id
@@ -41,6 +43,7 @@ public class Proposition {
 		this.description = description;
 	}
 
+	@JsonIgnore
 	public boolean isWellFormed() {
 		boolean result = !StringUtils.isEmpty(title);
 

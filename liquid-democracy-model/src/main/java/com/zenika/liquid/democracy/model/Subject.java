@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document
 public class Subject {
 
@@ -137,11 +139,13 @@ public class Subject {
 
 	}
 
+	@JsonIgnore
 	public boolean isClosed() {
 		Date today = new Date();
 		return getDeadLine() != null && getDeadLine().before(today);
 	}
 
+	@JsonIgnore
 	public boolean isWellFormed() {
 		boolean result = !StringUtils.isEmpty(title) && !StringUtils.isEmpty(description);
 

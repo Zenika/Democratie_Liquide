@@ -27,7 +27,7 @@ public class SocialUserDetailsImpl implements SocialUserDetails, UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ZENIKA"));
 		return grantedAuthorities;
 	}
 
@@ -66,7 +66,7 @@ public class SocialUserDetailsImpl implements SocialUserDetails, UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return getEmail().endsWith("zenika.com");
 	}
 
 	public Collaborator getUser() {

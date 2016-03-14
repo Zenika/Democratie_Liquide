@@ -18,6 +18,7 @@ import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.util.PowerUtil;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Subject;
+import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 
 @Service
 public class PowerService {
@@ -27,9 +28,14 @@ public class PowerService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public void addPowerOnSubject(String subjectUuid, Power power, String userId)
+	@Autowired
+	private CollaboratorService collaboratorService;
+
+	public void addPowerOnSubject(String subjectUuid, Power power)
 			throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
 			UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+		String userId = collaboratorService.currentUser().getCollaboratorId();
+
 		LOG.info("Trying to add power for subject {} with {}", subjectUuid, power);
 
 		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
@@ -48,8 +54,10 @@ public class PowerService {
 
 	}
 
-	public void deletePowerOnSubject(String subjectUuid, String userId) throws DeletePowerOnNonExistingSubjectException,
+	public void deletePowerOnSubject(String subjectUuid) throws DeletePowerOnNonExistingSubjectException,
 			DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException {
+		String userId = collaboratorService.currentUser().getCollaboratorId();
+
 		LOG.info("Trying to delete power for subject {} for {}", subjectUuid, userId);
 
 		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);

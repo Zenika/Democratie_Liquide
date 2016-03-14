@@ -3,18 +3,11 @@ package com.zenika.liquid.democracy.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -28,9 +21,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.zenika.Application;
+import com.zenika.TestConfiguration;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
-import com.zenika.liquid.democracy.api.util.AuthenticationUtil;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
@@ -38,14 +30,10 @@ import com.zenika.liquid.democracy.model.Vote;
 import com.zenika.liquid.democracy.model.WeightedChoice;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = TestConfiguration.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("dev")
-@PrepareForTest(AuthenticationUtil.class)
 public class VoteControllerTest {
-
-	@Rule
-	public PowerMockRule rule = new PowerMockRule();
 
 	@Autowired
 	SubjectRepository repository;
@@ -64,10 +52,6 @@ public class VoteControllerTest {
 			}
 		});
 		repository.deleteAll();
-		MockitoAnnotations.initMocks(this);
-		PowerMockito.mockStatic(AuthenticationUtil.class);
-		PowerMockito.when(AuthenticationUtil.getUserIdentifiant(Mockito.any(Map.class)))
-				.thenReturn("sandra.parlant@zenika.com");
 	}
 
 	@Test

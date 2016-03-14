@@ -24,7 +24,7 @@ import com.zenika.liquid.democracy.model.Subject;
 
 @RestController
 @RequestMapping("/api/subjects")
-public class SubjectController extends SecuredController {
+public class SubjectController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SubjectController.class);
 
@@ -34,9 +34,7 @@ public class SubjectController extends SecuredController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s) throws MalformedSubjectException {
 
-		String userId = currentUser().getEmail();
-
-		Subject out = subjectService.addSubject(s, userId);
+		Subject out = subjectService.addSubject(s);
 
 		return ResponseEntity.created(
 				ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())

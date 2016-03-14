@@ -3,6 +3,7 @@ package com.zenika.si.core.zenika.authentication.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import com.zenika.si.core.zenika.authentication.spring.social.google.GoogleConfi
 @Configuration
 @EnableWebSecurity
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Profile({ "docker", "test-prod" })
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String LOGIN_PAGE = "/static/index.html";
@@ -33,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
 		http.exceptionHandling().and().authorizeRequests()
 				.antMatchers("/", "/test", "/signin/google", "/styles/**", "/scripts/**").permitAll()
-				.antMatchers("/test/list", "/api/**").hasRole("USER").anyRequest().fullyAuthenticated().and()
+				.antMatchers("/test/list", "/api/**").hasRole("ZENIKA").anyRequest().fullyAuthenticated().and()
 				.formLogin().disable().anonymous().and().logout().deleteCookies("JSESSIONID")
 				.logoutSuccessUrl(LOGIN_PAGE + "?param.action=loggedOut").and().rememberMe()
 				.rememberMeServices(rememberMeServices).key(appConfig.getRememberMeKey()).and().csrf().disable()

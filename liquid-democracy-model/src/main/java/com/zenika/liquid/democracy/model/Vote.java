@@ -9,22 +9,22 @@ import org.springframework.data.annotation.Id;
 public class Vote {
 
 	@Id
-	private ObjectId id;
+	private String id;
 
 	private String collaborateurId;
 
 	private List<WeightedChoice> choices;
 
 	public Vote() {
-		id = new ObjectId();
+		id = new ObjectId().toString();
 		choices = new ArrayList<>();
 	}
 
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -31,13 +31,21 @@ public final class SimpleSignInAdapter implements SignInAdapter {
 	public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
 		SocialUserDetails socialUserDetails = socialUserDetailsService.loadUserByUserId(userId);
 
-		SocialAuthenticationToken authentication = new SocialAuthenticationToken(connection, socialUserDetails, null,
-				socialUserDetails.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		rememberMeServices.loginSuccess(request.getNativeRequest(HttpServletRequest.class),
-				request.getNativeResponse(HttpServletResponse.class), authentication);
+		if (socialUserDetails.isEnabled()) {
+			SocialAuthenticationToken authentication = new SocialAuthenticationToken(connection, socialUserDetails,
+					null, socialUserDetails.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		return appConfig.getRedirectUrl();
+			rememberMeServices.loginSuccess(request.getNativeRequest(HttpServletRequest.class),
+					request.getNativeResponse(HttpServletResponse.class), authentication);
+			return appConfig.getRedirectUrl();
+		} else {
+			SecurityContextHolder.getContext().setAuthentication(null);
+			rememberMeServices.loginFail(request.getNativeRequest(HttpServletRequest.class),
+					request.getNativeResponse(HttpServletResponse.class));
+			return appConfig.getRedirectUrlFailure();
+		}
+
 	}
 
 }

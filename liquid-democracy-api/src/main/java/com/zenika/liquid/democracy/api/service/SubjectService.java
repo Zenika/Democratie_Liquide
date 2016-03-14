@@ -13,6 +13,7 @@ import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.model.Subject;
+import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 
 @Service
 public class SubjectService {
@@ -22,7 +23,12 @@ public class SubjectService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public Subject addSubject(Subject s, String userId) throws MalformedSubjectException {
+	@Autowired
+	private CollaboratorService collaboratorService;
+
+	public Subject addSubject(Subject s) throws MalformedSubjectException {
+		String userId = collaboratorService.currentUser().getCollaboratorId();
+
 		LOG.info("Trying to add subject {}", s);
 
 		s.setCollaborateurId(userId);

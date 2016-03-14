@@ -15,6 +15,7 @@ import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.util.VoteUtil;
 import com.zenika.liquid.democracy.model.Subject;
 import com.zenika.liquid.democracy.model.Vote;
+import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 
 @Service
 public class VoteService {
@@ -24,8 +25,13 @@ public class VoteService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	public void voteForSubject(String subjectUuid, Vote vote, String userId) throws VoteForNonExistingSubjectException,
+	@Autowired
+	private CollaboratorService collaboratorService;
+
+	public void voteForSubject(String subjectUuid, Vote vote) throws VoteForNonExistingSubjectException,
 			VoteIsNotCorrectException, CloseSubjectException, UserAlreadyGavePowerException {
+
+		String userId = collaboratorService.currentUser().getCollaboratorId();
 
 		LOG.info("Trying to vote for subject {} with {}", subjectUuid, vote);
 

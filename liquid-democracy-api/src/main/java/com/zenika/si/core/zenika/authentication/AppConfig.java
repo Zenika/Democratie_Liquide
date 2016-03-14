@@ -15,6 +15,9 @@ public class AppConfig {
 	@NotNull
 	private String redirectUrl;
 
+	@NotNull
+	private String redirectUrlFailure;
+
 	public String getRedirectUrl() {
 		return redirectUrl;
 	}
@@ -29,5 +32,13 @@ public class AppConfig {
 
 	public void setRememberMeKey(String rememberMeKey) {
 		this.rememberMeKey = rememberMeKey;
+	}
+
+	public String getRedirectUrlFailure() {
+		return redirectUrlFailure;
+	}
+
+	public void setRedirectUrlFailure(String redirectUrlFailure) {
+		this.redirectUrlFailure = redirectUrlFailure;
 	}
 }

@@ -6,21 +6,6 @@ logging:
     ROOT: INFO
     com.zenika.liquid.democracy: INFO
     org.springframework.security: DEBUG
-    
-security:
-  oauth2:
-    sso:
-      login-path: /login_success
-    client:
-      clientId: TODO
-      clientSecret: TODO
-      accessTokenUri: https://www.googleapis.com/oauth2/v3/token
-      userAuthorizationUri: https://accounts.google.com/o/oauth2/auth?hd=zenika.com
-      clientAuthenticationScheme: query
-      scope: profile email
-    resource:
-      userInfoUri: https://www.googleapis.com/plus/v1/people/me
-      preferTokenInfo: false
 
 ---
 spring:
@@ -38,7 +23,7 @@ spring:
       host: localhost
 logging:
   level:
-    ROOT: ERROR
+    ROOT: INFO
     com.zenika.liquid.democracy: INFO
     org.springframework.security: DEBUG     
   file: ./logs/liquid_democracy_api.log
