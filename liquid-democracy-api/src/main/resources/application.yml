@@ -1,11 +1,23 @@
 info:
   component: Liquid Democracy Api
-
+  
 logging:
   level:
     ROOT: INFO
     com.zenika.liquid.democracy: INFO
-    org.springframework.security: DEBUG
+    org.springframework: ERROR
+
+app:
+  config:
+    rememberMeKey: thisisasimpleremembermekey
+    redirectUrl: /
+    redirectUrlFailure: /
+    
+spring:
+  social:
+    google:
+      appId: TODO
+      appSecret: TODO
 
 ---
 spring:
@@ -22,11 +34,12 @@ spring:
     mongodb:
       host: localhost
 logging:
-  level:
-    ROOT: INFO
-    com.zenika.liquid.democracy: INFO
-    org.springframework.security: DEBUG     
-  file: ./logs/liquid_democracy_api.log
+  config: src/main/resources/log4j-test-prod.xml
+app:
+  config:
+    rememberMeKey: thisisasimpleremembermekey
+    redirectUrl: http://localhost:8081/TestApi/success.html
+    redirectUrlFailure: http://localhost:8081/TestApi/failure.html
 
 ---      
 spring:
@@ -37,6 +50,11 @@ spring:
     mongodb:
       host: mongoliquidDemocracy
       database: dbliqdem
+app:
+  config:
+    rememberMeKey: thisisasimpleremembermekey
+    redirectUrl: http://localhost:3000
+    redirectUrlFailure: http://localhost:3000/#/loginfailed
 
 ---      
 spring:
