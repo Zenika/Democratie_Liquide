@@ -6,10 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -34,9 +32,6 @@ import com.zenika.liquid.democracy.model.Subject;
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("dev")
 public class PowerControllerTest {
-
-	@Rule
-	public PowerMockRule rule = new PowerMockRule();
 
 	@Autowired
 	SubjectRepository repository;
