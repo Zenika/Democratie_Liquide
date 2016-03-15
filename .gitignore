@@ -6,26 +6,9 @@
 /liquid-democracy-model/.project
 /liquid-democracy-api/.classpath
 /liquid-democracy-model/.classpath
-/liquid-democracy-front
+/liquid-democracy-api/logs
 RemoteSystemsTempFiles
 .metadata
 .recommenders
-/Servers/.project
-/Servers/.settings/org.eclipse.wst.server.core.prefs
-/Servers/Tomcat v8.0 Server at localhost-config/catalina.policy
-/Servers/Tomcat v8.0 Server at localhost-config/catalina.properties
-/Servers/Tomcat v8.0 Server at localhost-config/context.xml
-/Servers/Tomcat v8.0 Server at localhost-config/server.xml
-/Servers/Tomcat v8.0 Server at localhost-config/tomcat-users.xml
-/Servers/Tomcat v8.0 Server at localhost-config/web.xml
-/TestApi/.classpath
-/TestApi/.project
-/TestApi/.settings/.jsdtscope
-/TestApi/.settings/org.eclipse.jdt.core.prefs
-/TestApi/.settings/org.eclipse.wst.common.component
-/TestApi/.settings/org.eclipse.wst.common.project.facet.core.xml
-/TestApi/.settings/org.eclipse.wst.jsdt.ui.superType.container
-/TestApi/.settings/org.eclipse.wst.jsdt.ui.superType.name
-/TestApi/WebContent/failure.html
-/TestApi/WebContent/META-INF/MANIFEST.MF
-/TestApi/WebContent/success.html
+/Servers
+/TestApi
