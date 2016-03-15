@@ -23,14 +23,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.zenika.TestConfiguration;
+import com.zenika.Application;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = TestConfiguration.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("dev")
 public class PowerControllerTest {
