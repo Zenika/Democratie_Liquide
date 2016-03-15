@@ -1,8 +1,7 @@
-package com.zenika.liquid.democracy.api;
+package com.zenika.si.core.zenika.authentication.service;
 
 import org.springframework.context.annotation.Configuration;
 
-import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 import com.zenika.si.core.zenika.model.Collaborator;
 
 @Configuration

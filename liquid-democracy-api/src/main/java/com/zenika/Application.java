@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zenika.si.core.zenika.authentication.AppConfig;
+import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 
 @SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
@@ -60,6 +61,11 @@ public class Application extends WebMvcConfigurerAdapter {
 		urlPatterns.add("/*");
 		filterRegBean.setUrlPatterns(urlPatterns);
 		return filterRegBean;
+	}
+
+	@Bean
+	public CollaboratorService collaboratorService() {
+		return new CollaboratorService();
 	}
 
 }

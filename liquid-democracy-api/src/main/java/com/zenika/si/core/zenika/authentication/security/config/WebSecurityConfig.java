@@ -20,8 +20,6 @@ import com.zenika.si.core.zenika.authentication.spring.social.google.GoogleConfi
 @Profile({ "docker", "test-prod" })
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String LOGIN_PAGE = "/static/index.html";
-
 	@Autowired
 	RememberMeServices rememberMeServices;
 	@Autowired
@@ -33,11 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
-		http.exceptionHandling().and().authorizeRequests()
-				.antMatchers("/", "/test", "/signin/google", "/styles/**", "/scripts/**").permitAll()
-				.antMatchers("/test/list", "/api/**").hasRole("ZENIKA").anyRequest().fullyAuthenticated().and()
-				.formLogin().disable().anonymous().and().logout().deleteCookies("JSESSIONID")
-				.logoutSuccessUrl(LOGIN_PAGE + "?param.action=loggedOut").and().rememberMe()
+		http.exceptionHandling().and().authorizeRequests().antMatchers("/signin/google").permitAll()
+				.antMatchers("/api/**").hasRole("ZENIKA").anyRequest().fullyAuthenticated().and().formLogin().disable()
+				.anonymous().and().logout().logoutUrl("/signout/google").deleteCookies("JSESSIONID")
+				.logoutSuccessUrl(appConfig.getRedirectUrlFailure()).and().rememberMe()
 				.rememberMeServices(rememberMeServices).key(appConfig.getRememberMeKey()).and().csrf().disable()
 				.apply(springSocialConfigurer);
 	}

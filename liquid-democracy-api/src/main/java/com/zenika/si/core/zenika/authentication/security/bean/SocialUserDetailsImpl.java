@@ -36,7 +36,7 @@ public class SocialUserDetailsImpl implements SocialUserDetails, UserDetails {
 	}
 
 	public String getDisplayName() {
-		return user.getUsername();
+		return user.getFirstName() + " " + user.getLastName();
 	}
 
 	@Override

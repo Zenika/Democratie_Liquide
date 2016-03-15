@@ -1,5 +1,7 @@
 package com.zenika.si.core.zenika.authentication.security.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.security.SocialUserDetails;
 import org.springframework.social.security.SocialUserDetailsService;
@@ -21,10 +23,12 @@ public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
 
 	@Override
 	public SocialUserDetails loadUserByUserId(String userId) {
-		Collaborator user = userRepository.findCollaboratorByEmail(userId);
+		Collaborator user = new Collaborator();
 
-		if (user == null) {
-			user = new Collaborator();
+		Optional<Collaborator> userTmp = userRepository.findCollaboratorByEmail(userId);
+
+		if (userTmp.isPresent()) {
+			user = userTmp.get();
 		}
 
 		return new SocialUserDetailsImpl(user);

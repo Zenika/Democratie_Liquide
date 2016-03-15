@@ -10,7 +10,6 @@ import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
-import org.springframework.social.google.connect.GoogleConnectionFactory;
 
 import com.zenika.si.core.zenika.authentication.persistence.CollaboratorRepository;
 import com.zenika.si.core.zenika.authentication.spring.social.AccountConnectionSignUp;
@@ -39,8 +38,8 @@ public class GoogleConfigurerAdapter extends SocialConfigurerAdapter {
 
 	@Override
 	public void addConnectionFactories(ConnectionFactoryConfigurer configurer, Environment environment) {
-		GoogleConnectionFactory factory = new GoogleConnectionFactory(this.properties.getAppId(),
-				this.properties.getAppSecret());
+		GoogleConnectionFactoryWithDomainRestriction factory = new GoogleConnectionFactoryWithDomainRestriction(
+				this.properties.getAppId(), this.properties.getAppSecret());
 		factory.setScope("email profile");
 		configurer.addConnectionFactory(factory);
 	}

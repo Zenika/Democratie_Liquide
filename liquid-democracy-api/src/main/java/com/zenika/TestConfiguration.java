@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.zenika.liquid.democracy.api.CollaboratorServiceStub;
 import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
+import com.zenika.si.core.zenika.authentication.service.CollaboratorServiceStub;
 
 @SpringBootApplication
 public class TestConfiguration {

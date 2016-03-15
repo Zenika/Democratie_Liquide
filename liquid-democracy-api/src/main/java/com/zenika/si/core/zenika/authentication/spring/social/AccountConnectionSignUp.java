@@ -1,5 +1,7 @@
 package com.zenika.si.core.zenika.authentication.spring.social;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -19,14 +21,21 @@ public class AccountConnectionSignUp implements ConnectionSignUp {
 
 	@Override
 	public String execute(Connection<?> connection) {
+		Collaborator user = new Collaborator();
+
 		UserProfile profile = connection.fetchUserProfile();
-		Collaborator user = userRepository.findCollaboratorByEmail(profile.getEmail());
-		if (user == null) {
-			user = new Collaborator();
+
+		Optional<Collaborator> userTmp = userRepository.findCollaboratorByEmail(profile.getEmail());
+
+		if (userTmp.isPresent()) {
+			user = userTmp.get();
+		} else {
 			user.setEmail(profile.getEmail());
-			user.setUsername(profile.getFirstName());
+			user.setFirstName(profile.getFirstName());
+			user.setLastName(profile.getLastName());
 			userRepository.insert(user);
 		}
+
 		return user.getEmail();
 	}
 
