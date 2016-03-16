@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
@@ -16,6 +17,9 @@ public class Subject {
 
 	@Id
 	private String uuid;
+
+	@Version
+	private String version;
 
 	private String title;
 
@@ -182,6 +186,14 @@ public class Subject {
 		}
 
 		return strB.toString();
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 }

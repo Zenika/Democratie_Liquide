@@ -5,6 +5,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
@@ -18,6 +21,8 @@ import com.zenika.liquid.democracy.model.Vote;
 import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 
 @Service
+@EnableRetry
+@Retryable(OptimisticLockingFailureException.class)
 public class VoteService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(VoteService.class);
