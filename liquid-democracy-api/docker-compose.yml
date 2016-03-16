@@ -6,3 +6,5 @@ liquidDemocracyApi:
    - mongoliquidDemocracy:mongoliquidDemocracy
 mongoliquidDemocracy:
   image: mongo:3.2.3
+  volumes: 
+    - /data/mongo/liquid_democracy:/data/db
