@@ -73,5 +73,19 @@ public class VoteUtil {
 		vote.setCollaborateurId(userId);
 
 		s.getVotes().add(vote);
+
+		compileResults(s);
+	}
+
+	private static void compileResults(Subject s) {
+		for (Proposition p : s.getPropositions()) {
+			p.setPoints(0);
+			s.getVotes().stream().forEach(v -> {
+				int nbPointsVoted = v.getChoices().stream().filter(c -> {
+					return p.getId().equals(c.getProposition().getId());
+				}).collect(Collectors.summingInt(WeightedChoice::getPoints));
+				p.setPoints(nbPointsVoted + p.getPoints());
+			});
+		}
 	}
 }

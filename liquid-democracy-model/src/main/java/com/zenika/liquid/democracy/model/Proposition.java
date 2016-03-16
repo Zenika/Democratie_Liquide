@@ -15,6 +15,8 @@ public class Proposition {
 
 	private String description;
 
+	private int points;
+
 	public Proposition() {
 		id = new ObjectId().toString();
 	}
@@ -60,6 +62,14 @@ public class Proposition {
 		strB.append("\n \t Description : ").append(getDescription());
 
 		return strB.toString();
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
 	}
 
 }
