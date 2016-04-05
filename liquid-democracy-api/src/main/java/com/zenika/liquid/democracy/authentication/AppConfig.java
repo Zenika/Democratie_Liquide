@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication;
+package com.zenika.liquid.democracy.authentication;
 
 import javax.validation.constraints.NotNull;
 

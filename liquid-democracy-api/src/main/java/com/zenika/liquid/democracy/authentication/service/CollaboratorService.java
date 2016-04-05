@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.service;
+package com.zenika.liquid.democracy.authentication.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.zenika.si.core.zenika.authentication.persistence.CollaboratorRepository;
-import com.zenika.si.core.zenika.authentication.security.bean.SocialUserDetailsImpl;
+import com.zenika.liquid.democracy.authentication.persistence.CollaboratorRepository;
+import com.zenika.liquid.democracy.authentication.security.bean.SocialUserDetailsImpl;
 import com.zenika.si.core.zenika.model.Collaborator;
 
 @Service

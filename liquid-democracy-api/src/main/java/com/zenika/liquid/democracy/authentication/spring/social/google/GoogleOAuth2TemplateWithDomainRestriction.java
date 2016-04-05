@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.spring.social.google;
+package com.zenika.liquid.democracy.authentication.spring.social.google;
 
 import java.util.List;
 

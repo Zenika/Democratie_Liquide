@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.spring.social;
+package com.zenika.liquid.democracy.authentication.spring.social;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import com.zenika.si.core.zenika.authentication.AppConfig;
+import com.zenika.liquid.democracy.authentication.AppConfig;
 
 @Component
 public final class SimpleSignInAdapter implements SignInAdapter {

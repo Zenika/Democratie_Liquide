@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.security.bean;
+package com.zenika.liquid.democracy.authentication.security.bean;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.security.service;
+package com.zenika.liquid.democracy.authentication.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

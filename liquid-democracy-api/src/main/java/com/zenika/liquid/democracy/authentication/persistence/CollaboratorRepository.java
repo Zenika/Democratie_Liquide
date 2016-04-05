@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.persistence;
+package com.zenika.liquid.democracy.authentication.persistence;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.zenika;
+package com.zenika.liquid.democracy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
@@ -17,9 +18,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zenika.si.core.zenika.authentication.AppConfig;
+import com.zenika.liquid.democracy.authentication.AppConfig;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class Application extends WebMvcConfigurerAdapter {
 
 	@Autowired
@@ -34,8 +36,6 @@ public class Application extends WebMvcConfigurerAdapter {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		objectMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
-		// objectMapper.setDateFormat(new
-		// SimpleDateFormat(ConstantKt.getMAIN_DATE_FORMAT()));
 		return objectMapper;
 	}
 

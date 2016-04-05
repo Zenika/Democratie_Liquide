@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.spring.social;
+package com.zenika.liquid.democracy.authentication.spring.social;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UserProfile;
 
-import com.zenika.si.core.zenika.authentication.persistence.CollaboratorRepository;
+import com.zenika.liquid.democracy.authentication.persistence.CollaboratorRepository;
 import com.zenika.si.core.zenika.model.Collaborator;
 
 public class AccountConnectionSignUp implements ConnectionSignUp {

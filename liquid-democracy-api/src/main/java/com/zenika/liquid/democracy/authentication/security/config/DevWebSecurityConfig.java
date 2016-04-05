@@ -1,12 +1,10 @@
-package com.zenika.si.core.zenika.authentication.security.config;
+package com.zenika.liquid.democracy.authentication.security.config;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@Configuration
 @EnableWebSecurity
 @Profile({ "dev", "docker-test" })
 public class DevWebSecurityConfig extends WebSecurityConfigurerAdapter {

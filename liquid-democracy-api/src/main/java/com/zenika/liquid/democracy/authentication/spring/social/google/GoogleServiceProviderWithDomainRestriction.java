@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.spring.social.google;
+package com.zenika.liquid.democracy.authentication.spring.social.google;
 
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.impl.GoogleTemplate;

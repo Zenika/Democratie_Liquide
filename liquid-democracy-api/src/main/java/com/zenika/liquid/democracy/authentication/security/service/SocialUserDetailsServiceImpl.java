@@ -1,4 +1,4 @@
-package com.zenika.si.core.zenika.authentication.security.service;
+package com.zenika.liquid.democracy.authentication.security.service;
 
 import java.util.Optional;
 
@@ -7,8 +7,8 @@ import org.springframework.social.security.SocialUserDetails;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.zenika.si.core.zenika.authentication.persistence.CollaboratorRepository;
-import com.zenika.si.core.zenika.authentication.security.bean.SocialUserDetailsImpl;
+import com.zenika.liquid.democracy.authentication.persistence.CollaboratorRepository;
+import com.zenika.liquid.democracy.authentication.security.bean.SocialUserDetailsImpl;
 import com.zenika.si.core.zenika.model.Collaborator;
 
 @Service

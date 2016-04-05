@@ -1,10 +1,7 @@
-package com.zenika.si.core.zenika.authentication.service;
-
-import org.springframework.context.annotation.Configuration;
+package com.zenika.liquid.democracy.authentication.service;
 
 import com.zenika.si.core.zenika.model.Collaborator;
 
-@Configuration
 public class CollaboratorServiceStub extends CollaboratorService {
 
 	public Collaborator currentUser() {
