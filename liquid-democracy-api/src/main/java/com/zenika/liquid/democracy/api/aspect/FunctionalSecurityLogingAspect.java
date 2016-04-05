@@ -1,11 +1,10 @@
 package com.zenika.liquid.democracy.api.aspect;
 
+import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,7 @@ import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 @Component
 public class FunctionalSecurityLogingAspect {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FunctionalSecurityLogingAspect.class);
+	private static final Logger LOG = Logger.getLogger(FunctionalSecurityLogingAspect.class);
 
 	@Autowired
 	private CollaboratorService collaboratorService;
