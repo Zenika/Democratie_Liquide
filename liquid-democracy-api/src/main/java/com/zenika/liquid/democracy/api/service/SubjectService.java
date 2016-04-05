@@ -4,21 +4,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.si.core.zenika.authentication.service.CollaboratorService;
 
 @Service
 public class SubjectService {
-
-	private static final Logger LOG = LoggerFactory.getLogger(SubjectService.class);
 
 	@Autowired
 	private SubjectRepository subjectRepository;
@@ -27,11 +23,8 @@ public class SubjectService {
 	private CollaboratorService collaboratorService;
 
 	public Subject addSubject(Subject s) throws MalformedSubjectException {
+
 		String userId = collaboratorService.currentUser().getCollaboratorId();
-
-		LOG.info("Trying to add subject {}", s);
-
-		s.setCollaborateurId(userId);
 
 		if (!s.isWellFormed()) {
 			throw new MalformedSubjectException();
@@ -39,13 +32,12 @@ public class SubjectService {
 
 		s.setSubmitDate(new Date());
 
-		LOG.info("Adding subject {}", s);
+		s.setCollaborateurId(userId);
+
 		return subjectRepository.save(s);
 	}
 
 	public List<Subject> getSubjectsInProgress() {
-		LOG.info("Getting subjectsInProgress");
-
 		List<Subject> out = subjectRepository.findByDeadLineGreaterThanOrDeadLineIsNull(new Date());
 		return out;
 	}

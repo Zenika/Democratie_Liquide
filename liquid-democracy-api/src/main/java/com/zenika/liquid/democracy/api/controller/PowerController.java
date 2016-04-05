@@ -1,7 +1,5 @@
 package com.zenika.liquid.democracy.api.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +25,6 @@ import com.zenika.liquid.democracy.model.Power;
 @RequestMapping("/api/powers")
 public class PowerController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(PowerController.class);
-
 	@Autowired
 	private PowerService powerService;
 
@@ -36,8 +32,6 @@ public class PowerController {
 	public ResponseEntity<Void> addPowerOnSubject(@RequestBody Power p, @PathVariable String subjectUuid)
 			throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
 			UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
-
-		LOG.info("addPowerOnSubject {} ", p);
 
 		powerService.addPowerOnSubject(subjectUuid, p);
 
@@ -48,8 +42,6 @@ public class PowerController {
 	public ResponseEntity<Void> deletePowerOnSubject(@PathVariable String subjectUuid)
 			throws DeletePowerOnNonExistingSubjectException, DeleteNonExistingPowerException, CloseSubjectException,
 			UserAlreadyVoteException {
-
-		LOG.info("deletePowerOnSubject");
 
 		powerService.deletePowerOnSubject(subjectUuid);
 

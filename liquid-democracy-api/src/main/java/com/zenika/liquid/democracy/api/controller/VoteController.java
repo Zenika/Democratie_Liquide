@@ -1,7 +1,5 @@
 package com.zenika.liquid.democracy.api.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +26,6 @@ import com.zenika.liquid.democracy.model.Vote;
 @RequestMapping("/api/votes")
 public class VoteController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(VoteController.class);
-
 	@Autowired
 	private VoteService voteService;
 
@@ -37,8 +33,6 @@ public class VoteController {
 	public ResponseEntity<Void> voteForSubject(@PathVariable String subjectUuid, @Validated @RequestBody Vote vote)
 			throws VoteForNonExistingSubjectException, VoteIsNotCorrectException, CloseSubjectException,
 			UserAlreadyGavePowerException {
-
-		LOG.info("voteForSubject {} with {} ", subjectUuid, vote);
 
 		voteService.voteForSubject(subjectUuid, vote);
 

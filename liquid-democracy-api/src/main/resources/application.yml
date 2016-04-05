@@ -16,8 +16,8 @@ app:
 spring:
   social:
     google:
-      appId: TODO
-      appSecret: TODO
+      appId: 
+      appSecret: 
 
 ---
 spring:
@@ -50,6 +50,8 @@ spring:
     mongodb:
       host: mongoliquidDemocracy
       database: dbliqdem
+logging:
+  config: src/main/resources/log4j-test-prod.xml
 app:
   config:
     rememberMeKey: thisisasimpleremembermekey

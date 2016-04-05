@@ -4,7 +4,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File"
-			value="/home/sparlant/Documents/Democratie_Liquide/liquid-democracy-api/logs/liquid_democracy_server.log" />
+			value="./liquid-democracy-api-logs/logs/liquid_democracy_server.log" />
 		<param name="Append" value="true" />
 		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -14,7 +14,7 @@
 	</appender>
 	<appender name="fileApi" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File"
-			value="/home/sparlant/Documents/Democratie_Liquide/liquid-democracy-api/logs/liquid_democracy_api.log" />
+			value="./liquid-democracy-api-logs/logs/liquid_democracy_api.log" />
 		<param name="Append" value="true" />
 		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">

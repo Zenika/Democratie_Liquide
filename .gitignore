@@ -12,3 +12,7 @@ RemoteSystemsTempFiles
 .recommenders
 /Servers
 /TestApi
+/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_api.log
+/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_api.log_2016-03-17.log
+/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_server.log
+/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_server.log_2016-03-17.log

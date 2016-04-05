@@ -2,8 +2,6 @@ package com.zenika.liquid.democracy.api.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +24,6 @@ import com.zenika.liquid.democracy.model.Subject;
 @RequestMapping("/api/subjects")
 public class SubjectController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SubjectController.class);
-
 	@Autowired
 	private SubjectService subjectService;
 
@@ -44,8 +40,6 @@ public class SubjectController {
 	@RequestMapping(method = RequestMethod.GET, path = "/inprogress")
 	public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
 
-		LOG.info("getSubjectsInProgress");
-
 		List<Subject> out = subjectService.getSubjectsInProgress();
 
 		if (out.isEmpty()) {
@@ -58,8 +52,6 @@ public class SubjectController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
 	public ResponseEntity<Subject> getSubjectByUuid(@PathVariable String subjectUuid)
 			throws UnexistingSubjectException {
-
-		LOG.info("getSubject with id {} ", subjectUuid);
 
 		Subject s = subjectService.getSubjectByUuid(subjectUuid);
 
