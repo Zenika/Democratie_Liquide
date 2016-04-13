@@ -1,13 +1,10 @@
 package com.zenika.liquid.democracy.model;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
 public class WeightedChoice {
 
 	private int points;
 
-	@DBRef
-	Proposition proposition;
+	private String propositionId;
 
 	public int getPoints() {
 		return points;
@@ -17,23 +14,23 @@ public class WeightedChoice {
 		this.points = points;
 	}
 
-	public Proposition getProposition() {
-		return proposition;
-	}
-
-	public void setProposition(Proposition proposition) {
-		this.proposition = proposition;
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder strB = new StringBuilder();
 
 		strB.append("Choice : ");
-		strB.append("\n \t Proposition : ").append(getProposition());
+		strB.append("\n \t Proposition : ").append(getPropositionId());
 		strB.append("\n \t Points : ").append(getPoints());
 
 		return strB.toString();
+	}
+
+	public String getPropositionId() {
+		return propositionId;
+	}
+
+	public void setPropositionId(String propositionId) {
+		this.propositionId = propositionId;
 	}
 
 }
