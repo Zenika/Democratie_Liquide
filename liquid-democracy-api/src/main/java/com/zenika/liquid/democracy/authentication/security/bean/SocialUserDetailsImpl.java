@@ -21,7 +21,7 @@ public class SocialUserDetailsImpl implements SocialUserDetails, UserDetails {
 
 	@Override
 	public String getUserId() {
-		return user.getCollaboratorId();
+		return user.getEmail();
 	}
 
 	@Override

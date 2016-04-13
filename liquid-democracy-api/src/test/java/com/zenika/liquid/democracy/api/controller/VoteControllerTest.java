@@ -71,7 +71,7 @@ public class VoteControllerTest {
 		Vote v = new Vote();
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
-		c1.setProposition(p2);
+		c1.setPropositionId(p2.getId());
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
@@ -106,7 +106,7 @@ public class VoteControllerTest {
 		Vote v = new Vote();
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
-		c1.setProposition(p2);
+		c1.setPropositionId(p2.getId());
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
@@ -133,7 +133,7 @@ public class VoteControllerTest {
 		v.setCollaborateurId("sandra.parlant@zenika.com");
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
-		c1.setProposition(p2);
+		c1.setPropositionId(p2.getId());
 		v.getChoices().add(c1);
 		s.getVotes().add(v);
 
@@ -163,7 +163,7 @@ public class VoteControllerTest {
 		Vote v = new Vote();
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
-		c1.setProposition(p2);
+		c1.setPropositionId(p2.getId());
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
@@ -190,7 +190,7 @@ public class VoteControllerTest {
 		Vote v = new Vote();
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(2);
-		c1.setProposition(p1);
+		c1.setPropositionId(p1.getId());
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
@@ -217,7 +217,7 @@ public class VoteControllerTest {
 		Vote v = new Vote();
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
-		c1.setProposition(p2);
+		c1.setPropositionId(p2.getId());
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
@@ -245,11 +245,11 @@ public class VoteControllerTest {
 		Vote v = new Vote();
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
-		c1.setProposition(p1);
+		c1.setPropositionId(p1.getId());
 
 		WeightedChoice c2 = new WeightedChoice();
 		c2.setPoints(1);
-		c2.setProposition(p1);
+		c2.setPropositionId(p1.getId());
 
 		v.getChoices().add(c1);
 		v.getChoices().add(c2);

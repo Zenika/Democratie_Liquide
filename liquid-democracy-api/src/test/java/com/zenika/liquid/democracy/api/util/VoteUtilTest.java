@@ -28,12 +28,12 @@ public class VoteUtilTest {
 
 		Vote v = new Vote();
 		WeightedChoice choice2 = new WeightedChoice();
-		choice2.setProposition(s.getPropositions().get(1));
+		choice2.setPropositionId(s.getPropositions().get(1).getId());
 		choice2.setPoints(1);
 		v.getChoices().add(choice2);
 
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(1));
+		choice1.setPropositionId(s.getPropositions().get(1).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -50,7 +50,7 @@ public class VoteUtilTest {
 		WeightedChoice choice1 = new WeightedChoice();
 		Proposition p2 = new Proposition();
 		p2.setTitle("P2 title");
-		choice1.setProposition(p2);
+		choice1.setPropositionId(p2.getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -65,12 +65,12 @@ public class VoteUtilTest {
 
 		Vote v = new Vote();
 		WeightedChoice choice2 = new WeightedChoice();
-		choice2.setProposition(s.getPropositions().get(1));
+		choice2.setPropositionId(s.getPropositions().get(1).getId());
 		choice2.setPoints(1);
 		v.getChoices().add(choice2);
 
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(0));
+		choice1.setPropositionId(s.getPropositions().get(0).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -89,7 +89,7 @@ public class VoteUtilTest {
 
 		Vote v = new Vote();
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(0));
+		choice1.setPropositionId(s.getPropositions().get(0).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -105,7 +105,7 @@ public class VoteUtilTest {
 		Vote oldV = new Vote();
 		oldV.setCollaborateurId("sandra.parlant@zenika.com");
 		WeightedChoice oldChoice1 = new WeightedChoice();
-		oldChoice1.setProposition(s.getPropositions().get(0));
+		oldChoice1.setPropositionId(s.getPropositions().get(0).getId());
 		oldChoice1.setPoints(1);
 		oldV.getChoices().add(oldChoice1);
 
@@ -113,7 +113,7 @@ public class VoteUtilTest {
 
 		Vote v = new Vote();
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(0));
+		choice1.setPropositionId(s.getPropositions().get(0).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -133,7 +133,7 @@ public class VoteUtilTest {
 
 		Vote v = new Vote();
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(0));
+		choice1.setPropositionId(s.getPropositions().get(0).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -148,7 +148,7 @@ public class VoteUtilTest {
 
 		Vote v = new Vote();
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(0));
+		choice1.setPropositionId(s.getPropositions().get(0).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -163,7 +163,7 @@ public class VoteUtilTest {
 		Vote v0 = new Vote();
 		v0.setCollaborateurId("julie.bourhis@zenika.com");
 		WeightedChoice choice01 = new WeightedChoice();
-		choice01.setProposition(s.getPropositions().get(1));
+		choice01.setPropositionId(s.getPropositions().get(1).getId());
 		choice01.setPoints(1);
 		v0.getChoices().add(choice01);
 		s.getVotes().add(v0);
@@ -171,14 +171,14 @@ public class VoteUtilTest {
 		Vote v1 = new Vote();
 		v1.setCollaborateurId("julie.bourhis@zenika.com");
 		WeightedChoice choice11 = new WeightedChoice();
-		choice11.setProposition(s.getPropositions().get(1));
+		choice11.setPropositionId(s.getPropositions().get(1).getId());
 		choice11.setPoints(1);
 		v1.getChoices().add(choice11);
 		s.getVotes().add(v1);
 
 		Vote v = new Vote();
 		WeightedChoice choice1 = new WeightedChoice();
-		choice1.setProposition(s.getPropositions().get(0));
+		choice1.setPropositionId(s.getPropositions().get(0).getId());
 		choice1.setPoints(1);
 		v.getChoices().add(choice1);
 
@@ -189,7 +189,7 @@ public class VoteUtilTest {
 
 		Vote v3 = new Vote();
 		WeightedChoice choice3 = new WeightedChoice();
-		choice3.setProposition(s.getPropositions().get(1));
+		choice3.setPropositionId(s.getPropositions().get(1).getId());
 		choice3.setPoints(1);
 		v.getChoices().add(choice3);
 		VoteUtil.prepareVotes(v3, s, "sandra.parlant@zenika.com");
@@ -211,7 +211,7 @@ public class VoteUtilTest {
 		Vote v0 = new Vote();
 		v0.setCollaborateurId("julie.bourhis@zenika.com");
 		WeightedChoice choice01 = new WeightedChoice();
-		choice01.setProposition(s.getPropositions().get(1));
+		choice01.setPropositionId(s.getPropositions().get(1).getId());
 		choice01.setPoints(1);
 		v0.getChoices().add(choice01);
 		s.getVotes().add(v0);

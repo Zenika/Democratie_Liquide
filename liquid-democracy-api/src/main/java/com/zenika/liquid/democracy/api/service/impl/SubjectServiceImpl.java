@@ -25,7 +25,7 @@ public class SubjectServiceImpl implements SubjectService {
 
 	public Subject addSubject(Subject s) throws MalformedSubjectException {
 
-		String userId = collaboratorService.currentUser().getCollaboratorId();
+		String userId = collaboratorService.currentUser().getEmail();
 
 		if (!s.isWellFormed()) {
 			throw new MalformedSubjectException();

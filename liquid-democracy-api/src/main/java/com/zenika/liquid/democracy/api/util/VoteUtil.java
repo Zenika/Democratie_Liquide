@@ -44,12 +44,12 @@ public class VoteUtil {
 
 		for (WeightedChoice c : vote.getChoices()) {
 			Optional<Proposition> propositionFound = s.getPropositions().stream()
-					.filter(p -> p.getId().equals(c.getProposition().getId())).findFirst();
+					.filter(p -> p.getId().equals(c.getPropositionId())).findFirst();
 
 			propositionFound.orElseThrow(VotePropositionIncorrectException::new);
 
 			Stream<WeightedChoice> propositionsFound = vote.getChoices().stream()
-					.filter(cTmp -> cTmp.getProposition().getId().equals(c.getProposition().getId()));
+					.filter(cTmp -> cTmp.getPropositionId().equals(c.getPropositionId()));
 
 			if (propositionsFound.count() != 1) {
 				throw new VotePropositionIncorrectException();
@@ -62,11 +62,6 @@ public class VoteUtil {
 		Long power = s.getPowers().stream().filter(p -> p.getCollaborateurIdTo().equals(userId)).count();
 
 		for (WeightedChoice c : vote.getChoices()) {
-			Optional<Proposition> propositionFound = s.getPropositions().stream()
-					.filter(p -> p.getId().equals(c.getProposition().getId())).findFirst();
-			propositionFound.ifPresent(p -> {
-				c.setProposition(p);
-			});
 			c.setPoints(c.getPoints() * (1 + power.intValue()));
 		}
 
@@ -82,7 +77,7 @@ public class VoteUtil {
 			p.setPoints(0);
 			s.getVotes().stream().forEach(v -> {
 				int nbPointsVoted = v.getChoices().stream().filter(c -> {
-					return p.getId().equals(c.getProposition().getId());
+					return p.getId().equals(c.getPropositionId());
 				}).collect(Collectors.summingInt(WeightedChoice::getPoints));
 				p.setPoints(nbPointsVoted + p.getPoints());
 			});

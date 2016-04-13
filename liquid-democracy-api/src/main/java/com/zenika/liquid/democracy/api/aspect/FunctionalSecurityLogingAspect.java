@@ -21,7 +21,7 @@ public class FunctionalSecurityLogingAspect {
 
 	@Before("execution(* com.zenika.liquid.democracy.api.*.*.*(..))")
 	public void beforeLogging(JoinPoint joinPoint) {
-		String userId = collaboratorService.currentUser().getCollaboratorId();
+		String userId = collaboratorService.currentUser().getEmail();
 
 		StringBuilder infos = new StringBuilder();
 		infos.append("Starting ").append(joinPoint.getTarget().getClass()).append(" ")

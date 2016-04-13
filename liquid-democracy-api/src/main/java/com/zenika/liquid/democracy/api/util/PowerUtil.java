@@ -28,6 +28,14 @@ public class PowerUtil {
 		if (foundPower.isPresent()) {
 			throw new UserAlreadyGavePowerException();
 		}
+		
+		foundPower = subject.getPowers().stream().filter(p -> {
+			return power.getCollaborateurIdTo().equals(p.getCollaborateurIdFrom());
+		}).findFirst();
+
+		if (foundPower.isPresent()) {
+			throw new UserAlreadyGavePowerException();
+		}
 
 		if (userId.equals(power.getCollaborateurIdTo())) {
 			throw new UserGivePowerToHimselfException();

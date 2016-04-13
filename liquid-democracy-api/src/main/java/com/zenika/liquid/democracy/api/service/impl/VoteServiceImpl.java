@@ -34,7 +34,7 @@ public class VoteServiceImpl implements VoteService {
 	public void voteForSubject(String subjectUuid, Vote vote) throws VoteForNonExistingSubjectException,
 			VoteIsNotCorrectException, CloseSubjectException, UserAlreadyGavePowerException {
 
-		String userId = collaboratorService.currentUser().getCollaboratorId();
+		String userId = collaboratorService.currentUser().getEmail();
 
 		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
 		if (!s.isPresent()) {
