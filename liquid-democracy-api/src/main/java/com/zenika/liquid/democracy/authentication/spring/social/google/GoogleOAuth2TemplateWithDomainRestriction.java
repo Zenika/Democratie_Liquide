@@ -41,8 +41,9 @@ public class GoogleOAuth2TemplateWithDomainRestriction extends GoogleOAuth2Templ
 			parameters = new OAuth2Parameters();
 		}
 		List<String> hd = parameters.get("hd");
-		if (hd == null || hd.isEmpty())
+		if (hd == null || hd.isEmpty()) {
 			parameters.add("hd", "zenika.com");
+		}
 	}
 
 }

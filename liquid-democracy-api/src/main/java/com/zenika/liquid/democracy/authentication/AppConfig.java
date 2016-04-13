@@ -18,6 +18,9 @@ public class AppConfig {
 	@NotNull
 	private String redirectUrlFailure;
 
+	@NotNull
+	private String applicationUrl;
+	
 	public String getRedirectUrl() {
 		return redirectUrl;
 	}
@@ -41,4 +44,13 @@ public class AppConfig {
 	public void setRedirectUrlFailure(String redirectUrlFailure) {
 		this.redirectUrlFailure = redirectUrlFailure;
 	}
+	
+	public String getApplicationUrl() {
+		return applicationUrl;
+	}
+
+	public void setApplicationUrl(String applicationUrl) {
+		this.applicationUrl = applicationUrl;
+	}
+
 }
