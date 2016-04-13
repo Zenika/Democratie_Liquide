@@ -6,6 +6,7 @@ app:
     rememberMeKey: thisisasimpleremembermekey
     redirectUrl: /
     redirectUrlFailure: /
+    applicationUrl: 
     
 spring:
   social:
@@ -32,6 +33,7 @@ app:
     rememberMeKey: thisisasimpleremembermekey
     redirectUrl: http://localhost:8081/TestApi/success.html
     redirectUrlFailure: http://localhost:8081/TestApi/failure.html
+    applicationUrl: http://localhost:8080
 
 ---      
 spring:
@@ -45,8 +47,9 @@ spring:
 app:
   config:
     rememberMeKey: thisisasimpleremembermekey
-    redirectUrl: http://localhost:3000
-    redirectUrlFailure: http://localhost:3000/#/loginfailed
+    redirectUrl:  
+    redirectUrlFailure: /loginfailed
+    applicationUrl: http://agora.zenika.com
 
 ---      
 spring:
