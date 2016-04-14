@@ -5,7 +5,7 @@
 ### Sujet
 
 |     Nom         |      Type           |  Obligatoire                     | Description                        |
-| --------------- |: -----------------: | -------------------------------: | ---------------------------------: |
+| --------------- |---------------------|----------------------------------|----------------------------------- |
 | uuid            |     String          | Oui (généré)                     | id du sujet                        |
 | version         |     String          | Oui (généré)                     | numéro de version du sujet         |
 | title           |     String          |      Oui                         | Titre du sujet                     |
@@ -19,7 +19,7 @@
 ### Proposition
 
 |     Nom         |      Type           |  Obligatoire                     | Description                       |
-| --------------- |: -----------------: | -------------------------------: | --------------------------------: |
+|-----------------|---------------------|----------------------------------|-----------------------------------|
 | uuid            |     String          | Oui (généré)                     | id de la proposition              |
 | title           |     String          |      Oui                         | Titre de la proposition           |
 | description     |     String          |      Non                         | Description de la proposition     |
