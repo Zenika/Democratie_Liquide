@@ -24,3 +24,6 @@
 | title           |     String          |      Oui                         | Titre de la proposition           |
 | description     |     String          |      Non                         | Description de la proposition     |
 | points          |     int             |      Non                         | Nombre de points attribués à cette proposition par les votes|      
+
+
+[Index](00_INDEX.md)
