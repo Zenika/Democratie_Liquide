@@ -1,4 +1,4 @@
- # Règles de création d'un sujet
+# Règles de création d'un sujet
 
 ## Champs composant un sujet
 
