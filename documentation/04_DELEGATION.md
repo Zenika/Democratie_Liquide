@@ -5,7 +5,7 @@
 ### Vote
 
 |     Nom             |      Type           |  Obligatoire                     | Description                         |
-| ------------------- |: -----------------: | -------------------------------: | ----------------------------------: |
+|---------------------|---------------------|----------------------------------|-------------------------------------|
 | id                  |     String          | Oui (généré)                     | id du vote                          |
 | collaborateurIdFrom |     String          |      Oui (@mail de l'utilisateur)| @mail de l'utilisateur              |
 | collaborateurIdTo   |     String          |      Oui (@mail)                 | @mail de la personne à qui déléguer |
