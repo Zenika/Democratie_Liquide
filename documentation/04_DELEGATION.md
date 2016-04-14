@@ -29,3 +29,6 @@
 * Le sujet ne doit pas être terminé, ce qui revient à dire que la deadline ne doit pas être dépasée
 * La délégation doit avoir été donnée
 * La personne à qui l'on a délégué ne doit pas avoir déjà voté
+
+
+[Index](00_INDEX.md)
