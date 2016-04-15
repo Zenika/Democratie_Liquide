@@ -30,7 +30,7 @@ import com.zenika.liquid.democracy.model.Subject;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class PowerControllerTest {
 
 	@Autowired

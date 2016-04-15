@@ -7,43 +7,49 @@ app:
     redirectUrl: /
     redirectUrlFailure: /
     applicationUrl: 
-    
+
+
+---
 spring:
-  social:
-    google:
-      appId: 
-      appSecret: 
+  profiles: test
+  data:
+    mongodb:
+      host: localhost
 
 ---
 spring:
   profiles: dev
-  data:
-    mongodb:
-      host: localhost
-
-
----
-spring:
-  profiles: test-prod
-  data:
-    mongodb:
-      host: localhost
-app:
-  config:
-    rememberMeKey: thisisasimpleremembermekey
-    redirectUrl: http://localhost:8081/TestApi/success.html
-    redirectUrlFailure: http://localhost:8081/TestApi/failure.html
-    applicationUrl: http://localhost:8080
-
----      
-spring:
-  profiles: docker
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
   data:
     mongodb:
       host: mongoliquidDemocracy
       database: dbliqdem
+  social:
+    google:
+      appId: 
+      appSecret: 
+app:
+  config:
+    rememberMeKey: thisisasimpleremembermekey
+    redirectUrl: 
+    redirectUrlFailure: /loginfailed
+    applicationUrl: http://localhost
+  
+
+---      
+spring:
+  profiles: prod
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
+  data:
+    mongodb:
+      host: mongoliquidDemocracy
+      database: dbliqdem
+  social:
+    google:
+      appId: 
+      appSecret: 
 app:
   config:
     rememberMeKey: thisisasimpleremembermekey
@@ -51,12 +57,3 @@ app:
     redirectUrlFailure: /loginfailed
     applicationUrl: http://agora.zenika.com
 
----      
-spring:
-  profiles: docker-test
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
-  data:
-    mongodb:
-      host: mongoliquidDemocracy
-      database: dbliqdem

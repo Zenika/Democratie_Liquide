@@ -15,7 +15,7 @@ import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorServiceStub;
 
 @Configuration
-@Profile({ "dev", "docker-test" })
+@Profile({ "test"})
 public class TestConfiguration {
 
 	private static final String PATTERN = "[%d{yyyy-MM-dd HH:mm:ss.SSS}] boot%X{context} - ${PID} %5p [%t] --- %c{3}: %m%n";

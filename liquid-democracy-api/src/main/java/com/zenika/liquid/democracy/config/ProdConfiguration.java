@@ -27,7 +27,7 @@ import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.authentication.spring.social.SimpleSignInAdapter;
 
 @Configuration
-@Profile({ "docker", "test-prod" })
+@Profile({ "prod", "dev" })
 public class ProdConfiguration {
 
 	private static final String PATTERN = "[%d{yyyy-MM-dd HH:mm:ss.SSS}] boot%X{context} - ${PID} %5p [%t] --- %c{3}: %m%n";

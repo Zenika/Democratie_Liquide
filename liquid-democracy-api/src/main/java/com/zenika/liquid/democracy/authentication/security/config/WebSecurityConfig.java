@@ -15,7 +15,7 @@ import com.zenika.liquid.democracy.authentication.spring.social.google.GoogleCon
 
 @EnableWebSecurity
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-@Profile({ "docker", "test-prod" })
+@Profile({ "prod", "dev" })
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
