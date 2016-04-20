@@ -48,32 +48,32 @@ public class PowerController {
 		return ResponseEntity.ok().build();
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject doesn't exist")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet n'existe pas")
 	@ExceptionHandler({ AddPowerOnNonExistingSubjectException.class, DeletePowerOnNonExistingSubjectException.class })
 	public void addPowerOnNonExistingSubjectHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User has already given his power")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous ou la personne avez déjà donné votre délégation")
 	@ExceptionHandler(UserAlreadyGavePowerException.class)
 	public void userAlreadyGavePowerHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User gave his power to himself")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous ne pouvez pas donner délégation à vous-même")
 	@ExceptionHandler(UserGivePowerToHimselfException.class)
 	public void userGivePowerToHimselfHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User hasn't given any power on this subject")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "La délégation n'existe pas")
 	@ExceptionHandler(DeleteNonExistingPowerException.class)
 	public void deleteNonExistingPowerHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject is closed")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet est terminé")
 	@ExceptionHandler(CloseSubjectException.class)
 	public void managePowerOnClosedSubjectHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "You or the other collaborator had already voted")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous ou la personne avez déjà voté")
 	@ExceptionHandler(UserAlreadyVoteException.class)
 	public void userAlreadyVoteHandler() {
 	}

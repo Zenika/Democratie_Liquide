@@ -39,32 +39,32 @@ public class VoteController {
 		return ResponseEntity.ok().build();
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject is closed")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet est terminé")
 	@ExceptionHandler(CloseSubjectException.class)
 	public void voteForClosedSubjectHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject doesn't exist")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet n'existe pas")
 	@ExceptionHandler(VoteForNonExistingSubjectException.class)
 	public void voteForNonExistingSubjectHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Propositions voted are not correct")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Les propositions votées ne sont pas correctes")
 	@ExceptionHandler(VotePropositionIncorrectException.class)
 	public void votePropositionIncorrectHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Too many points used")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous avez utilisé trop de points")
 	@ExceptionHandler(TooManyPointsException.class)
 	public void tooManyPointsHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User has already voted")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous avez déjà voté")
 	@ExceptionHandler(UserAlreadyVoteException.class)
 	public void userAlreadyVoteHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "User has given his power for this subject")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous avez donné une délégation pour ce sujet")
 	@ExceptionHandler(UserAlreadyGavePowerException.class)
 	public void userAlreadyGavePowerHandler() {
 	}

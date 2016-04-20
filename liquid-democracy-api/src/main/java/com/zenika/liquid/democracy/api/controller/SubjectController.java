@@ -58,12 +58,12 @@ public class SubjectController {
 		return ResponseEntity.ok().body(s);
 	}
 
-	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Subject doesn't exist")
+	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Le sujet n'existe pas")
 	@ExceptionHandler(UnexistingSubjectException.class)
 	public void unexistingSubjectHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Subject is not complete")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet n'est pas complet")
 	@ExceptionHandler(MalformedSubjectException.class)
 	public void malFormedSubjectHandler() {
 	}
