@@ -1,8 +1,6 @@
 package com.zenika.liquid.democracy.config;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
@@ -15,12 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ProviderSignInController;
-import org.springframework.social.connect.web.ProviderSignInInterceptor;
-import org.springframework.social.google.api.Google;
 
 import com.zenika.liquid.democracy.authentication.AppConfig;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
@@ -35,10 +29,10 @@ public class ProdConfiguration {
 
 	@Autowired
 	Environment env;
-	
+
 	@Autowired
 	AppConfig appConfig;
-	
+
 	@Bean
 	public CollaboratorService collaboratorService() {
 		return new CollaboratorService();
@@ -55,7 +49,7 @@ public class ProdConfiguration {
 		PatternLayout patternLayout = new PatternLayout(PATTERN);
 
 		DailyRollingFileAppender apiFileAppender = new DailyRollingFileAppender(patternLayout,
-				"./logs/liquid_democracy_api.log", DATE_PATTERN);
+		        "./logs/liquid_democracy_api.log", DATE_PATTERN);
 		apiFileAppender.setThreshold(Level.ALL);
 
 		return apiFileAppender;
@@ -65,7 +59,7 @@ public class ProdConfiguration {
 		PatternLayout patternLayout = new PatternLayout(PATTERN);
 
 		DailyRollingFileAppender apiFileAppender = new DailyRollingFileAppender(patternLayout,
-				"./logs/liquid_democracy_application.log", DATE_PATTERN);
+		        "./logs/liquid_democracy_application.log", DATE_PATTERN);
 		apiFileAppender.setThreshold(Level.ERROR);
 
 		return apiFileAppender;
@@ -90,12 +84,14 @@ public class ProdConfiguration {
 
 		return apiLogger;
 	}
-	
+
 	@Bean
-	public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository, SimpleSignInAdapter simpleSignInAdapter) {
-		ProviderSignInController controller = new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, simpleSignInAdapter);
+	public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator,
+	        UsersConnectionRepository usersConnectionRepository, SimpleSignInAdapter simpleSignInAdapter) {
+		ProviderSignInController controller = new ProviderSignInController(connectionFactoryLocator,
+		        usersConnectionRepository, simpleSignInAdapter);
 		controller.setApplicationUrl(appConfig.getApplicationUrl());
 		return controller;
-    }
+	}
 
 }

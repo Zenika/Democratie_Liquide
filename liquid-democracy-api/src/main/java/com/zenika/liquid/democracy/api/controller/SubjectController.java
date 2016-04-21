@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
-import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.commons.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.subject.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.service.SubjectService;
 import com.zenika.liquid.democracy.model.Subject;
 

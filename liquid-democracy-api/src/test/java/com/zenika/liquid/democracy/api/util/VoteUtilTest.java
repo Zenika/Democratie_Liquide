@@ -7,11 +7,11 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.TooManyPointsException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
-import com.zenika.liquid.democracy.api.exception.VotePropositionIncorrectException;
+import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.exception.vote.TooManyPointsException;
+import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.api.exception.vote.VotePropositionIncorrectException;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;

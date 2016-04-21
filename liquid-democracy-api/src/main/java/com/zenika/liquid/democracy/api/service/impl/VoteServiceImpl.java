@@ -8,10 +8,10 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
+import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.exception.vote.VoteForNonExistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.vote.VoteIsNotCorrectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.service.VoteService;
 import com.zenika.liquid.democracy.api.util.VoteUtil;

@@ -1,4 +1,4 @@
-package com.zenika.liquid.democracy.api.exception;
+package com.zenika.liquid.democracy.api.exception.power;
 
 public class DeleteNonExistingPowerException extends PowerIsNotCorrectException {
 

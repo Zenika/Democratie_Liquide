@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
-import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.commons.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.subject.MalformedSubjectException;
 import com.zenika.liquid.democracy.model.Subject;
 
 @Service

@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zenika.liquid.democracy.api.exception.MalformedSubjectException;
-import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.commons.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.subject.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.service.SubjectService;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;

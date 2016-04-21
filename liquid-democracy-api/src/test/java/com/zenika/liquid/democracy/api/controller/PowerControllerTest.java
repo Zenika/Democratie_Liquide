@@ -69,8 +69,8 @@ public class PowerControllerTest {
 		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
+		        Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
@@ -100,12 +100,12 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
+		        Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("User has already given his power"));
+		assertEquals(true, addResp.getBody().toString().contains("UserAlreadyGavePowerException"));
 	}
 
 	@Test
@@ -125,12 +125,12 @@ public class PowerControllerTest {
 		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(p),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(p),
+		        Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Subject doesn't exist"));
+		assertEquals(true, addResp.getBody().toString().contains("AddPowerOnNonExistingSubjectException"));
 	}
 
 	@Test
@@ -150,12 +150,12 @@ public class PowerControllerTest {
 		p.setCollaborateurIdTo("sandra.parlant@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
+		        Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("User gave his power to himself"));
+		assertEquals(true, addResp.getBody().toString().contains("UserGivePowerToHimselfException"));
 	}
 
 	@Test
@@ -178,8 +178,8 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
-				new HttpEntity<>(null), Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
+		        new HttpEntity<>(null), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
@@ -205,12 +205,12 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
-				new HttpEntity<>(null), Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
+		        new HttpEntity<>(null), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("User hasn't given any power on this subject"));
+		assertEquals(true, addResp.getBody().toString().contains("DeleteNonExistingPowerException"));
 	}
 
 	@Test
@@ -233,12 +233,12 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.DELETE,
-				new HttpEntity<>(null), Object.class);
+		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.DELETE,
+		        new HttpEntity<>(null), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Subject doesn't exist"));
+		assertEquals(true, addResp.getBody().toString().contains("DeletePowerOnNonExistingSubjectException"));
 	}
 
 }

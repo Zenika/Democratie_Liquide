@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zenika.liquid.democracy.api.exception.AddPowerOnNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.DeleteNonExistingPowerException;
-import com.zenika.liquid.democracy.api.exception.DeletePowerOnNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
-import com.zenika.liquid.democracy.api.exception.UserGivePowerToHimselfException;
+import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerException;
+import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.exception.power.UserGivePowerToHimselfException;
+import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.service.PowerService;
 import com.zenika.liquid.democracy.model.Power;
 

@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.TooManyPointsException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyVoteException;
-import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
-import com.zenika.liquid.democracy.api.exception.VotePropositionIncorrectException;
+import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.exception.vote.TooManyPointsException;
+import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.api.exception.vote.VoteForNonExistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.vote.VoteIsNotCorrectException;
+import com.zenika.liquid.democracy.api.exception.vote.VotePropositionIncorrectException;
 import com.zenika.liquid.democracy.api.service.VoteService;
 import com.zenika.liquid.democracy.model.Vote;
 

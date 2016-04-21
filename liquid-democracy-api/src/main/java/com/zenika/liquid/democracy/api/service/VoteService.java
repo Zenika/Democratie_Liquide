@@ -2,10 +2,10 @@ package com.zenika.liquid.democracy.api.service;
 
 import org.springframework.stereotype.Service;
 
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.VoteForNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.exception.VoteIsNotCorrectException;
+import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.exception.vote.VoteForNonExistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.vote.VoteIsNotCorrectException;
 import com.zenika.liquid.democracy.model.Vote;
 
 @Service

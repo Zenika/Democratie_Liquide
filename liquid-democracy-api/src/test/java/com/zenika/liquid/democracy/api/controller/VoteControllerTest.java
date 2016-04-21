@@ -75,8 +75,8 @@ public class VoteControllerTest {
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 
@@ -110,11 +110,11 @@ public class VoteControllerTest {
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("User has given his power for this subject"));
+		assertEquals(true, addResp.getBody().toString().contains("UserAlreadyGavePowerException"));
 	}
 
 	@Test
@@ -140,11 +140,11 @@ public class VoteControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("User has already voted"));
+		assertEquals(true, addResp.getBody().toString().contains("UserAlreadyVoteException"));
 	}
 
 	@Test
@@ -167,11 +167,11 @@ public class VoteControllerTest {
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Subject doesn't exist"));
+		assertEquals(true, addResp.getBody().toString().contains("VoteForNonExistingSubjectException"));
 	}
 
 	@Test
@@ -194,11 +194,11 @@ public class VoteControllerTest {
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Too many points used"));
+		assertEquals(true, addResp.getBody().toString().contains("TooManyPointsException"));
 	}
 
 	@Test
@@ -221,11 +221,11 @@ public class VoteControllerTest {
 		v.getChoices().add(c1);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Propositions voted are not correct"));
+		assertEquals(true, addResp.getBody().toString().contains("VotePropositionIncorrectException"));
 	}
 
 	@Test
@@ -255,11 +255,11 @@ public class VoteControllerTest {
 		v.getChoices().add(c2);
 
 		ResponseEntity<Object> addResp = template.exchange(
-				"http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
-				Object.class);
+		        "http://localhost:" + serverPort + "api/votes/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(v),
+		        Object.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("Propositions voted are not correct"));
+		assertEquals(true, addResp.getBody().toString().contains("VotePropositionIncorrectException"));
 	}
 
 }
