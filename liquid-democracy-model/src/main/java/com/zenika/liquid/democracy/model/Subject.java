@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +39,9 @@ public class Subject {
 	private List<Vote> votes;
 
 	private List<Power> powers;
+
+	@DBRef
+	private Category category;
 
 	public Subject() {
 		maxPoints = 1;
@@ -124,6 +128,14 @@ public class Subject {
 
 	public void setPowers(List<Power> powers) {
 		this.powers = powers;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public Optional<Power> findPower(String userId) {
