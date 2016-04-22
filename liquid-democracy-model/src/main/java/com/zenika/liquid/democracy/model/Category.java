@@ -1,5 +1,8 @@
 package com.zenika.liquid.democracy.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +19,12 @@ public class Category {
 	private String title;
 
 	private String description;
+
+	private List<Power> powers;
+
+	public Category() {
+		powers = new ArrayList<>();
+	}
 
 	public String getUuid() {
 		return uuid;
@@ -47,6 +56,14 @@ public class Category {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<Power> getPowers() {
+		return powers;
+	}
+
+	public void setPowers(List<Power> powers) {
+		this.powers = powers;
 	}
 
 }

@@ -7,6 +7,7 @@ import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerExc
 import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.power.UserGivePowerToHimselfException;
 import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.model.Category;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Subject;
 import com.zenika.liquid.democracy.model.Vote;
@@ -57,6 +58,30 @@ public class PowerUtil {
 
 	}
 
+	public static void checkCategoryPowerForAddition(Power power, Category category, String userId)
+	        throws UserAlreadyGavePowerException, UserGivePowerToHimselfException {
+		Optional<Power> foundPower = category.getPowers().stream().filter(p -> {
+			return userId.equals(p.getCollaboratorIdFrom());
+		}).findFirst();
+
+		if (foundPower.isPresent()) {
+			throw new UserAlreadyGavePowerException();
+		}
+
+		foundPower = category.getPowers().stream().filter(p -> {
+			return power.getCollaboratorIdTo().equals(p.getCollaboratorIdFrom());
+		}).findFirst();
+
+		if (foundPower.isPresent()) {
+			throw new UserAlreadyGavePowerException();
+		}
+
+		if (userId.equals(power.getCollaboratorIdTo())) {
+			throw new UserGivePowerToHimselfException();
+		}
+
+	}
+
 	public static void preparePower(Power power, Subject s, String userId, boolean addVote) {
 		power.setCollaboratorIdFrom(userId);
 
@@ -71,6 +96,11 @@ public class PowerUtil {
 		s.getPowers().add(power);
 
 		VoteUtil.compileResults(s);
+	}
+
+	public static void prepareCategoryPower(Power power, Category c, String userId) {
+		power.setCollaboratorIdFrom(userId);
+		c.getPowers().add(power);
 	}
 
 	public static Power checkPowerForDelete(Subject subject, String userId)

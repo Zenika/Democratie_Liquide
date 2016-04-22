@@ -3,6 +3,7 @@ package com.zenika.liquid.democracy.api.service;
 import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerException;
 import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingSubjectException;
@@ -15,10 +16,13 @@ import com.zenika.liquid.democracy.model.Power;
 public interface PowerService {
 
 	public void addPowerOnSubject(String subjectUuid, Power power)
-			throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-			UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException;
+	        throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
+	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException;
 
 	public void deletePowerOnSubject(String subjectUuid) throws DeletePowerOnNonExistingSubjectException,
-			DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException;
+	        DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException;
+
+	public void addPowerOnCategory(String categoryUuid, Power p) throws AddPowerOnNonExistingCategoryException,
+	        UserAlreadyGavePowerException, UserGivePowerToHimselfException;
 
 }
