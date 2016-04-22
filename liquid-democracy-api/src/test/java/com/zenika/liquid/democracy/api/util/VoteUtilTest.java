@@ -84,7 +84,7 @@ public class VoteUtilTest {
 		Subject s = generateSubject();
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
 		s.getPowers().add(p);
 
 		Vote v = new Vote();
@@ -103,7 +103,7 @@ public class VoteUtilTest {
 		Subject s = generateSubject();
 
 		Vote oldV = new Vote();
-		oldV.setCollaborateurId("sandra.parlant@zenika.com");
+		oldV.setCollaboratorId("sandra.parlant@zenika.com");
 		WeightedChoice oldChoice1 = new WeightedChoice();
 		oldChoice1.setPropositionId(s.getPropositions().get(0).getId());
 		oldChoice1.setPoints(1);
@@ -161,7 +161,7 @@ public class VoteUtilTest {
 		Subject s = generateSubject();
 
 		Vote v0 = new Vote();
-		v0.setCollaborateurId("julie.bourhis@zenika.com");
+		v0.setCollaboratorId("julie.bourhis@zenika.com");
 		WeightedChoice choice01 = new WeightedChoice();
 		choice01.setPropositionId(s.getPropositions().get(1).getId());
 		choice01.setPoints(1);
@@ -169,7 +169,7 @@ public class VoteUtilTest {
 		s.getVotes().add(v0);
 
 		Vote v1 = new Vote();
-		v1.setCollaborateurId("julie.bourhis@zenika.com");
+		v1.setCollaboratorId("julie.bourhis@zenika.com");
 		WeightedChoice choice11 = new WeightedChoice();
 		choice11.setPropositionId(s.getPropositions().get(1).getId());
 		choice11.setPoints(1);
@@ -204,12 +204,12 @@ public class VoteUtilTest {
 		Subject s = generateSubject();
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 		s.getPowers().add(p);
 
 		Vote v0 = new Vote();
-		v0.setCollaborateurId("julie.bourhis@zenika.com");
+		v0.setCollaboratorId("julie.bourhis@zenika.com");
 		WeightedChoice choice01 = new WeightedChoice();
 		choice01.setPropositionId(s.getPropositions().get(1).getId());
 		choice01.setPoints(1);

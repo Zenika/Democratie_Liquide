@@ -98,8 +98,8 @@ public class VoteControllerTest {
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 		s.getPowers().add(p);
 		repository.save(s);
 
@@ -130,7 +130,7 @@ public class VoteControllerTest {
 		p2.setTitle("P2 title");
 
 		Vote v = new Vote();
-		v.setCollaborateurId("sandra.parlant@zenika.com");
+		v.setCollaboratorId("sandra.parlant@zenika.com");
 		WeightedChoice c1 = new WeightedChoice();
 		c1.setPoints(1);
 		c1.setPropositionId(p2.getId());

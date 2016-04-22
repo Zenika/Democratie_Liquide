@@ -11,7 +11,7 @@ public class Vote {
 	@Id
 	private String id;
 
-	private String collaborateurId;
+	private String collaboratorId;
 
 	private List<WeightedChoice> choices;
 
@@ -28,12 +28,12 @@ public class Vote {
 		this.id = id;
 	}
 
-	public String getCollaborateurId() {
-		return collaborateurId;
+	public String getCollaboratorId() {
+		return collaboratorId;
 	}
 
-	public void setCollaborateurId(String collaborateurId) {
-		this.collaborateurId = collaborateurId;
+	public void setCollaboratorId(String collaboratorId) {
+		this.collaboratorId = collaboratorId;
 	}
 
 	public List<WeightedChoice> getChoices() {
@@ -49,7 +49,7 @@ public class Vote {
 		StringBuilder strB = new StringBuilder();
 
 		strB.append("Vote : ");
-		strB.append("\n \t CollaborateurId : ").append(getCollaborateurId());
+		strB.append("\n \t CollaboratorId : ").append(getCollaboratorId());
 
 		for (WeightedChoice choice : choices) {
 			strB.append("\n \t").append(choice);

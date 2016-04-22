@@ -66,7 +66,7 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
@@ -93,8 +93,8 @@ public class PowerControllerTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
 		repository.save(s);
@@ -122,7 +122,7 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(p),
@@ -147,7 +147,7 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("sandra.parlant@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
@@ -171,8 +171,8 @@ public class PowerControllerTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
 		repository.save(s);
@@ -198,8 +198,8 @@ public class PowerControllerTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlantt@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlantt@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
 		repository.save(s);
@@ -226,8 +226,8 @@ public class PowerControllerTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
 		repository.save(s);

@@ -32,7 +32,7 @@ public class Subject {
 
 	private Date submitDate;
 
-	private String collaborateurId;
+	private String collaboratorId;
 
 	private List<Proposition> propositions;
 
@@ -98,12 +98,12 @@ public class Subject {
 		this.submitDate = submitDate;
 	}
 
-	public String getCollaborateurId() {
-		return collaborateurId;
+	public String getCollaboratorId() {
+		return collaboratorId;
 	}
 
-	public void setCollaborateurId(String collaborateurId) {
-		this.collaborateurId = collaborateurId;
+	public void setCollaboratorId(String collaboratorId) {
+		this.collaboratorId = collaboratorId;
 	}
 
 	public List<Proposition> getPropositions() {
@@ -140,14 +140,14 @@ public class Subject {
 
 	public Optional<Power> findPower(String userId) {
 		Optional<Power> foundPower = getPowers().stream().filter(p -> {
-			return userId.equals(p.getCollaborateurIdFrom());
+			return userId.equals(p.getCollaboratorIdFrom());
 		}).findFirst();
 
 		return foundPower;
 	}
 
 	public Optional<Vote> findVote(String userId) {
-		return getVotes().stream().filter(v -> v.getCollaborateurId().equals(userId)).findFirst();
+		return getVotes().stream().filter(v -> v.getCollaboratorId().equals(userId)).findFirst();
 	}
 
 	public void removePower(Power p) {
@@ -183,7 +183,7 @@ public class Subject {
 		strB.append("\n \t Description : ").append(getDescription());
 		strB.append("\n \t MaxPoints : ").append(getMaxPoints());
 		strB.append("\n \t SubmitDate : ").append(getSubmitDate());
-		strB.append("\n \t CollaborateurId : ").append(getCollaborateurId());
+		strB.append("\n \t CollaboratorId : ").append(getCollaboratorId());
 
 		for (Proposition proposition : propositions) {
 			strB.append("\n \t").append(proposition);

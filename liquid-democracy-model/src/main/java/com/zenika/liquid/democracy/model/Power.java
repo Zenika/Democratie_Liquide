@@ -8,9 +8,9 @@ public class Power {
 	@Id
 	private String id;
 
-	private String collaborateurIdFrom;
+	private String collaboratorIdFrom;
 
-	private String collaborateurIdTo;
+	private String collaboratorIdTo;
 
 	public Power() {
 		id = new ObjectId().toString();
@@ -24,20 +24,20 @@ public class Power {
 		this.id = id;
 	}
 
-	public String getCollaborateurIdFrom() {
-		return collaborateurIdFrom;
+	public String getCollaboratorIdFrom() {
+		return collaboratorIdFrom;
 	}
 
-	public void setCollaborateurIdFrom(String collaborateurIdFrom) {
-		this.collaborateurIdFrom = collaborateurIdFrom;
+	public void setCollaboratorIdFrom(String collaboratorIdFrom) {
+		this.collaboratorIdFrom = collaboratorIdFrom;
 	}
 
-	public String getCollaborateurIdTo() {
-		return collaborateurIdTo;
+	public String getCollaboratorIdTo() {
+		return collaboratorIdTo;
 	}
 
-	public void setCollaborateurIdTo(String collaborateurIdTo) {
-		this.collaborateurIdTo = collaborateurIdTo;
+	public void setCollaboratorIdTo(String collaboratorIdTo) {
+		this.collaboratorIdTo = collaboratorIdTo;
 	}
 
 }

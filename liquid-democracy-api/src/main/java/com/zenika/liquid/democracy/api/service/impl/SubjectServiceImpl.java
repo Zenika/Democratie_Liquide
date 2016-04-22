@@ -33,7 +33,7 @@ public class SubjectServiceImpl implements SubjectService {
 
 		s.setSubmitDate(new Date());
 
-		s.setCollaborateurId(userId);
+		s.setCollaboratorId(userId);
 
 		return subjectRepository.save(s);
 	}

@@ -39,7 +39,7 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
 
@@ -66,7 +66,7 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
 	}
@@ -91,12 +91,12 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 		s.getPowers().add(p);
 
 		Power pToAdd = new Power();
-		pToAdd.setCollaborateurIdTo("guillaume.gerbaud@zenika.com");
+		pToAdd.setCollaboratorIdTo("guillaume.gerbaud@zenika.com");
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
 
@@ -123,7 +123,7 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("sandra.parlant@zenika.com");
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
 	}
@@ -148,10 +148,10 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		Vote v = new Vote();
-		v.setCollaborateurId("sandra.parlant@zenika.com");
+		v.setCollaboratorId("sandra.parlant@zenika.com");
 		s.getVotes().add(v);
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
@@ -177,10 +177,10 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		Vote v = new Vote();
-		v.setCollaborateurId("julie.bourhis@zenika.com");
+		v.setCollaboratorId("julie.bourhis@zenika.com");
 		s.getVotes().add(v);
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
@@ -206,8 +206,8 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 		s.getPowers().add(p);
 
 		PowerUtil.checkPowerForDelete(s, "sandra.parlant@zenika.com");
@@ -235,8 +235,8 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 		s.getPowers().add(p);
 
 		PowerUtil.checkPowerForDelete(s, "sandra.parlant@zenika.com");
@@ -284,12 +284,12 @@ public class PowerUtilTest {
 		p2.setTitle("P2 title");
 
 		Power p = new Power();
-		p.setCollaborateurIdFrom("sandra.parlant@zenika.com");
-		p.setCollaborateurIdTo("julie.bourhis@zenika.com");
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 		s.getPowers().add(p);
 
 		Vote v = new Vote();
-		v.setCollaborateurId("julie.bourhis@zenika.com");
+		v.setCollaboratorId("julie.bourhis@zenika.com");
 		s.getVotes().add(v);
 
 		PowerUtil.checkPowerForDelete(s, "sandra.parlant@zenika.com");

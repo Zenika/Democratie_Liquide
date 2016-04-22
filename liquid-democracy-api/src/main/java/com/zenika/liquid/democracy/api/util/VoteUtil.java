@@ -59,13 +59,13 @@ public class VoteUtil {
 	}
 
 	public static void prepareVotes(Vote vote, Subject s, String userId) {
-		Long power = s.getPowers().stream().filter(p -> p.getCollaborateurIdTo().equals(userId)).count();
+		Long power = s.getPowers().stream().filter(p -> p.getCollaboratorIdTo().equals(userId)).count();
 
 		for (WeightedChoice c : vote.getChoices()) {
 			c.setPoints(c.getPoints() * (1 + power.intValue()));
 		}
 
-		vote.setCollaborateurId(userId);
+		vote.setCollaboratorId(userId);
 
 		s.getVotes().add(vote);
 

@@ -22,7 +22,7 @@ public class PowerUtil {
 		}
 
 		Optional<Power> foundPower = subject.getPowers().stream().filter(p -> {
-			return userId.equals(p.getCollaborateurIdFrom());
+			return userId.equals(p.getCollaboratorIdFrom());
 		}).findFirst();
 
 		if (foundPower.isPresent()) {
@@ -30,14 +30,14 @@ public class PowerUtil {
 		}
 		
 		foundPower = subject.getPowers().stream().filter(p -> {
-			return power.getCollaborateurIdTo().equals(p.getCollaborateurIdFrom());
+			return power.getCollaboratorIdTo().equals(p.getCollaboratorIdFrom());
 		}).findFirst();
 
 		if (foundPower.isPresent()) {
 			throw new UserAlreadyGavePowerException();
 		}
 
-		if (userId.equals(power.getCollaborateurIdTo())) {
+		if (userId.equals(power.getCollaboratorIdTo())) {
 			throw new UserGivePowerToHimselfException();
 		}
 
@@ -46,7 +46,7 @@ public class PowerUtil {
 			throw new UserAlreadyVoteException();
 		}
 
-		foundVote = subject.findVote(power.getCollaborateurIdTo());
+		foundVote = subject.findVote(power.getCollaboratorIdTo());
 		if (foundVote.isPresent()) {
 			throw new UserAlreadyVoteException();
 		}
@@ -54,7 +54,7 @@ public class PowerUtil {
 	}
 
 	public static void preparePower(Power power, Subject s, String userId) {
-		power.setCollaborateurIdFrom(userId);
+		power.setCollaboratorIdFrom(userId);
 		s.getPowers().add(power);
 	}
 
@@ -70,7 +70,7 @@ public class PowerUtil {
 			throw new DeleteNonExistingPowerException();
 		}
 
-		Optional<Vote> foundVote = subject.findVote(power.get().getCollaborateurIdTo());
+		Optional<Vote> foundVote = subject.findVote(power.get().getCollaboratorIdTo());
 		if (foundVote.isPresent()) {
 			throw new UserAlreadyVoteException();
 		}
