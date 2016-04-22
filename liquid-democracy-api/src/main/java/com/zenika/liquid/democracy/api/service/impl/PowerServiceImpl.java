@@ -34,8 +34,8 @@ public class PowerServiceImpl implements PowerService {
 	private CollaboratorService collaboratorService;
 
 	public void addPowerOnSubject(String subjectUuid, Power power)
-			throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-			UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+	        throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
+	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
 
 		String userId = collaboratorService.currentUser().getEmail();
 
@@ -43,16 +43,17 @@ public class PowerServiceImpl implements PowerService {
 		if (!s.isPresent()) {
 			throw new AddPowerOnNonExistingSubjectException();
 		}
-		PowerUtil.checkPowerForAddition(power, s.get(), userId);
 
-		PowerUtil.preparePower(power, s.get(), userId);
+		boolean addVote = PowerUtil.checkPowerForAddition(power, s.get(), userId);
+
+		PowerUtil.preparePower(power, s.get(), userId, addVote);
 
 		subjectRepository.save(s.get());
 
 	}
 
 	public void deletePowerOnSubject(String subjectUuid) throws DeletePowerOnNonExistingSubjectException,
-			DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException {
+	        DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException {
 
 		String userId = collaboratorService.currentUser().getEmail();
 

@@ -13,9 +13,11 @@ import com.zenika.liquid.democracy.model.Vote;
 
 public class PowerUtil {
 
-	public static void checkPowerForAddition(Power power, Subject subject, String userId)
-			throws UserAlreadyGavePowerException, UserGivePowerToHimselfException, CloseSubjectException,
-			UserAlreadyVoteException {
+	public static boolean checkPowerForAddition(Power power, Subject subject, String userId)
+	        throws UserAlreadyGavePowerException, UserGivePowerToHimselfException, CloseSubjectException,
+	        UserAlreadyVoteException {
+
+		boolean addVote = false;
 
 		if (subject.isClosed()) {
 			throw new CloseSubjectException();
@@ -28,7 +30,7 @@ public class PowerUtil {
 		if (foundPower.isPresent()) {
 			throw new UserAlreadyGavePowerException();
 		}
-		
+
 		foundPower = subject.getPowers().stream().filter(p -> {
 			return power.getCollaboratorIdTo().equals(p.getCollaboratorIdFrom());
 		}).findFirst();
@@ -48,18 +50,31 @@ public class PowerUtil {
 
 		foundVote = subject.findVote(power.getCollaboratorIdTo());
 		if (foundVote.isPresent()) {
-			throw new UserAlreadyVoteException();
+			addVote = true;
 		}
+
+		return addVote;
 
 	}
 
-	public static void preparePower(Power power, Subject s, String userId) {
+	public static void preparePower(Power power, Subject s, String userId, boolean addVote) {
 		power.setCollaboratorIdFrom(userId);
+
+		if (addVote) {
+			Optional<Vote> voteToDuplicate = s.findVote(power.getCollaboratorIdTo());
+			Vote newVote = new Vote();
+			newVote.setCollaboratorId(userId);
+			newVote.setChoices(voteToDuplicate.get().getChoices());
+			s.getVotes().add(newVote);
+		}
+
 		s.getPowers().add(power);
+
+		VoteUtil.compileResults(s);
 	}
 
 	public static Power checkPowerForDelete(Subject subject, String userId)
-			throws CloseSubjectException, DeleteNonExistingPowerException, UserAlreadyVoteException {
+	        throws CloseSubjectException, DeleteNonExistingPowerException, UserAlreadyVoteException {
 
 		if (subject.isClosed()) {
 			throw new CloseSubjectException();

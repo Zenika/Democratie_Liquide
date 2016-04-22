@@ -7,8 +7,8 @@
 |     Nom             |      Type           |  Obligatoire                     | Description                         |
 |---------------------|---------------------|----------------------------------|-------------------------------------|
 | id                  |     String          | Oui (généré)                     | id du vote                          |
-| collaborateurIdFrom |     String          |      Oui (@mail de l'utilisateur)| @mail de l'utilisateur              |
-| collaborateurIdTo   |     String          |      Oui (@mail)                 | @mail de la personne à qui déléguer |
+| collaboratorIdFrom |     String          |      Oui (@mail de l'utilisateur)| @mail de l'utilisateur              |
+| collaboratorIdTo   |     String          |      Oui (@mail)                 | @mail de la personne à qui déléguer |
 
 
 ### Règles
@@ -21,7 +21,6 @@
 * On ne peut pas déléguer à quelqu'un qui a délégué
 * On ne peut se donner son pouvoir à soi-même
 * On ne peut pas déléguer si l'on a déjà voté
-* On ne peut pas déléguer à quelqu'un qui a déjà voté
 
 #### Suppression de délégation
 

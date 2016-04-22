@@ -7,7 +7,7 @@
 |     Nom         |      Type           |  Obligatoire                     | Description                        |
 |-----------------|---------------------|----------------------------------|------------------------------------|
 | id              |     String          | Oui (généré)                     | id du vote                         |
-| collaborateurId |     String          |      Oui (@mail de l'utilisateur)| @mail du voteur                    |
+| collaboratorId |     String          |      Oui (@mail de l'utilisateur)| @mail du voteur                    |
 | choix           |Liste de Choix       |      Non                         | Liste des choix pondérés du voteur |
 
 ### Choix

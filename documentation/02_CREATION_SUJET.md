@@ -13,7 +13,7 @@
 | maxPoints       |     String          |      Oui (1 par défaut)          | Nombre de point maximum à distribuer pour le vote|
 | deadLine        |     Date            |      Non                         | Date limite pour voter             |
 | submitDate      |     Date            |      Oui (date du jour)          | Date de création du sujet          |
-| collaborateurId |     String          |      Oui (@mail de l'utilisateur)| @mail du créateur du sujet         |
+| collaboratorId |     String          |      Oui (@mail de l'utilisateur)| @mail du créateur du sujet         |
 | propositions    |Liste de Propositions|      Oui (au moins 2)            | Liste de propositions pour ce sujet|
 
 ### Proposition
