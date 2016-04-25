@@ -123,4 +123,16 @@ public class PowerUtil {
 		return power.get();
 
 	}
+
+	public static Power checkCategoryPowerForDelete(Category category, String userId)
+	        throws DeleteNonExistingPowerException {
+
+		Optional<Power> power = category.findPower(userId);
+		if (!power.isPresent()) {
+			throw new DeleteNonExistingPowerException();
+		}
+
+		return power.get();
+
+	}
 }

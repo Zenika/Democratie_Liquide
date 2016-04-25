@@ -15,6 +15,7 @@ import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerException;
+import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.power.UserGivePowerToHimselfException;
@@ -50,12 +51,21 @@ public class PowerController {
 		return ResponseEntity.ok().build();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{subjectUuid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/subjects/{subjectUuid}")
 	public ResponseEntity<Void> deletePowerOnSubject(@PathVariable String subjectUuid)
 	        throws DeletePowerOnNonExistingSubjectException, DeleteNonExistingPowerException, CloseSubjectException,
 	        UserAlreadyVoteException {
 
 		powerService.deletePowerOnSubject(subjectUuid);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/categories/{categoryUuid}")
+	public ResponseEntity<Void> deletePowerOnCategory(@PathVariable String categoryUuid)
+	        throws DeletePowerOnNonExistingCategoryException, DeleteNonExistingPowerException {
+
+		powerService.deletePowerOnCategory(categoryUuid);
 
 		return ResponseEntity.ok().build();
 	}
@@ -66,7 +76,7 @@ public class PowerController {
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "La catégorie n'existe pas")
-	@ExceptionHandler({ AddPowerOnNonExistingCategoryException.class })
+	@ExceptionHandler({ AddPowerOnNonExistingCategoryException.class, DeletePowerOnNonExistingCategoryException.class })
 	public void addPowerOnNonExistingCategoryHandler() {
 	}
 

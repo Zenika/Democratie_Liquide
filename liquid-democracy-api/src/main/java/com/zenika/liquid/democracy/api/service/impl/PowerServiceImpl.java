@@ -13,6 +13,7 @@ import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerException;
+import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.PowerIsNotCorrectException;
 import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
@@ -103,6 +104,38 @@ public class PowerServiceImpl implements PowerService {
 		s.get().removePower(power);
 
 		subjectRepository.save(s.get());
+
+	}
+
+	@Override
+	public void deletePowerOnCategory(String categoryUuid)
+	        throws DeletePowerOnNonExistingCategoryException, DeleteNonExistingPowerException {
+		String userId = collaboratorService.currentUser().getEmail();
+
+		Optional<Category> c = categoryRepository.findCategoryByUuid(categoryUuid);
+		if (!c.isPresent()) {
+			throw new DeletePowerOnNonExistingCategoryException();
+		}
+
+		Power power = PowerUtil.checkCategoryPowerForDelete(c.get(), userId);
+
+		c.get().removePower(power);
+
+		List<Subject> subjectsInCategory = subjectRepository.findSubjectByCategoryUuid(categoryUuid);
+		for (Subject subject : subjectsInCategory) {
+			try {
+				Optional<Power> powerTmp = subject.findPower(userId);
+				if (powerTmp.isPresent() && powerTmp.get().getCollaboratorIdTo().equals(power.getCollaboratorIdTo())) {
+					deletePowerOnSubject(subject.getUuid());
+				}
+			} catch (DeletePowerOnNonExistingSubjectException | DeleteNonExistingPowerException | CloseSubjectException
+			        | UserAlreadyVoteException e) {
+				// if this appends, we just don't propagate power
+				System.out.println("ERROR DELEGATION");
+			}
+		}
+
+		categoryRepository.save(c.get());
 
 	}
 }

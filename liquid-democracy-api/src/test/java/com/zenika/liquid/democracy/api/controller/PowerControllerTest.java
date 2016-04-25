@@ -220,11 +220,96 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.DELETE,
 		        new HttpEntity<>(null), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+	}
+
+	@Test
+	public void deletePowerOnCategoryTest() {
+		Category c = new Category();
+		c.setTitle("c1");
+		repositoryC.save(c);
+
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		s.setCategory(c);
+
+		Power p = new Power();
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
+
+		c.getPowers().add(p);
+		repositoryC.save(c);
+
+		s.getPowers().add(p);
+		repository.save(s);
+
+		ResponseEntity<Object> addResp = template.exchange(
+		        "http://localhost:" + serverPort + "api/powers/categories/" + c.getUuid(), HttpMethod.DELETE,
+		        new HttpEntity<>(null), Object.class);
+
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+
+		Optional<Category> savedCategory = repositoryC.findCategoryByUuid(c.getUuid());
+		assertEquals(savedCategory.get().getPowers().size(), 0);
+
+		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		assertEquals(savedSubject.get().getPowers().size(), 0);
+	}
+
+	@Test
+	public void deletePowerOnCategoryWithinPowerOnSubjectTest() {
+		Category c = new Category();
+		c.setTitle("c1");
+		repositoryC.save(c);
+
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		s.setCategory(c);
+
+		Power p = new Power();
+		p.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
+
+		c.getPowers().add(p);
+		repositoryC.save(c);
+
+		Power powerS = new Power();
+		powerS.setCollaboratorIdFrom("sandra.parlant@zenika.com");
+		powerS.setCollaboratorIdTo("guillaume.gerbaud@zenika.com");
+		s.getPowers().add(powerS);
+		repository.save(s);
+
+		ResponseEntity<Object> addResp = template.exchange(
+		        "http://localhost:" + serverPort + "api/powers/categories/" + c.getUuid(), HttpMethod.DELETE,
+		        new HttpEntity<>(null), Object.class);
+
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+
+		Optional<Category> savedCategory = repositoryC.findCategoryByUuid(c.getUuid());
+		assertEquals(savedCategory.get().getPowers().size(), 0);
+
+		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		assertEquals(savedSubject.get().getPowers().size(), 1);
 	}
 
 	@Test
@@ -247,7 +332,7 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.DELETE,
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.DELETE,
 		        new HttpEntity<>(null), Object.class);
 
 		assertNotNull(addResp);
@@ -275,7 +360,7 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.DELETE,
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid() + 1, HttpMethod.DELETE,
 		        new HttpEntity<>(null), Object.class);
 
 		assertNotNull(addResp);

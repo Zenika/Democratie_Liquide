@@ -75,4 +75,8 @@ public class Category {
 		return foundPower;
 	}
 
+	public void removePower(Power power) {
+		powers.remove(power);
+	}
+
 }

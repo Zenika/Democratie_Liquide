@@ -6,6 +6,7 @@ import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerException;
+import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingCategoryException;
 import com.zenika.liquid.democracy.api.exception.power.DeletePowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.exception.power.UserGivePowerToHimselfException;
@@ -24,5 +25,8 @@ public interface PowerService {
 
 	public void addPowerOnCategory(String categoryUuid, Power p) throws AddPowerOnNonExistingCategoryException,
 	        UserAlreadyGavePowerException, UserGivePowerToHimselfException;
+
+	public void deletePowerOnCategory(String categoryUuid)
+	        throws DeletePowerOnNonExistingCategoryException, DeleteNonExistingPowerException;
 
 }
