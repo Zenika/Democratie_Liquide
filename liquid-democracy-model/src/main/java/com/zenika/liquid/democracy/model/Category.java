@@ -2,6 +2,7 @@ package com.zenika.liquid.democracy.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
@@ -64,6 +65,14 @@ public class Category {
 
 	public void setPowers(List<Power> powers) {
 		this.powers = powers;
+	}
+
+	public Optional<Power> findPower(String userId) {
+		Optional<Power> foundPower = getPowers().stream().filter(p -> {
+			return userId.equals(p.getCollaboratorIdFrom());
+		}).findFirst();
+
+		return foundPower;
 	}
 
 }

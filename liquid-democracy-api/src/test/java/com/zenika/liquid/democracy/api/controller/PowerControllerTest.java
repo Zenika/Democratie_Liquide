@@ -22,7 +22,9 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.zenika.liquid.democracy.Application;
+import com.zenika.liquid.democracy.api.persistence.CategoryRepository;
 import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.model.Category;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
@@ -35,6 +37,9 @@ public class PowerControllerTest {
 
 	@Autowired
 	SubjectRepository repository;
+
+	@Autowired
+	CategoryRepository repositoryC;
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -69,8 +74,8 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
-		        Object.class);
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.PUT,
+		        new HttpEntity<>(p), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
@@ -100,8 +105,8 @@ public class PowerControllerTest {
 		repository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
-		        Object.class);
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.PUT,
+		        new HttpEntity<>(p), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
@@ -125,8 +130,8 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid() + 1, HttpMethod.PUT, new HttpEntity<>(p),
-		        Object.class);
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid() + 1, HttpMethod.PUT,
+		        new HttpEntity<>(p), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
@@ -150,12 +155,49 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("sandra.parlant@zenika.com");
 
 		ResponseEntity<Object> addResp = template.exchange(
-		        "http://localhost:" + serverPort + "api/powers/" + s.getUuid(), HttpMethod.PUT, new HttpEntity<>(p),
-		        Object.class);
+		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.PUT,
+		        new HttpEntity<>(p), Object.class);
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 		assertEquals(true, addResp.getBody().toString().contains("UserGivePowerToHimselfException"));
+	}
+
+	@Test
+	public void addPowerOnCategoryTest() {
+		Category c = new Category();
+		c.setTitle("c1");
+		repositoryC.save(c);
+
+		Subject s = new Subject();
+		s.setTitle("Title");
+		s.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		s.getPropositions().add(p1);
+		s.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+		s.setCategory(c);
+		repository.save(s);
+
+		Power p = new Power();
+		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
+
+		ResponseEntity<Object> addResp = template.exchange(
+		        "http://localhost:" + serverPort + "api/powers/categories/" + c.getUuid(), HttpMethod.PUT,
+		        new HttpEntity<>(p), Object.class);
+
+		assertNotNull(addResp);
+		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
+
+		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		assertEquals(true, savedSubject.isPresent());
+		assertEquals(true, savedSubject.get().findPower("sandra.parlant@zenika.com").isPresent());
+
+		Optional<Category> savedCategory = repositoryC.findCategoryByUuid(c.getUuid());
+		assertEquals(true, savedCategory.isPresent());
+		assertEquals(true, savedCategory.get().findPower("sandra.parlant@zenika.com").isPresent());
 	}
 
 	@Test

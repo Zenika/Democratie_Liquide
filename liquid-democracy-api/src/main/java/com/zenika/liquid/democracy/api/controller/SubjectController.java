@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.commons.UnexistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.AddPowerOnNonExistingSubjectException;
+import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.exception.power.UserGivePowerToHimselfException;
 import com.zenika.liquid.democracy.api.exception.subject.MalformedSubjectException;
+import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.service.SubjectService;
 import com.zenika.liquid.democracy.model.Subject;
 
@@ -28,13 +33,15 @@ public class SubjectController {
 	private SubjectService subjectService;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s) throws MalformedSubjectException {
+	public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s)
+	        throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
+	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
 		Subject out = subjectService.addSubject(s);
 
 		return ResponseEntity.created(
-				ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
-				.build();
+		        ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
+		        .build();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/inprogress")
@@ -51,7 +58,7 @@ public class SubjectController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
 	public ResponseEntity<Subject> getSubjectByUuid(@PathVariable String subjectUuid)
-			throws UnexistingSubjectException {
+	        throws UnexistingSubjectException {
 
 		Subject s = subjectService.getSubjectByUuid(subjectUuid);
 
