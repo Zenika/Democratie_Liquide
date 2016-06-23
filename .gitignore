@@ -6,13 +6,13 @@
 /liquid-democracy-model/.project
 /liquid-democracy-api/.classpath
 /liquid-democracy-model/.classpath
+/liquid-democracy-model/.idea
+/liquid-democracy-api/.idea
+*.iml
 /liquid-democracy-api/logs
 RemoteSystemsTempFiles
 .metadata
 .recommenders
 /Servers
 /TestApi
-/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_api.log
-/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_api.log_2016-03-17.log
-/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_server.log
-/liquid-democracy-api/liquid-democracy-api-logs/logs/liquid_democracy_server.log_2016-03-17.log
+/liquid-democracy-api/liquid-democracy-api-logs/logs/*
