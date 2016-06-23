@@ -1,22 +1,18 @@
 package com.zenika.liquid.democracy.api.util;
 
-import static org.junit.Assert.assertEquals;
+import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.vote.exception.TooManyPointsException;
+import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.api.vote.exception.VotePropositionIncorrectException;
+import com.zenika.liquid.democracy.api.vote.util.VoteUtil;
+import com.zenika.liquid.democracy.model.*;
+import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.Test;
-
-import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.vote.TooManyPointsException;
-import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
-import com.zenika.liquid.democracy.api.exception.vote.VotePropositionIncorrectException;
-import com.zenika.liquid.democracy.model.Power;
-import com.zenika.liquid.democracy.model.Proposition;
-import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Vote;
-import com.zenika.liquid.democracy.model.WeightedChoice;
+import static org.junit.Assert.assertEquals;
 
 public class VoteUtilTest {
 

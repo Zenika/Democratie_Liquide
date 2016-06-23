@@ -22,7 +22,7 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.zenika.liquid.democracy.Application;
-import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.api.subject.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;

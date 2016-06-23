@@ -3,9 +3,14 @@ package com.zenika.liquid.democracy.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.sql.Date;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import com.zenika.liquid.democracy.model.Subjects;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,7 +28,7 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.zenika.liquid.democracy.Application;
-import com.zenika.liquid.democracy.api.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.api.subject.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
 
@@ -52,36 +59,102 @@ public class SubjectControllerTest {
 
 	@Test
 	public void addSubjectTest() {
-		Subject l = new Subject();
+		Subject newSubject = new Subject();
 
-		ResponseEntity<Void> addResp = template.postForEntity("http://localhost:" + serverPort + "api/subjects/", l,
-				Void.class);
+		ResponseEntity<Void> addResp = template.postForEntity(
+			"http://localhost:" + serverPort + "api/subjects/",
+			newSubject,
+			Void.class
+		);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 
-		l.setTitle("Title");
-		addResp = template.postForEntity("http://localhost:" + serverPort + "api/subjects/", l, Void.class);
+		newSubject.setTitle("Title");
+		addResp = template.postForEntity(
+			"http://localhost:" + serverPort + "api/subjects/",
+			newSubject,
+			Void.class
+		);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 
-		l.setDescription("Description");
-		addResp = template.postForEntity("http://localhost:" + serverPort + "api/subjects/", l, Void.class);
+		newSubject.setDescription("Description");
+		addResp = template.postForEntity(
+			"http://localhost:" + serverPort + "api/subjects/",
+			newSubject,
+			Void.class
+		);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
-		l.getPropositions().add(p1);
-		l.getPropositions().add(p2);
-		addResp = template.postForEntity("http://localhost:" + serverPort + "api/subjects/", l, Void.class);
+		newSubject.getPropositions().add(p1);
+		newSubject.getPropositions().add(p2);
+		addResp = template.postForEntity(
+			"http://localhost:" + serverPort + "api/subjects/",
+			newSubject,
+			Void.class
+		);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
-		addResp = template.postForEntity("http://localhost:" + serverPort + "api/subjects/", l, Void.class);
+		addResp = template.postForEntity(
+			"http://localhost:" + serverPort + "api/subjects/",
+			newSubject,
+			Void.class
+		);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.CREATED.value(), addResp.getStatusCode().value());
+	}
+
+	@Test
+	public void getSubjectsShouldReturnOpenedAndClosedSubjects() {
+		Subject opened = new Subject();
+		opened.setDeadLine(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)));
+		opened.setTitle("Opened subject");
+		opened.setDescription("Description");
+		Proposition p1 = new Proposition();
+		Proposition p2 = new Proposition();
+		opened.getPropositions().add(p1);
+		opened.getPropositions().add(p2);
+		p1.setTitle("P1 title");
+		p2.setTitle("P2 title");
+
+		Subject noDeadline = new Subject();
+		noDeadline.setTitle("No deadline subject");
+		noDeadline.setDescription("Description");
+		Proposition p3 = new Proposition();
+		Proposition p4 = new Proposition();
+		noDeadline.getPropositions().add(p3);
+		noDeadline.getPropositions().add(p4);
+		p3.setTitle("P2 title");
+		p3.setTitle("P3 title");
+
+		Subject closed = new Subject();
+		opened.setDeadLine(Date.from(Instant.now().minus(1, ChronoUnit.DAYS)));
+		closed.setTitle("Title");
+		closed.setDescription("Description");
+		Proposition p5 = new Proposition();
+		Proposition p6 = new Proposition();
+		closed.getPropositions().add(p5);
+		closed.getPropositions().add(p6);
+		p3.setTitle("P5 title");
+		p3.setTitle("P6 title");
+
+		repository.save(Arrays.asList(opened, noDeadline, closed));
+
+		final ResponseEntity<Subjects> response = template.getForEntity(
+				"http://localhost:" + serverPort + "api/subjects/",
+				Subjects.class
+		);
+		assertNotNull(response);
+		assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
+		assertEquals(2, response.getBody().getOpened().size());
+		assertEquals(1, response.getBody().getClosed().size());
+
 	}
 
 	@Test

@@ -5,13 +5,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.zenika.liquid.democracy.api.power.util.PowerUtil;
 import org.junit.Test;
 
-import com.zenika.liquid.democracy.api.exception.commons.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.power.DeleteNonExistingPowerException;
-import com.zenika.liquid.democracy.api.exception.power.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.exception.power.UserGivePowerToHimselfException;
-import com.zenika.liquid.democracy.api.exception.vote.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.power.exception.DeleteNonExistingPowerException;
+import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfException;
+import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Proposition;
 import com.zenika.liquid.democracy.model.Subject;
