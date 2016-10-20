@@ -17,6 +17,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInController;
 
 import com.zenika.liquid.democracy.authentication.AppConfig;
+import com.zenika.liquid.democracy.authentication.security.config.cond.ConditionnalOnGoogleKey;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.authentication.spring.social.SimpleSignInAdapter;
 
@@ -86,6 +87,7 @@ public class ProdConfiguration {
 	}
 
 	@Bean
+	@ConditionnalOnGoogleKey
 	public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator,
 	        UsersConnectionRepository usersConnectionRepository, SimpleSignInAdapter simpleSignInAdapter) {
 		ProviderSignInController controller = new ProviderSignInController(connectionFactoryLocator,
