@@ -9,6 +9,7 @@
 /liquid-democracy-model/.idea
 /liquid-democracy-api/.idea
 *.iml
+.idea
 /liquid-democracy-api/logs
 RemoteSystemsTempFiles
 .metadata
