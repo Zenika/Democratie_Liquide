@@ -43,6 +43,9 @@ public class Subject {
 	@DBRef
 	private Category category;
 
+	@DBRef
+	private Channel channel;
+
 	public Subject() {
 		maxPoints = 1;
 		propositions = new ArrayList<>();
@@ -136,6 +139,14 @@ public class Subject {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
 	}
 
 	public Optional<Power> findPower(String userId) {
