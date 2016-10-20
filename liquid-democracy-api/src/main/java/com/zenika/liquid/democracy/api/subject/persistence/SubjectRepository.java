@@ -15,4 +15,6 @@ public interface SubjectRepository extends MongoRepository<Subject, Long> {
 	Optional<Subject> findSubjectByUuid(String subjectUuid);
 
 	List<Subject> findSubjectByCategoryUuid(String categoryUuid);
+
+	List<Subject> findSubjectByChannelUuid(String channelUuid);
 }

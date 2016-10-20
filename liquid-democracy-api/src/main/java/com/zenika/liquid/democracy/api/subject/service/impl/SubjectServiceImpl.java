@@ -1,6 +1,7 @@
 package com.zenika.liquid.democracy.api.subject.service.impl;
 
 import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
+import com.zenika.liquid.democracy.api.channel.persistence.ChannelRepository;
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
@@ -13,6 +14,7 @@ import com.zenika.liquid.democracy.api.subject.service.SubjectService;
 import com.zenika.liquid.democracy.api.power.util.PowerUtil;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.model.Category;
+import com.zenika.liquid.democracy.model.Channel;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Subject;
 import com.zenika.liquid.democracy.model.Subjects;
@@ -35,6 +37,9 @@ public class SubjectServiceImpl implements SubjectService {
 	private CategoryRepository categoryRepository;
 
 	@Autowired
+	private ChannelRepository channelRepository;
+
+	@Autowired
 	private CollaboratorService collaboratorService;
 
 	public Subject addSubject(Subject s)
@@ -50,6 +55,16 @@ public class SubjectServiceImpl implements SubjectService {
 				throw new MalformedSubjectException();
 			} else {
 				s.setCategory(category.get());
+			}
+		}
+
+		if (s.getChannel() != null) {
+			Optional<Channel> channel = channelRepository.findChannelByUuid(s.getChannel().getUuid());
+
+			if (!channel.isPresent()) {
+				throw new MalformedSubjectException();
+			} else {
+				s.setChannel(channel.get());
 			}
 		}
 
