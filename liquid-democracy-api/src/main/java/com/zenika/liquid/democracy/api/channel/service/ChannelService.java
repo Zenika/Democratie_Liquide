@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public interface ChannelService {
 
-	public Channel addChannel(Channel c) throws MalformedChannelException;
+	public Channel addChannel(Channel c) throws MalformedChannelException, UserAlreadyInChannelException;
 
 	public List<Channel> getChannels();
 

@@ -23,7 +23,7 @@ public class ChannelController {
 	private ChannelService channelService;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> addChannel(@Validated @RequestBody Channel c) throws MalformedChannelException {
+	public ResponseEntity<Void> addChannel(@Validated @RequestBody Channel c) throws MalformedChannelException, UserAlreadyInChannelException {
 
 		Channel out = channelService.addChannel(c);
 
