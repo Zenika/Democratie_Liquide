@@ -25,9 +25,10 @@ public class ChannelServiceImpl implements ChannelService {
 	@Autowired
 	private CollaboratorService collaboratorService;
 
-	public Channel addChannel(Channel c) throws MalformedChannelException {
+	public Channel addChannel(Channel c) throws MalformedChannelException, UserAlreadyInChannelException {
 
 		ChannelUtil.checkChannel(c);
+		this.joinChannel(c);
 
 		return channelRepository.save(c);
 	}
