@@ -3,6 +3,7 @@ package com.zenika.liquid.democracy.model;
 import com.zenika.si.core.zenika.model.Collaborator;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Channel {
 
 	private String description;
 
+	@DBRef
 	private List<Collaborator> collaborators;
 
 	public Channel() {
