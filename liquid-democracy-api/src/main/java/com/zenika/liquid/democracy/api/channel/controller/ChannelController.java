@@ -1,9 +1,6 @@
 package com.zenika.liquid.democracy.api.channel.controller;
 
-import com.zenika.liquid.democracy.api.channel.exception.MalformedChannelException;
-import com.zenika.liquid.democracy.api.channel.exception.UnexistingChannelException;
-import com.zenika.liquid.democracy.api.channel.exception.UserAlreadyInChannelException;
-import com.zenika.liquid.democracy.api.channel.exception.UserNotInChannelException;
+import com.zenika.liquid.democracy.api.channel.exception.*;
 import com.zenika.liquid.democracy.api.channel.service.ChannelService;
 import com.zenika.liquid.democracy.model.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,7 @@ public class ChannelController {
 	private ChannelService channelService;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> addChannel(@Validated @RequestBody Channel c) throws MalformedChannelException, UserAlreadyInChannelException {
+	public ResponseEntity<Void> addChannel(@Validated @RequestBody Channel c) throws MalformedChannelException, UserAlreadyInChannelException, ExistingChannelException {
 
 		Channel out = channelService.addChannel(c);
 
@@ -83,4 +80,18 @@ public class ChannelController {
 	public void unexistingChannelHandler() {
 	}
 
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Un channel du même nom existe déjà")
+	@ExceptionHandler(ExistingChannelException.class)
+	public void existingChannelHandler() {
+	}
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous appartenez déjà à ce channel")
+	@ExceptionHandler(UserAlreadyInChannelException.class)
+	public void userAlreadyInChannelHandler() {}
+
+
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Aucune trace de vous n'a été trouvée dans ce channel")
+	@ExceptionHandler(UserNotInChannelException.class)
+	public void userNotInChannelHandler() {}
 }

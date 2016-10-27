@@ -1,9 +1,6 @@
 package com.zenika.liquid.democracy.api.channel.service.impl;
 
-import com.zenika.liquid.democracy.api.channel.exception.MalformedChannelException;
-import com.zenika.liquid.democracy.api.channel.exception.UnexistingChannelException;
-import com.zenika.liquid.democracy.api.channel.exception.UserAlreadyInChannelException;
-import com.zenika.liquid.democracy.api.channel.exception.UserNotInChannelException;
+import com.zenika.liquid.democracy.api.channel.exception.*;
 import com.zenika.liquid.democracy.api.channel.persistence.ChannelRepository;
 import com.zenika.liquid.democracy.api.channel.service.ChannelService;
 import com.zenika.liquid.democracy.api.channel.util.ChannelUtil;
@@ -25,12 +22,23 @@ public class ChannelServiceImpl implements ChannelService {
 	@Autowired
 	private CollaboratorService collaboratorService;
 
-	public Channel addChannel(Channel c) throws MalformedChannelException, UserAlreadyInChannelException {
+	public Channel addChannel(Channel newChannel) throws MalformedChannelException, UserAlreadyInChannelException, ExistingChannelException {
 
-		ChannelUtil.checkChannel(c);
-		this.joinChannel(c);
+		// check channel not blank
+		ChannelUtil.checkChannel(newChannel);
 
-		return channelRepository.save(c);
+		// trim and lowerCase title
+		newChannel.setTitle(newChannel.getTitle().toLowerCase().trim());
+
+		// find duplicates
+		Optional<Channel> c = channelRepository.findChannelByTitle(newChannel.getTitle());
+		if (c.isPresent()) {
+			throw new ExistingChannelException();
+		}
+
+		// join the channel
+		this.joinChannel(newChannel);
+		return channelRepository.save(newChannel);
 	}
 
 	public List<Channel> getChannels() {

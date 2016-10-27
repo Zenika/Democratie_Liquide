@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface ChannelRepository extends MongoRepository<Channel, Long> {
 
 	Optional<Channel> findChannelByUuid(String channelUuid);
+
+	Optional<Channel> findChannelByTitle(String title);
 }
