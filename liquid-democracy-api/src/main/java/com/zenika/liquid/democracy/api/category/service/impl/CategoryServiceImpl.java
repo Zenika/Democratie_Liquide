@@ -25,12 +25,11 @@ public class CategoryServiceImpl implements CategoryService {
 		// check category not blank
 		CategoryUtil.checkCategory(newCategory);
 
-		// trim and lowerCase title
-		newCategory.setTitle(newCategory.getTitle().toLowerCase().trim());
-
 		// find duplicates
-		Optional<Category> c = categoryRepository.findCategoryByTitle(newCategory.getTitle());
-		if (c.isPresent()) {
+		Boolean isPresent = categoryRepository.findAll().stream().anyMatch(p ->
+			p.getTitle().toLowerCase().trim().equals(newCategory.getTitle().toLowerCase().trim())
+		);
+		if (isPresent) {
 			throw new ExistingCategoryException();
 		}
 
