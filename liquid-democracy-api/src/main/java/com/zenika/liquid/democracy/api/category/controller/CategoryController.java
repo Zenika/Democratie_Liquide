@@ -2,6 +2,7 @@ package com.zenika.liquid.democracy.api.category.controller;
 
 import java.util.List;
 
+import com.zenika.liquid.democracy.api.category.exception.ExistingCategoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> addCategory(@Validated @RequestBody Category c) throws MalformedCategoryException {
+	public ResponseEntity<Void> addCategory(@Validated @RequestBody Category c) throws MalformedCategoryException, ExistingCategoryException {
 
 		Category out = categoryService.addCategory(c);
 
@@ -62,6 +63,13 @@ public class CategoryController {
 	@ExceptionHandler(MalformedCategoryException.class)
 	public void malformedCategoryHandler() {
 	}
+
+
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Une catégorie du même nom existe déjà")
+	@ExceptionHandler(ExistingCategoryException.class)
+	public void existingCategoryHandler() {
+	}
+
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "La catégorie n'existe pas")
 	@ExceptionHandler(UnexistingCategoryException.class)

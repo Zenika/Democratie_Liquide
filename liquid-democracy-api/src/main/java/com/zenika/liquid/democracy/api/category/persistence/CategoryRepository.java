@@ -9,4 +9,6 @@ import com.zenika.liquid.democracy.model.Category;
 public interface CategoryRepository extends MongoRepository<Category, Long> {
 
 	Optional<Category> findCategoryByUuid(String categoryUuid);
+
+    Optional<Category> findCategoryByTitle(String title);
 }

@@ -13,8 +13,8 @@ import com.zenika.liquid.democracy.authentication.security.bean.SocialUserDetail
 import com.zenika.si.core.zenika.model.Collaborator;
 
 @Service
-@Profile({"prod"})
-public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
+@Profile({"!prod"})
+public class DevSocialUserDetailsServiceImpl implements SocialUserDetailsService {
 
     @Autowired
     private CollaboratorRepository userRepository;
@@ -32,6 +32,12 @@ public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
 
         if (userTmp.isPresent()) {
             user = userTmp.get();
+        } else if (userId.endsWith("@zenika.com")) {
+            user.setEmail(userId);
+            user.setFirstName("Dave");
+            user.setLastName("Lauper");
+
+            userRepository.save(user);
         }
 
         return new SocialUserDetailsImpl(user);

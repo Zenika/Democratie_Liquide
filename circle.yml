@@ -1,0 +1,31 @@
+# Activate Docker services
+machine:
+  services:
+    - docker
+
+# Install model and build api without tests
+dependencies:
+  override:
+    - docker run --rm -v ~/.m2:/root/.m2 -v $(pwd)/liquid-democracy-model:/usr/src/app -w /usr/src/app maven:3.2-jdk-8 mvn clean install
+    - docker run --rm -v ~/.m2:/root/.m2 -v $(pwd)/liquid-democracy-api:/usr/src/app -w /usr/src/app maven:3.2-jdk-8 mvn clean install -DskipTests
+
+# Run api's tests
+test:
+  override:
+    - docker run --rm -v ~/.m2:/root/.m2 -v $(pwd)/liquid-democracy-api:/usr/src/app -w /usr/src/app maven:3.2-jdk-8 mvn integration-test
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+
+# Deployment
+deployment:
+  production:
+    branch: master
+    commands:
+      - cp $(pwd)/liquid-democracy-api/target/liquid-democracy-api.jar $(pwd)/liquid-democracy-api/docker/liquid-democracy-api.jar
+      # --rm=false : avoid Docker Btrfs volume error
+      - docker build --rm=false -t zenika/agora-api $(pwd)/liquid-democracy-api/docker
+      - docker login -e "$DOCKER_EMAIL" -u "$DOCKER_USER" -p "$DOCKER_PASS"
+      - docker push zenika/agora-api
+      - ssh -o "StrictHostKeyChecking no" root@agora.zenika.com ./deploy.sh
+

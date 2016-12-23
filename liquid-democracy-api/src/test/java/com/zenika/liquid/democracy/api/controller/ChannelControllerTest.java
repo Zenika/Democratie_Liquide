@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import com.zenika.liquid.democracy.api.channel.persistence.ChannelRepository;
+import com.zenika.liquid.democracy.model.Channel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,17 +22,15 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.zenika.liquid.democracy.Application;
-import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
-import com.zenika.liquid.democracy.model.Category;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebIntegrationTest(randomPort = true)
 @ActiveProfiles("test")
-public class CategoryControllerTest {
+public class ChannelControllerTest {
 
 	@Autowired
-	CategoryRepository repository;
+	ChannelRepository repository;
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -49,61 +49,61 @@ public class CategoryControllerTest {
 	}
 
 	@Test
-	public void addCategoryTest() {
-		Category c = new Category();
+	public void addChannelTest() {
+		Channel c = new Channel();
 
-		ResponseEntity<Void> addResp = template.postForEntity("http://localhost:" + serverPort + "api/categories/", c,
+		ResponseEntity<Void> addResp = template.postForEntity("http://localhost:" + serverPort + "api/channels/", c,
 		        Void.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 
 		c.setTitle("Title");
-		addResp = template.postForEntity("http://localhost:" + serverPort + "api/categories/", c, Void.class);
+		addResp = template.postForEntity("http://localhost:" + serverPort + "api/channels/", c, Void.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.CREATED.value(), addResp.getStatusCode().value());
 	}
 
 	@Test
-	public void getCategoriesTest() {
+	public void getChannelsTest() {
 
-		Category c = new Category();
+		Channel c = new Channel();
 		c.setTitle("Title");
 		c.setDescription("Description");
 		repository.save(c);
 
-		ResponseEntity<List> addResp = template.getForEntity("http://localhost:" + serverPort + "api/categories",
+		ResponseEntity<List> addResp = template.getForEntity("http://localhost:" + serverPort + "api/channels",
 		        List.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 		assertEquals(1, addResp.getBody().size());
 
-		Category c2 = new Category();
+		Channel c2 = new Channel();
 		c2.setTitle("Title");
 		c2.setDescription("Description");
 		repository.save(c2);
 
-		addResp = template.getForEntity("http://localhost:" + serverPort + "api/categories", List.class);
+		addResp = template.getForEntity("http://localhost:" + serverPort + "api/channels", List.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 		assertEquals(2, addResp.getBody().size());
 	}
 
 	@Test
-	public void getCategoryTest() {
+	public void getChannelTest() {
 
-		Category c = new Category();
+		Channel c = new Channel();
 		c.setTitle("Title");
 		c.setDescription("Description");
 		repository.save(c);
 
-		ResponseEntity<Category> addResp = template
-		        .getForEntity("http://localhost:" + serverPort + "api/categories/" + c.getUuid(), Category.class);
+		ResponseEntity<Channel> addResp = template
+		        .getForEntity("http://localhost:" + serverPort + "api/channels/" + c.getUuid(), Channel.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 		assertEquals(c.getUuid(), addResp.getBody().getUuid());
 
-		addResp = template.getForEntity("http://localhost:" + serverPort + "api/categories/" + c.getUuid() + 1,
-		        Category.class);
+		addResp = template.getForEntity("http://localhost:" + serverPort + "api/channels/" + c.getUuid() + 1,
+		        Channel.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.NOT_FOUND.value(), addResp.getStatusCode().value());
 	}
