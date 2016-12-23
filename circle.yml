@@ -28,4 +28,13 @@ deployment:
       - docker login -e "$DOCKER_EMAIL" -u "$DOCKER_USER" -p "$DOCKER_PASS"
       - docker push zenika/agora-api
       - ssh -o "StrictHostKeyChecking no" root@agora.zenika.com ./deploy.sh
+  statging:
+    branch: /.*/
+    commands:
+      - cp $(pwd)/liquid-democracy-api/target/liquid-democracy-api.jar $(pwd)/liquid-democracy-api/docker/liquid-democracy-api.jar
+      # --rm=false : avoid Docker Btrfs volume error
+      - docker build --rm=false -t zenika/agora-api:${CIRCLE_BRANCH} $(pwd)/liquid-democracy-api/docker
+      - docker login -e "$DOCKER_EMAIL" -u "$DOCKER_USER" -p "$DOCKER_PASS"
+      - docker push zenika/agora-api:${CIRCLE_BRANCH}
+      - ssh -o "StrictHostKeyChecking no" root@agora.zenika.com ./deploy.sh
 
