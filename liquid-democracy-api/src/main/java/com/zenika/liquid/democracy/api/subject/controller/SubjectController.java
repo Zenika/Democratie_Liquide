@@ -18,62 +18,63 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/subjects")
 public class SubjectController {
 
-	@Autowired
-	private SubjectService subjectService;
+    @Autowired
+    private SubjectService subjectService;
 
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s)
-	        throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s)
+            throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
+            UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
-		Subject out = subjectService.addSubject(s);
+        Subject out = subjectService.addSubject(s);
 
-		return ResponseEntity.created(
-		        ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
-		        .build();
-	}
+        return ResponseEntity.created(
+                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
+                .build();
+    }
 
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Subjects> getSubjects() {
-		return ResponseEntity.ok(new SubjectsRepresentation(subjectService.getSubjects()));
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<Subjects> getSubjects() {
+        subjectService.getSubjects().getOpened().stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
+        subjectService.getSubjects().getClosed().stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
+        return ResponseEntity.ok(subjectService.getSubjects());
+    }
 
-	@RequestMapping(method = RequestMethod.GET, path = "/inprogress")
-	public ResponseEntity<List<SubjectRepresentation>> getSubjectsInProgress() throws MalformedSubjectException {
+    @RequestMapping(method = RequestMethod.GET, path = "/inprogress")
+    public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
 
-		List<SubjectRepresentation> out = subjectService.getSubjectsInProgress()
-				.stream().map(SubjectRepresentation::new).collect(Collectors.toList());
+        List<Subject> out = subjectService.getSubjectsInProgress();
+        out.stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
 
-		if (out.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
-		}
+        if (out.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
+        }
 
-		return ResponseEntity.ok(out);
-	}
+        return ResponseEntity.ok(out);
+    }
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
-	public ResponseEntity<SubjectRepresentation> getSubjectByUuid(@PathVariable String subjectUuid)
-	        throws UnexistingSubjectException {
+    @RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
+    public ResponseEntity<Subject> getSubjectByUuid(@PathVariable String subjectUuid)
+            throws UnexistingSubjectException {
 
-		Subject s = subjectService.getSubjectByUuid(subjectUuid);
+        Subject s = subjectService.getSubjectByUuid(subjectUuid);
+        s.getVotes().forEach(v -> v.setChoices(null));
+        return ResponseEntity.ok().body(s);
+    }
 
-		return ResponseEntity.ok().body(new SubjectRepresentation(s));
-	}
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Le sujet n'existe pas")
+    @ExceptionHandler(UnexistingSubjectException.class)
+    public void unexistingSubjectHandler() {
+    }
 
-	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Le sujet n'existe pas")
-	@ExceptionHandler(UnexistingSubjectException.class)
-	public void unexistingSubjectHandler() {
-	}
-
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet n'est pas complet")
-	@ExceptionHandler(MalformedSubjectException.class)
-	public void malFormedSubjectHandler() {
-	}
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le sujet n'est pas complet")
+    @ExceptionHandler(MalformedSubjectException.class)
+    public void malFormedSubjectHandler() {
+    }
 
 }
