@@ -3,6 +3,8 @@ package com.zenika.liquid.democracy.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -36,10 +38,12 @@ public class Vote {
 		this.collaboratorId = collaboratorId;
 	}
 
+	@JsonIgnore
 	public List<WeightedChoice> getChoices() {
 		return choices;
 	}
 
+	@JsonProperty
 	public void setChoices(List<WeightedChoice> choices) {
 		this.choices = choices;
 	}

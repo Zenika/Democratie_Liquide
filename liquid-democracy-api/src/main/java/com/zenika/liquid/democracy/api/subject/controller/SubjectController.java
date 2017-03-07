@@ -40,8 +40,6 @@ public class SubjectController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Subjects> getSubjects() {
-        subjectService.getSubjects().getOpened().stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
-        subjectService.getSubjects().getClosed().stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
         return ResponseEntity.ok(subjectService.getSubjects());
     }
 
@@ -49,7 +47,6 @@ public class SubjectController {
     public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
 
         List<Subject> out = subjectService.getSubjectsInProgress();
-        out.stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
 
         if (out.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
@@ -63,7 +60,6 @@ public class SubjectController {
             throws UnexistingSubjectException {
 
         Subject s = subjectService.getSubjectByUuid(subjectUuid);
-        s.getVotes().forEach(v -> v.setChoices(null));
         return ResponseEntity.ok().body(s);
     }
 
