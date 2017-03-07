@@ -17,3 +17,4 @@ RemoteSystemsTempFiles
 /Servers
 /TestApi
 /liquid-democracy-api/liquid-democracy-api-logs/logs/*
+*.log

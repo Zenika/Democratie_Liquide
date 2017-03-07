@@ -1,0 +1,18 @@
+info:
+  component: Liquid Democracy Api
+
+---
+spring:
+  profiles: dev
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
+  data:
+    mongodb:
+      host: localhost
+      database: dbliqdem
+app:
+  config:
+    rememberMeKey: thisisasimpleremembermekey
+    redirectUrl: http://localhost:3000
+    redirectUrlFailure: http://localhost:3000/#/loginfailed
+    applicationUrl: http://localhost:3000

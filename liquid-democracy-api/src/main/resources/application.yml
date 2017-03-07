@@ -16,27 +16,6 @@ spring:
     mongodb:
       host: localhost
 
----
-spring:
-  profiles: dev
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
-  data:
-    mongodb:
-      host: mongoliquidDemocracy
-      database: dbliqdem
-  social:
-    google:
-      appId: 
-      appSecret: 
-app:
-  config:
-    rememberMeKey: thisisasimpleremembermekey
-    redirectUrl: 
-    redirectUrlFailure: /loginfailed
-    applicationUrl: http://localhost
-  
-
 ---      
 spring:
   profiles: prod
