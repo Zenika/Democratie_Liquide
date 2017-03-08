@@ -7,113 +7,122 @@ import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfException;
+import com.zenika.liquid.democracy.api.power.util.PowerUtil;
 import com.zenika.liquid.democracy.api.subject.exception.MalformedSubjectException;
-import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.subject.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.subject.service.SubjectService;
-import com.zenika.liquid.democracy.api.power.util.PowerUtil;
+import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
+import com.zenika.liquid.democracy.config.MapperConfig;
+import com.zenika.liquid.democracy.dto.SubjectDto;
 import com.zenika.liquid.democracy.model.Category;
 import com.zenika.liquid.democracy.model.Channel;
 import com.zenika.liquid.democracy.model.Power;
 import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Subjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
 
-	@Autowired
-	private SubjectRepository subjectRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
 
-	@Autowired
-	private CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
-	@Autowired
-	private ChannelRepository channelRepository;
+    @Autowired
+    private ChannelRepository channelRepository;
 
-	@Autowired
-	private CollaboratorService collaboratorService;
+    @Autowired
+    private CollaboratorService collaboratorService;
 
-	public Subject addSubject(Subject s)
-	        throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
-		String userId = collaboratorService.currentUser().getEmail();
+    @Autowired
+    MapperConfig mapper;
 
-		if (s.getCategory() != null) {
-			Optional<Category> category = categoryRepository.findCategoryByUuid(s.getCategory().getUuid());
+    public SubjectDto addSubject(SubjectDto s)
+            throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
+            UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
-			if (!category.isPresent()) {
-				throw new MalformedSubjectException();
-			} else {
-				s.setCategory(category.get());
-			}
-		}
+        String userId = collaboratorService.currentUser().getEmail();
 
-		if (s.getChannel() != null) {
-			Optional<Channel> channel = channelRepository.findChannelByUuid(s.getChannel().getUuid());
+        if (s.getCategory() != null) {
+            Optional<Category> category = categoryRepository.findCategoryByUuid(s.getCategory().getUuid());
 
-			if (!channel.isPresent()) {
-				throw new MalformedSubjectException();
-			} else {
-				s.setChannel(channel.get());
-			}
-		}
+            if (!category.isPresent()) {
+                throw new MalformedSubjectException();
+            } else {
+                s.setCategory(category.get());
+            }
+        }
 
-		if (!s.isWellFormed()) {
-			throw new MalformedSubjectException();
-		}
+        if (s.getChannel() != null) {
+            Optional<Channel> channel = channelRepository.findChannelByUuid(s.getChannel().getUuid());
 
-		s.setSubmitDate(new Date());
-		s.setCollaboratorId(userId);
+            if (!channel.isPresent()) {
+                throw new MalformedSubjectException();
+            } else {
+                s.setChannel(channel.get());
+            }
+        }
 
-		s = subjectRepository.save(s);
+        if (!s.isWellFormed()) {
+            throw new MalformedSubjectException();
+        }
 
-		if (s.getCategory() != null) {
-			for (Power power : s.getCategory().getPowers()) {
-				Power powerTmp = new Power();
-				powerTmp.setCollaboratorIdTo(power.getCollaboratorIdTo());
+        s.setSubmitDate(new Date());
+        s.setCollaboratorId(userId);
 
-				boolean addVote = PowerUtil.checkPowerForAddition(powerTmp, s, power.getCollaboratorIdFrom());
+        s = subjectRepository.save(s);
 
-				PowerUtil.preparePower(powerTmp, s, power.getCollaboratorIdFrom(), addVote);
-			}
-		}
+        if (s.getCategory() != null) {
+            for (Power power : s.getCategory().getPowers()) {
+                Power powerTmp = new Power();
+                powerTmp.setCollaboratorIdTo(power.getCollaboratorIdTo());
 
-		return subjectRepository.save(s);
-	}
+                boolean addVote = PowerUtil.checkPowerForAddition(powerTmp, s, power.getCollaboratorIdFrom());
 
-	public List<Subject> getSubjectsInProgress() {
-		return subjectRepository.findByDeadLineGreaterThanOrDeadLineIsNull(new Date());
-	}
+                PowerUtil.preparePower(powerTmp, s, power.getCollaboratorIdFrom(), addVote);
+            }
+        }
 
-	@Override
-	public Subjects getSubjects() {
-		final List<Subject> allSubjects = subjectRepository.findAll();
-		final Map<Boolean, List<Subject>> subjectsByState = allSubjects.stream()
-				.collect(
-					Collectors.groupingBy(Subject::isClosed)
-				);
+        return subjectRepository.save(s);
+    }
 
-		return new Subjects(subjectsByState.get(false), subjectsByState.get(true));
-	}
+    public List<Subject> getSubjectsInProgress() {
+        return subjectRepository.findByDeadLineGreaterThanOrDeadLineIsNull(new Date());
+    }
 
-	public Subject getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException {
-		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+    @Override
+    public List<SubjectDto> getSubjects() {
+        String userId = collaboratorService.currentUser().getEmail();
 
-		if (!s.isPresent()) {
-			throw new UnexistingSubjectException();
-		}
+        return subjectRepository.findAll().stream().map(s -> {
+            SubjectDto sdto = mapper.map(s, SubjectDto.class);
+            sdto.setIsClosed(s.isClosed());
+            sdto.setIsMine(s.isMine(userId));
+            sdto.setIsVoted(s.isVoted(userId));
+            sdto.setGivenDelegation(s.getGivenDelegation(userId));
+            sdto.setReceivedDelegations(s.getReceivedDelegations(userId));
+            sdto.setVoteCount(s.getVoteCount());
+            return sdto;
+        }).collect(Collectors.toList());
+    }
 
-		return s.get();
-	}
+    public Subject getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException {
+        Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+
+        if (!s.isPresent()) {
+            throw new UnexistingSubjectException();
+        }
+
+        return s.get();
+    }
 
 }

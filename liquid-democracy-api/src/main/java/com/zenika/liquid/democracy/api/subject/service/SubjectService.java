@@ -2,7 +2,7 @@ package com.zenika.liquid.democracy.api.subject.service;
 
 import java.util.List;
 
-import com.zenika.liquid.democracy.model.Subjects;
+import com.zenika.liquid.democracy.dto.SubjectDto;
 import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
@@ -23,7 +23,7 @@ public interface SubjectService {
 
 	public List<Subject> getSubjectsInProgress();
 
-	public Subjects getSubjects();
+	public List<SubjectDto> getSubjects();
 
 	public Subject getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException;
 

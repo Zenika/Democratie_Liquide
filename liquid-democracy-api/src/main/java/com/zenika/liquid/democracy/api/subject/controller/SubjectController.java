@@ -8,8 +8,8 @@ import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfExc
 import com.zenika.liquid.democracy.api.subject.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.subject.service.SubjectService;
 import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.dto.SubjectDto;
 import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Subjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Subjects> getSubjects() {
+    public ResponseEntity<List<SubjectDto>> getSubjects() {
         return ResponseEntity.ok(subjectService.getSubjects());
     }
 
