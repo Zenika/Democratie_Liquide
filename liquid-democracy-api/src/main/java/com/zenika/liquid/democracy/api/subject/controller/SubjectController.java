@@ -8,8 +8,8 @@ import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfExc
 import com.zenika.liquid.democracy.api.subject.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.subject.service.SubjectService;
 import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.dto.SubjectDto;
 import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Subjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class SubjectController {
             throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
             UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
-        Subject out = subjectService.addSubject(s);
+        SubjectDto out = subjectService.addSubject(s);
 
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
@@ -39,17 +39,14 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Subjects> getSubjects() {
-        subjectService.getSubjects().getOpened().stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
-        subjectService.getSubjects().getClosed().stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
+    public ResponseEntity<List<SubjectDto>> getSubjects() {
         return ResponseEntity.ok(subjectService.getSubjects());
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/inprogress")
-    public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
+    public ResponseEntity<List<SubjectDto>> getSubjectsInProgress() throws MalformedSubjectException {
 
-        List<Subject> out = subjectService.getSubjectsInProgress();
-        out.stream().forEach(s -> s.getVotes().forEach(v -> v.setChoices(null)));
+        List<SubjectDto> out = subjectService.getSubjectsInProgress();
 
         if (out.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
@@ -59,11 +56,10 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
-    public ResponseEntity<Subject> getSubjectByUuid(@PathVariable String subjectUuid)
+    public ResponseEntity<SubjectDto> getSubjectByUuid(@PathVariable String subjectUuid)
             throws UnexistingSubjectException {
 
-        Subject s = subjectService.getSubjectByUuid(subjectUuid);
-        s.getVotes().forEach(v -> v.setChoices(null));
+        SubjectDto s = subjectService.getSubjectByUuid(subjectUuid);
         return ResponseEntity.ok().body(s);
     }
 

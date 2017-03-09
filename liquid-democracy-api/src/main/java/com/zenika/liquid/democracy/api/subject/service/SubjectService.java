@@ -2,7 +2,7 @@ package com.zenika.liquid.democracy.api.subject.service;
 
 import java.util.List;
 
-import com.zenika.liquid.democracy.model.Subjects;
+import com.zenika.liquid.democracy.dto.SubjectDto;
 import org.springframework.stereotype.Service;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
@@ -17,14 +17,14 @@ import com.zenika.liquid.democracy.model.Subject;
 @Service
 public interface SubjectService {
 
-	public Subject addSubject(Subject s)
+	public SubjectDto addSubject(Subject s)
 	        throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
 	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException;
 
-	public List<Subject> getSubjectsInProgress();
+	public List<SubjectDto> getSubjectsInProgress();
 
-	public Subjects getSubjects();
+	public List<SubjectDto> getSubjects();
 
-	public Subject getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException;
+	public SubjectDto getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException;
 
 }
