@@ -3,6 +3,7 @@ package com.zenika.liquid.democracy.api.category.controller;
 import java.util.List;
 
 import com.zenika.liquid.democracy.api.category.exception.ExistingCategoryException;
+import com.zenika.liquid.democracy.dto.CategoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class CategoryController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> addCategory(@Validated @RequestBody Category c) throws MalformedCategoryException, ExistingCategoryException {
 
-		Category out = categoryService.addCategory(c);
+		CategoryDto out = categoryService.addCategory(c);
 
 		return ResponseEntity.created(
 		        ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
@@ -39,9 +40,9 @@ public class CategoryController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Category>> getCategories() {
+	public ResponseEntity<List<CategoryDto>> getCategories() {
 
-		List<Category> out = categoryService.getCategories();
+		List<CategoryDto> out = categoryService.getCategories();
 
 		if (out.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
@@ -51,12 +52,12 @@ public class CategoryController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{categoryUuid}")
-	public ResponseEntity<Category> getCategoryByUuid(@PathVariable String categoryUuid)
+	public ResponseEntity<CategoryDto> getCategoryByUuid(@PathVariable String categoryUuid)
 	        throws UnexistingCategoryException {
 
-		Category c = categoryService.getCategoryByUuid(categoryUuid);
+		CategoryDto cdto = categoryService.getCategoryByUuid(categoryUuid);
 
-		return ResponseEntity.ok().body(c);
+		return ResponseEntity.ok().body(cdto);
 	}
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Le titre est obligatoire")

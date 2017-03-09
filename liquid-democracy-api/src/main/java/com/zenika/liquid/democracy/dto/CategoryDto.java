@@ -21,12 +21,4 @@ public class CategoryDto {
     @Getter
     @Setter
     private String description;
-
-    @Getter
-    @Setter
-    private String givenDelegation;
-
-    @Getter
-    @Setter
-    private long receivedDelegations;
 }
