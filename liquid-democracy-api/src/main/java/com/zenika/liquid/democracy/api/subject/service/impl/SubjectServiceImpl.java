@@ -46,7 +46,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     MapperConfig mapper;
 
-    public SubjectDto addSubject(SubjectDto s)
+    public SubjectDto addSubject(Subject s)
             throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
             UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
@@ -92,37 +92,48 @@ public class SubjectServiceImpl implements SubjectService {
             }
         }
 
-        return subjectRepository.save(s);
+        return prepareSubjectForResponse(subjectRepository.save(s), userId);
     }
 
-    public List<Subject> getSubjectsInProgress() {
-        return subjectRepository.findByDeadLineGreaterThanOrDeadLineIsNull(new Date());
+    public List<SubjectDto> getSubjectsInProgress() {
+        String userId = collaboratorService.currentUser().getEmail();
+        return subjectRepository
+                .findByDeadLineGreaterThanOrDeadLineIsNull(new Date())
+                .stream()
+                .map(s -> prepareSubjectForResponse(s, userId))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<SubjectDto> getSubjects() {
         String userId = collaboratorService.currentUser().getEmail();
-
-        return subjectRepository.findAll().stream().map(s -> {
-            SubjectDto sdto = mapper.map(s, SubjectDto.class);
-            sdto.setIsClosed(s.isClosed());
-            sdto.setIsMine(s.isMine(userId));
-            sdto.setIsVoted(s.isVoted(userId));
-            sdto.setGivenDelegation(s.getGivenDelegation(userId));
-            sdto.setReceivedDelegations(s.getReceivedDelegations(userId));
-            sdto.setVoteCount(s.getVoteCount());
-            return sdto;
-        }).collect(Collectors.toList());
+        return subjectRepository
+                .findAll()
+                .stream()
+                .map(s -> prepareSubjectForResponse(s, userId))
+                .collect(Collectors.toList());
     }
 
-    public Subject getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException {
+    public SubjectDto getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException {
         Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+        String userId = collaboratorService.currentUser().getEmail();
 
         if (!s.isPresent()) {
             throw new UnexistingSubjectException();
         }
 
-        return s.get();
+        return prepareSubjectForResponse(s.get(), userId);
+    }
+
+    private SubjectDto prepareSubjectForResponse(Subject s, String userId) {
+        SubjectDto sdto = mapper.map(s, SubjectDto.class);
+        sdto.setIsClosed(s.isClosed());
+        sdto.setIsMine(s.isMine(userId));
+        sdto.setIsVoted(s.isVoted(userId));
+        sdto.setGivenDelegation(s.getGivenDelegation(userId));
+        sdto.setReceivedDelegations(s.getReceivedDelegations(userId));
+        sdto.setVoteCount(s.getVoteCount());
+        return sdto;
     }
 
 }

@@ -31,7 +31,7 @@ public class SubjectController {
             throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
             UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
 
-        Subject out = subjectService.addSubject(s);
+        SubjectDto out = subjectService.addSubject(s);
 
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
@@ -44,9 +44,9 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/inprogress")
-    public ResponseEntity<List<Subject>> getSubjectsInProgress() throws MalformedSubjectException {
+    public ResponseEntity<List<SubjectDto>> getSubjectsInProgress() throws MalformedSubjectException {
 
-        List<Subject> out = subjectService.getSubjectsInProgress();
+        List<SubjectDto> out = subjectService.getSubjectsInProgress();
 
         if (out.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
@@ -56,10 +56,10 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
-    public ResponseEntity<Subject> getSubjectByUuid(@PathVariable String subjectUuid)
+    public ResponseEntity<SubjectDto> getSubjectByUuid(@PathVariable String subjectUuid)
             throws UnexistingSubjectException {
 
-        Subject s = subjectService.getSubjectByUuid(subjectUuid);
+        SubjectDto s = subjectService.getSubjectByUuid(subjectUuid);
         return ResponseEntity.ok().body(s);
     }
 

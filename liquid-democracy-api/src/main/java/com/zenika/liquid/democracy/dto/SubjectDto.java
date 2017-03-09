@@ -11,6 +11,9 @@ import java.util.List;
  */
 public class SubjectDto {
 
+    @Setter
+    private String collaboratorId;
+
     @Getter
     @Setter
     private String uuid;
