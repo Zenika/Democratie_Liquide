@@ -38,12 +38,10 @@ public class Vote {
 		this.collaboratorId = collaboratorId;
 	}
 
-	@JsonIgnore
 	public List<WeightedChoice> getChoices() {
 		return choices;
 	}
 
-	@JsonProperty
 	public void setChoices(List<WeightedChoice> choices) {
 		this.choices = choices;
 	}

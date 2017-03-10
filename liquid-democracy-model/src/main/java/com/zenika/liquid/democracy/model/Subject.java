@@ -1,5 +1,6 @@
 package com.zenika.liquid.democracy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -45,6 +46,7 @@ public class Subject {
     private Channel channel;
 
     public Subject() {
+        collaboratorId = null;
         maxPoints = 1;
         propositions = new ArrayList<>();
         powers = new ArrayList<>();
@@ -164,31 +166,38 @@ public class Subject {
 
     }
 
+    @JsonIgnore
     public int getVoteCount() {
         return votes.size();
     }
 
+    @JsonIgnore
     public boolean isClosed() {
                         return getDeadLine() != null && getDeadLine().before(new Date());
                     }
 
+    @JsonIgnore
     public boolean isVoted(String userId) {
         return votes.stream().filter(v -> v.getCollaboratorId().equals(userId)).count() > 0;
     }
 
+    @JsonIgnore
     public boolean isMine(String userId) {
-        return this.collaboratorId.equals(userId);
+        return this.collaboratorId != null && this.collaboratorId.equals(userId);
     }
 
+    @JsonIgnore
     public String getGivenDelegation(String userId) {
         Optional<Power> p = this.findPower(userId);
         return p.isPresent() ? p.get().getCollaboratorIdTo() : null;
     }
 
+    @JsonIgnore
     public long getReceivedDelegations(String userId) {
         return this.powers.stream().filter(p -> p.getCollaboratorIdTo().equals(userId)).count();
     }
 
+    @JsonIgnore
     public boolean isWellFormed() {
         boolean result = !StringUtils.isEmpty(title) && !StringUtils.isEmpty(description);
 

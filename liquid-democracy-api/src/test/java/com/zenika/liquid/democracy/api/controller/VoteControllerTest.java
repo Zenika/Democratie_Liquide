@@ -60,6 +60,7 @@ public class VoteControllerTest {
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
+		s.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
 		s.getPropositions().add(p1);
@@ -206,6 +207,7 @@ public class VoteControllerTest {
 		Subject s = new Subject();
 		s.setTitle("Title");
 		s.setDescription("Description");
+		s.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p1 = new Proposition();
 		s.getPropositions().add(p1);
 		p1.setTitle("P1 title");
@@ -234,6 +236,7 @@ public class VoteControllerTest {
 		s.setTitle("Title");
 		s.setMaxPoints(2);
 		s.setDescription("Description");
+		s.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
 		s.getPropositions().add(p1);

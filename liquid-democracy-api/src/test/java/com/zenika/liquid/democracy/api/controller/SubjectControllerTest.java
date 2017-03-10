@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import com.zenika.liquid.democracy.dto.SubjectDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,6 +79,7 @@ public class SubjectControllerTest {
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
 
 		newSubject.setDescription("Description");
+		newSubject.setCollaboratorId("sandra.parlant@zenika.com");
 		addResp = template.postForEntity(
 			"http://localhost:" + serverPort + "api/subjects/",
 			newSubject,
@@ -110,11 +112,12 @@ public class SubjectControllerTest {
 	}
 
 	@Test
-	public void getSubjectsShouldReturnOpenedAndClosedSubjects() {
+	public void getSubjectsShouldReturnSubjectList() {
 		Subject opened = new Subject();
 		opened.setDeadLine(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)));
 		opened.setTitle("Opened subject");
 		opened.setDescription("Description");
+		opened.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
 		opened.getPropositions().add(p1);
@@ -125,6 +128,7 @@ public class SubjectControllerTest {
 		Subject noDeadline = new Subject();
 		noDeadline.setTitle("No deadline subject");
 		noDeadline.setDescription("Description");
+		noDeadline.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p3 = new Proposition();
 		Proposition p4 = new Proposition();
 		noDeadline.getPropositions().add(p3);
@@ -136,6 +140,7 @@ public class SubjectControllerTest {
 		opened.setDeadLine(Date.from(Instant.now().minus(1, ChronoUnit.DAYS)));
 		closed.setTitle("Title");
 		closed.setDescription("Description");
+		closed.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p5 = new Proposition();
 		Proposition p6 = new Proposition();
 		closed.getPropositions().add(p5);
@@ -145,14 +150,13 @@ public class SubjectControllerTest {
 
 		repository.save(Arrays.asList(opened, noDeadline, closed));
 
-//		final ResponseEntity<Subjects> response = template.getForEntity(
-//				"http://localhost:" + serverPort + "api/subjects/",
-//				Subjects.class
-//		);
-//		assertNotNull(response);
-//		assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
-//		assertEquals(2, response.getBody().getOpened().size());
-//		assertEquals(1, response.getBody().getClosed().size());
+		final ResponseEntity<List> response = template.getForEntity(
+				"http://localhost:" + serverPort + "api/subjects/",
+				List.class
+		);
+		assertNotNull(response);
+		assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
+		assertEquals(3, response.getBody().size());
 
 	}
 
@@ -162,6 +166,7 @@ public class SubjectControllerTest {
 		Subject l = new Subject();
 		l.setTitle("Title");
 		l.setDescription("Description");
+		l.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
 		l.getPropositions().add(p1);
@@ -179,6 +184,7 @@ public class SubjectControllerTest {
 		Subject l2 = new Subject();
 		l2.setTitle("Title");
 		l2.setDescription("Description");
+		l2.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p3 = new Proposition();
 		Proposition p4 = new Proposition();
 		l2.getPropositions().add(p3);
@@ -198,6 +204,7 @@ public class SubjectControllerTest {
 		Subject l3 = new Subject();
 		l3.setTitle("Title");
 		l3.setDescription("Description");
+		l3.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p5 = new Proposition();
 		Proposition p6 = new Proposition();
 		l3.getPropositions().add(p5);
@@ -220,6 +227,7 @@ public class SubjectControllerTest {
 		Subject l = new Subject();
 		l.setTitle("Title");
 		l.setDescription("Description");
+		l.setCollaboratorId("sandra.parlant@zenika.com");
 		Proposition p1 = new Proposition();
 		Proposition p2 = new Proposition();
 		l.getPropositions().add(p1);
@@ -228,14 +236,14 @@ public class SubjectControllerTest {
 		p2.setTitle("P2 title");
 		l = repository.save(l);
 
-		ResponseEntity<Subject> addResp = template
-				.getForEntity("http://localhost:" + serverPort + "api/subjects/" + l.getUuid(), Subject.class);
+		ResponseEntity<SubjectDto> addResp = template
+				.getForEntity("http://localhost:" + serverPort + "api/subjects/" + l.getUuid(), SubjectDto.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 		assertEquals(l.getUuid(), addResp.getBody().getUuid());
 
 		addResp = template.getForEntity("http://localhost:" + serverPort + "api/subjects/" + l.getUuid() + 1,
-				Subject.class);
+				SubjectDto.class);
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.NOT_FOUND.value(), addResp.getStatusCode().value());
 	}
