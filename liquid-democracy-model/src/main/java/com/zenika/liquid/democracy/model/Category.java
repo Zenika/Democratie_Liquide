@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -77,6 +78,12 @@ public class Category {
 
 	public void removePower(Power power) {
 		powers.remove(power);
+	}
+
+	@JsonIgnore
+	public String getGivenDelegation(String userId) {
+		Optional<Power> p = this.findPower(userId);
+		return p.isPresent() ? p.get().getCollaboratorIdTo() : null;
 	}
 
 }
