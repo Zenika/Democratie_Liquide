@@ -1,6 +1,7 @@
 package com.zenika.liquid.democracy.api.subject.controller;
 
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.UndeletableSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
@@ -36,6 +37,15 @@ public class SubjectController {
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
                 .build();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{subjectUuid}")
+    public ResponseEntity<Void> deleteSubject(@PathVariable String subjectUuid)
+            throws UnexistingSubjectException, UndeletableSubjectException {
+
+        subjectService.deleteSubject(subjectUuid);
+
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(method = RequestMethod.GET)

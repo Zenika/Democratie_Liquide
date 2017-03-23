@@ -3,6 +3,7 @@ package com.zenika.liquid.democracy.api.subject.service.impl;
 import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
 import com.zenika.liquid.democracy.api.channel.persistence.ChannelRepository;
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.exception.UndeletableSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
@@ -93,6 +94,22 @@ public class SubjectServiceImpl implements SubjectService {
         }
 
         return prepareSubjectForResponse(subjectRepository.save(s), userId);
+    }
+
+    public void deleteSubject(String subjectUuid) throws UnexistingSubjectException, UndeletableSubjectException {
+        Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+        String userId = collaboratorService.currentUser().getEmail();
+
+        if (!s.isPresent()) {
+            throw new UnexistingSubjectException();
+        }
+
+        Subject sub = s.get();
+        if (!sub.isMine(userId) || sub.getVoteCount() != 0) {
+            throw new UndeletableSubjectException();
+        } else {
+            subjectRepository.delete(sub);
+        }
     }
 
     public List<SubjectDto> getSubjectsInProgress() {

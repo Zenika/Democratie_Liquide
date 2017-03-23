@@ -2,6 +2,7 @@ package com.zenika.liquid.democracy.api.subject.service;
 
 import java.util.List;
 
+import com.zenika.liquid.democracy.api.exception.UndeletableSubjectException;
 import com.zenika.liquid.democracy.dto.SubjectDto;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public interface SubjectService {
 	public SubjectDto addSubject(Subject s)
 	        throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
 	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException;
+
+	public void deleteSubject(String subjectUuid) throws UnexistingSubjectException, UndeletableSubjectException;
 
 	public List<SubjectDto> getSubjectsInProgress();
 
