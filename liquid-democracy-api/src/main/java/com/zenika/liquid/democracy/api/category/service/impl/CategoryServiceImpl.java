@@ -6,6 +6,7 @@ import com.zenika.liquid.democracy.api.category.exception.UnexistingCategoryExce
 import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
 import com.zenika.liquid.democracy.api.category.service.CategoryService;
 import com.zenika.liquid.democracy.api.category.util.CategoryUtil;
+import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.config.MapperConfig;
 import com.zenika.liquid.democracy.dto.CategoryDto;
 import com.zenika.liquid.democracy.model.Category;
@@ -23,6 +24,9 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private CollaboratorService collaboratorService;
+
+    @Autowired
     MapperConfig mapper;
 
     public CategoryDto addCategory(Category newCategory) throws MalformedCategoryException, ExistingCategoryException {
@@ -38,11 +42,13 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ExistingCategoryException();
         }
 
-        return prepareCategoryForResponse(categoryRepository.save(newCategory));
+        String userId = collaboratorService.currentUser().getEmail();
+        return prepareCategoryForResponse(categoryRepository.save(newCategory), userId);
     }
 
     public List<CategoryDto> getCategories() {
-        return categoryRepository.findAll().stream().map(c -> prepareCategoryForResponse(c)).collect(Collectors.toList());
+        String userId = collaboratorService.currentUser().getEmail();
+        return categoryRepository.findAll().stream().map(c -> prepareCategoryForResponse(c, userId)).collect(Collectors.toList());
     }
 
     public CategoryDto getCategoryByUuid(String categoryUuid) throws UnexistingCategoryException {
@@ -52,11 +58,15 @@ public class CategoryServiceImpl implements CategoryService {
             throw new UnexistingCategoryException();
         }
 
-        return prepareCategoryForResponse(c.get());
+        String userId = collaboratorService.currentUser().getEmail();
+        return prepareCategoryForResponse(c.get(), userId);
     }
 
-    private CategoryDto prepareCategoryForResponse(Category c) {
-        return mapper.map(c, CategoryDto.class);
+    private CategoryDto prepareCategoryForResponse(Category c, String userId) {
+
+        CategoryDto cdto = mapper.map(c, CategoryDto.class);
+        cdto.setGivenDelegation(c.getGivenDelegation(userId));
+        return cdto;
     }
 
 }
