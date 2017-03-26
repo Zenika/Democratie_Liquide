@@ -15,6 +15,7 @@ import com.zenika.liquid.democracy.api.subject.service.SubjectService;
 import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.config.MapperConfig;
+import com.zenika.liquid.democracy.dto.PropositionDto;
 import com.zenika.liquid.democracy.dto.SubjectDto;
 import com.zenika.liquid.democracy.model.Category;
 import com.zenika.liquid.democracy.model.Channel;
@@ -150,6 +151,13 @@ public class SubjectServiceImpl implements SubjectService {
         sdto.setGivenDelegation(s.getGivenDelegation(userId));
         sdto.setReceivedDelegations(s.getReceivedDelegations(userId));
         sdto.setVoteCount(s.getVoteCount());
+        List<PropositionDto> propositions = sdto.getPropositions();
+        if (!sdto.getIsVoted()) {
+            sdto.setPropositions(propositions.stream().map(p -> {
+                p.setPoints(0);
+                return p;
+            }).collect(Collectors.toList()));
+        }
         return sdto;
     }
 
