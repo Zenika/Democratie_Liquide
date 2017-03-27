@@ -152,7 +152,7 @@ public class SubjectServiceImpl implements SubjectService {
         sdto.setReceivedDelegations(s.getReceivedDelegations(userId));
         sdto.setVoteCount(s.getVoteCount());
         List<PropositionDto> propositions = sdto.getPropositions();
-        if (!sdto.getIsVoted()) {
+        if (!sdto.getIsVoted() && !sdto.getIsClosed()) {
             sdto.setPropositions(propositions.stream().map(p -> {
                 p.setPoints(0);
                 return p;
