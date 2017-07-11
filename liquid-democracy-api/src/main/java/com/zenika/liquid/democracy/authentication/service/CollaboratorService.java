@@ -1,14 +1,15 @@
 package com.zenika.liquid.democracy.authentication.service;
 
+import com.zenika.liquid.democracy.authentication.persistence.CollaboratorRepository;
+import com.zenika.liquid.democracy.authentication.security.bean.SocialUserDetailsImpl;
+import com.zenika.si.core.zenika.model.Collaborator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.zenika.liquid.democracy.authentication.persistence.CollaboratorRepository;
-import com.zenika.liquid.democracy.authentication.security.bean.SocialUserDetailsImpl;
-import com.zenika.si.core.zenika.model.Collaborator;
+import java.util.List;
 
 @Service
 public class CollaboratorService {
@@ -25,5 +26,9 @@ public class CollaboratorService {
 	public Collaborator currentUser() {
 		return getAuthenticatedUser().getUser();
 	}
+
+	public List<Collaborator> getUsers() {
+        return collaboratorRepository.findAll();
+    }
 
 }

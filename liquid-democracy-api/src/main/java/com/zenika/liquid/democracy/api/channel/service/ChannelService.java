@@ -10,16 +10,16 @@ import java.util.List;
 @Service
 public interface ChannelService {
 
-    public ChannelDto addChannel(Channel c) throws MalformedChannelException, UserAlreadyInChannelException, ExistingChannelException;
+    ChannelDto addChannel(Channel c) throws MalformedChannelException, UserAlreadyInChannelException, ExistingChannelException;
 
-    public List<ChannelDto> getChannels();
+    List<ChannelDto> getChannels();
 
-    public Channel getChannelByUuid(String channelUuid) throws UnexistingChannelException;
+    Channel getChannelByUuid(String channelUuid) throws UnexistingChannelException;
 
-    public ChannelDto getChannelDtoByUuid(String channelUuid) throws UnexistingChannelException;
+    ChannelDto getChannelDtoByUuid(String channelUuid) throws UnexistingChannelException;
 
-    public void joinChannel(Channel c) throws UserAlreadyInChannelException;
+    void joinChannel(Channel c) throws UserAlreadyInChannelException;
 
-    public void quitChannel(Channel c) throws UserNotInChannelException;
+    void quitChannel(Channel c) throws UserNotInChannelException;
 
 }
