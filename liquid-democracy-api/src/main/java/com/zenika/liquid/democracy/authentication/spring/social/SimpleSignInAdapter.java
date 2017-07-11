@@ -21,6 +21,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
 
 	@Autowired
 	private RememberMeServices rememberMeServices;
+
 	@Autowired
 	private SocialUserDetailsService socialUserDetailsService;
 
