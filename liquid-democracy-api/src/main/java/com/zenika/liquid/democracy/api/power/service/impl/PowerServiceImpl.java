@@ -2,11 +2,11 @@ package com.zenika.liquid.democracy.api.power.service.impl;
 
 import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.power.exception.*;
-import com.zenika.liquid.democracy.api.subject.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.power.service.PowerService;
 import com.zenika.liquid.democracy.api.power.util.PowerUtil;
+import com.zenika.liquid.democracy.api.subject.persistence.SubjectRepository;
+import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.model.Category;
 import com.zenika.liquid.democracy.model.Power;
@@ -25,48 +25,42 @@ import java.util.Optional;
 @Retryable(OptimisticLockingFailureException.class)
 public class PowerServiceImpl implements PowerService {
 
-	@Autowired
-	private SubjectRepository subjectRepository;
+	private final SubjectRepository subjectRepository;
+
+	private final CategoryRepository categoryRepository;
+
+	private final CollaboratorService collaboratorService;
 
 	@Autowired
-	private CategoryRepository categoryRepository;
+	public PowerServiceImpl(SubjectRepository subjectRepository, CategoryRepository categoryRepository, CollaboratorService collaboratorService) {
+	    this.subjectRepository = subjectRepository;
+	    this.categoryRepository = categoryRepository;
+	    this.collaboratorService = collaboratorService;
+    }
 
-	@Autowired
-	private CollaboratorService collaboratorService;
+	public void addPowerOnSubject(final String subjectUuid, final Power power) {
+		final String userId = collaboratorService.currentUser().getEmail();
 
-	public void addPowerOnSubject(String subjectUuid, Power power)
-	        throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+		final Subject subject = subjectRepository.findSubjectByUuid(subjectUuid)
+                .orElseThrow(AddPowerOnNonExistingSubjectException::new);
 
-		String userId = collaboratorService.currentUser().getEmail();
+		PowerUtil.checkPowerForAddition(power, subject, userId);
+		PowerUtil.preparePower(power, subject, userId);
 
-		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
-		if (!s.isPresent()) {
-			throw new AddPowerOnNonExistingSubjectException();
-		}
-
-		boolean addVote = PowerUtil.checkPowerForAddition(power, s.get(), userId);
-
-		PowerUtil.preparePower(power, s.get(), userId, addVote);
-
-		subjectRepository.save(s.get());
-
+		subjectRepository.save(subject);
 	}
 
 	@Override
-	public void addPowerOnCategory(String categoryUuid, Power power) throws AddPowerOnNonExistingCategoryException,
-	        UserAlreadyGavePowerException, UserGivePowerToHimselfException {
-		String userId = collaboratorService.currentUser().getEmail();
+	public void addPowerOnCategory(final String categoryUuid, final Power power) {
+		final String userId = collaboratorService.currentUser().getEmail();
 
-		Optional<Category> c = categoryRepository.findCategoryByUuid(categoryUuid);
-		if (!c.isPresent()) {
-			throw new AddPowerOnNonExistingCategoryException();
-		}
+		final Category category = categoryRepository.findCategoryByUuid(categoryUuid)
+                .orElseThrow(AddPowerOnNonExistingCategoryException::new);
 
-		PowerUtil.checkCategoryPowerForAddition(power, c.get(), userId);
-		PowerUtil.prepareCategoryPower(power, c.get(), userId);
+		PowerUtil.checkCategoryPowerForAddition(power, category, userId);
+		PowerUtil.prepareCategoryPower(power, category, userId);
 
-		List<Subject> subjectsInCategory = subjectRepository.findSubjectByCategoryUuid(categoryUuid);
+		final List<Subject> subjectsInCategory = subjectRepository.findSubjectByCategoryUuid(categoryUuid);
 		for (Subject subject : subjectsInCategory) {
 			try {
 				Power powerTmp = new Power();
@@ -78,42 +72,34 @@ public class PowerServiceImpl implements PowerService {
 			}
 		}
 
-		categoryRepository.save(c.get());
+		categoryRepository.save(category);
 	}
 
-	public void deletePowerOnSubject(String subjectUuid) throws DeletePowerOnNonExistingSubjectException,
-			DeleteNonExistingPowerException, CloseSubjectException, UserAlreadyVoteException {
+	public void deletePowerOnSubject(final String subjectUuid) {
+		final String userId = collaboratorService.currentUser().getEmail();
 
-		String userId = collaboratorService.currentUser().getEmail();
+		final Subject s = subjectRepository.findSubjectByUuid(subjectUuid)
+                .orElseThrow(DeletePowerOnNonExistingSubjectException::new);
 
-		Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
-		if (!s.isPresent()) {
-			throw new DeletePowerOnNonExistingSubjectException();
-		}
+		final Power power = PowerUtil.checkPowerForDelete(s, userId);
 
-		Power power = PowerUtil.checkPowerForDelete(s.get(), userId);
+		s.removePower(power);
 
-		s.get().removePower(power);
-
-		subjectRepository.save(s.get());
-
+		subjectRepository.save(s);
 	}
 
 	@Override
-	public void deletePowerOnCategory(String categoryUuid)
-	        throws DeletePowerOnNonExistingCategoryException, DeleteNonExistingPowerException {
-		String userId = collaboratorService.currentUser().getEmail();
+	public void deletePowerOnCategory(String categoryUuid) {
+		final String userId = collaboratorService.currentUser().getEmail();
 
-		Optional<Category> c = categoryRepository.findCategoryByUuid(categoryUuid);
-		if (!c.isPresent()) {
-			throw new DeletePowerOnNonExistingCategoryException();
-		}
+		final Category c = categoryRepository.findCategoryByUuid(categoryUuid)
+                .orElseThrow(DeletePowerOnNonExistingCategoryException::new);
 
-		Power power = PowerUtil.checkCategoryPowerForDelete(c.get(), userId);
+		final Power power = PowerUtil.checkCategoryPowerForDelete(c, userId);
 
-		c.get().removePower(power);
+		c.removePower(power);
 
-		List<Subject> subjectsInCategory = subjectRepository.findSubjectByCategoryUuid(categoryUuid);
+		final List<Subject> subjectsInCategory = subjectRepository.findSubjectByCategoryUuid(categoryUuid);
 		for (Subject subject : subjectsInCategory) {
 			try {
 				Optional<Power> powerTmp = subject.findPower(userId);
@@ -127,7 +113,6 @@ public class PowerServiceImpl implements PowerService {
 			}
 		}
 
-		categoryRepository.save(c.get());
-
+		categoryRepository.save(c);
 	}
 }

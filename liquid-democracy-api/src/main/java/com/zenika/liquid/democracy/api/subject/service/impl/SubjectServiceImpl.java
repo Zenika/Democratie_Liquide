@@ -2,17 +2,12 @@ package com.zenika.liquid.democracy.api.subject.service.impl;
 
 import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
 import com.zenika.liquid.democracy.api.channel.persistence.ChannelRepository;
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.exception.UndeletableSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfException;
 import com.zenika.liquid.democracy.api.power.util.PowerUtil;
 import com.zenika.liquid.democracy.api.subject.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.subject.persistence.SubjectRepository;
 import com.zenika.liquid.democracy.api.subject.service.SubjectService;
-import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.authentication.service.CollaboratorService;
 import com.zenika.liquid.democracy.config.MapperConfig;
 import com.zenika.liquid.democracy.dto.PropositionDto;
@@ -26,91 +21,84 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
 
-    @Autowired
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
+
+    private final CategoryRepository categoryRepository;
+
+    private final ChannelRepository channelRepository;
+
+    private final CollaboratorService collaboratorService;
+
+    private final MapperConfig mapper;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    public SubjectServiceImpl(
+            SubjectRepository subjectRepository,
+            CategoryRepository categoryRepository,
+            ChannelRepository channelRepository,
+            CollaboratorService collaboratorService,
+            MapperConfig mapper
+    ) {
+        this.subjectRepository = subjectRepository;
+        this.categoryRepository = categoryRepository;
+        this.channelRepository = channelRepository;
+        this.collaboratorService = collaboratorService;
+        this.mapper = mapper;
+    }
 
-    @Autowired
-    private ChannelRepository channelRepository;
-
-    @Autowired
-    private CollaboratorService collaboratorService;
-
-
-    @Autowired
-    MapperConfig mapper;
-
-    public SubjectDto addSubject(Subject s)
-            throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-            UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
-
+    public SubjectDto addSubject(Subject subject) {
         String userId = collaboratorService.currentUser().getEmail();
 
-        if (s.getCategory() != null) {
-            Optional<Category> category = categoryRepository.findCategoryByUuid(s.getCategory().getUuid());
-
-            if (!category.isPresent()) {
-                throw new MalformedSubjectException();
-            } else {
-                s.setCategory(category.get());
-            }
+        if (subject.getCategory() != null) {
+            Category category = categoryRepository.findCategoryByUuid(subject.getCategory().getUuid())
+                    .orElseThrow(MalformedSubjectException::new);
+            subject.setCategory(category);
         }
 
-        if (s.getChannel() != null) {
-            Optional<Channel> channel = channelRepository.findChannelByUuid(s.getChannel().getUuid());
-
-            if (!channel.isPresent()) {
-                throw new MalformedSubjectException();
-            } else {
-                s.setChannel(channel.get());
-            }
+        if (subject.getChannel() != null) {
+            Channel channel = channelRepository.findChannelByUuid(subject.getChannel().getUuid())
+                    .orElseThrow(MalformedSubjectException::new);
+            subject.setChannel(channel);
         }
 
-        if (!s.isWellFormed()) {
+        if (!subject.isWellFormed()) {
             throw new MalformedSubjectException();
         }
 
-        s.setSubmitDate(new Date());
-        s.setCollaboratorId(userId);
+        subject.setSubmitDate(new Date());
+        subject.setCollaboratorId(userId);
 
-        s = subjectRepository.save(s);
+        subject = subjectRepository.save(subject);
 
-        if (s.getCategory() != null) {
-            for (Power power : s.getCategory().getPowers()) {
+        if (subject.getCategory() != null) {
+            for (Power power : subject.getCategory().getPowers()) {
                 Power powerTmp = new Power();
                 powerTmp.setCollaboratorIdTo(power.getCollaboratorIdTo());
 
-                boolean addVote = PowerUtil.checkPowerForAddition(powerTmp, s, power.getCollaboratorIdFrom());
-
-                PowerUtil.preparePower(powerTmp, s, power.getCollaboratorIdFrom(), addVote);
+                PowerUtil.checkPowerForAddition(powerTmp, subject, power.getCollaboratorIdFrom());
+                PowerUtil.preparePower(powerTmp, subject, power.getCollaboratorIdFrom());
             }
         }
 
-        return prepareSubjectForResponse(subjectRepository.save(s), userId);
+        return prepareSubjectForResponse(subjectRepository.save(subject), userId);
     }
 
-    public void deleteSubject(String subjectUuid) throws UnexistingSubjectException, UndeletableSubjectException {
-        Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+    public void deleteSubject(String subjectUuid) {
+        Subject subject = subjectRepository.findSubjectByUuid(subjectUuid)
+                .orElseThrow(UnexistingSubjectException::new);
+
         String userId = collaboratorService.currentUser().getEmail();
 
-        if (!s.isPresent()) {
-            throw new UnexistingSubjectException();
+        if (!subject.isMine(userId) || subject.getVoteCount() != 0) {
+            throw new UndeletableSubjectException();
         }
 
-        Subject sub = s.get();
-        if (!sub.isMine(userId) || sub.getVoteCount() != 0) {
-            throw new UndeletableSubjectException();
-        } else {
-            subjectRepository.delete(sub);
-        }
+        subjectRepository.delete(subject);
     }
 
     public List<SubjectDto> getSubjectsInProgress() {
@@ -132,15 +120,13 @@ public class SubjectServiceImpl implements SubjectService {
                 .collect(Collectors.toList());
     }
 
-    public SubjectDto getSubjectByUuid(String subjectUuid) throws UnexistingSubjectException {
-        Optional<Subject> s = subjectRepository.findSubjectByUuid(subjectUuid);
+    public SubjectDto getSubjectByUuid(String subjectUuid) {
+        Subject subject = subjectRepository.findSubjectByUuid(subjectUuid)
+                .orElseThrow(UnexistingSubjectException::new);
+
         String userId = collaboratorService.currentUser().getEmail();
 
-        if (!s.isPresent()) {
-            throw new UnexistingSubjectException();
-        }
-
-        return prepareSubjectForResponse(s.get(), userId);
+        return prepareSubjectForResponse(subject, userId);
     }
 
     private SubjectDto prepareSubjectForResponse(Subject s, String userId) {

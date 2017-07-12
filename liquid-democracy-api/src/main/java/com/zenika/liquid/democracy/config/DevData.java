@@ -22,16 +22,18 @@ import java.util.List;
 @Component
 public class DevData {
 
+    private final SubjectRepository subjectRepository;
 
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final ChannelRepository channelRepository;
 
     @Autowired
-    private ChannelRepository channelRepository;
+    public DevData(SubjectRepository subjectRepository, CategoryRepository categoryRepository, ChannelRepository channelRepository) {
+        this.subjectRepository = subjectRepository;
+        this.categoryRepository = categoryRepository;
+        this.channelRepository = channelRepository;
+    }
 
     @PostConstruct
     public void init() {

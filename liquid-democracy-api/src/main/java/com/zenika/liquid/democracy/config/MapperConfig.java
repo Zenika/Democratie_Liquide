@@ -7,9 +7,6 @@ import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by pc on 08/03/2017.
- */
 @Component
 public class MapperConfig extends ConfigurableMapper {
 

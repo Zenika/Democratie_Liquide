@@ -1,41 +1,33 @@
 package com.zenika.liquid.democracy.api.vote.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.vote.exception.TooManyPointsException;
 import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.vote.exception.VoteForNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.vote.exception.VoteIsNotCorrectException;
 import com.zenika.liquid.democracy.api.vote.exception.VotePropositionIncorrectException;
 import com.zenika.liquid.democracy.api.vote.service.VoteService;
 import com.zenika.liquid.democracy.model.Vote;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/votes")
 public class VoteController {
 
+	private final VoteService voteService;
+
 	@Autowired
-	private VoteService voteService;
+	public VoteController(VoteService voteService) {
+	    this.voteService = voteService;
+    }
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{subjectUuid}")
-	public ResponseEntity<Void> voteForSubject(@PathVariable String subjectUuid, @Validated @RequestBody Vote vote)
-			throws VoteForNonExistingSubjectException, VoteIsNotCorrectException, CloseSubjectException,
-			UserAlreadyGavePowerException {
-
+	public ResponseEntity<Void> voteForSubject(@PathVariable String subjectUuid, @Validated @RequestBody Vote vote) {
 		voteService.voteForSubject(subjectUuid, vote);
-
 		return ResponseEntity.ok().build();
 	}
 

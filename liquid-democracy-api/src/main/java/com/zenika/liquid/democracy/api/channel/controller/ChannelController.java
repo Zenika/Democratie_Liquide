@@ -17,35 +17,35 @@ import java.util.List;
 @RequestMapping("/api/channels")
 public class ChannelController {
 
+    private final ChannelService channelService;
+
     @Autowired
-    private ChannelService channelService;
+    public ChannelController(ChannelService channelService) {
+        this.channelService = channelService;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> addChannel(@Validated @RequestBody Channel c) throws MalformedChannelException, UserAlreadyInChannelException, ExistingChannelException {
-
+    public ResponseEntity<Void> addChannel(@Validated @RequestBody Channel c) {
         ChannelDto out = channelService.addChannel(c);
-
         return ResponseEntity.created(
-                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
-                .build();
+                ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(out.getUuid())
+                        .toUri()
+        ).build();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<ChannelDto>> getChannels() {
-
         List<ChannelDto> out = channelService.getChannels();
-
         if (out.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
         }
-
         return ResponseEntity.ok(out);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{channelUuid}/join")
-    public ResponseEntity<Void> joinChannel(@PathVariable String channelUuid)
-            throws UnexistingChannelException, UserAlreadyInChannelException {
-
+    public ResponseEntity<Void> joinChannel(@PathVariable String channelUuid) {
         Channel c = channelService.getChannelByUuid(channelUuid);
         channelService.joinChannel(c);
 
@@ -53,9 +53,7 @@ public class ChannelController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{channelUuid}/quit")
-    public ResponseEntity<Void> quitChannel(@PathVariable String channelUuid)
-            throws UnexistingChannelException, UserNotInChannelException {
-
+    public ResponseEntity<Void> quitChannel(@PathVariable String channelUuid) {
         Channel c = channelService.getChannelByUuid(channelUuid);
         channelService.quitChannel(c);
 
@@ -63,9 +61,7 @@ public class ChannelController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{channelUuid}")
-    public ResponseEntity<ChannelDto> getChannelByUuid(@PathVariable String channelUuid)
-            throws UnexistingChannelException {
-
+    public ResponseEntity<ChannelDto> getChannelByUuid(@PathVariable String channelUuid) {
         ChannelDto c = channelService.getChannelDtoByUuid(channelUuid);
 
         return ResponseEntity.ok().body(c);

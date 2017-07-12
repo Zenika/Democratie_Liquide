@@ -1,6 +1,6 @@
 package com.zenika.liquid.democracy.api.exception;
 
-public class CloseSubjectException extends Exception {
+public class CloseSubjectException extends RuntimeException {
 
 	public CloseSubjectException() {
 	}

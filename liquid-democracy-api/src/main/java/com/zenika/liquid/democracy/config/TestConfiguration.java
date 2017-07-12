@@ -2,6 +2,7 @@ package com.zenika.liquid.democracy.config;
 
 import java.io.IOException;
 
+import com.zenika.liquid.democracy.authentication.persistence.CollaboratorRepository;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Level;
@@ -22,35 +23,8 @@ public class TestConfiguration {
 	private static final String DATE_PATTERN = "yyyy-MM-dd";
 
 	@Bean
-	public CollaboratorService collaboratorService() {
-		return new CollaboratorServiceStub();
-	}
-
-	public ConsoleAppender consoleAppender() {
-		PatternLayout patternLayout = new PatternLayout(PATTERN);
-		ConsoleAppender consoleAppender = new ConsoleAppender(patternLayout);
-		consoleAppender.setThreshold(Level.ALL);
-		return consoleAppender;
-	}
-
-	public DailyRollingFileAppender apiFileAppender() throws IOException {
-		PatternLayout patternLayout = new PatternLayout(PATTERN);
-
-		DailyRollingFileAppender apiFileAppender = new DailyRollingFileAppender(patternLayout,
-				"./logs/liquid_democracy_api.log", DATE_PATTERN);
-		apiFileAppender.setThreshold(Level.ALL);
-
-		return apiFileAppender;
-	}
-
-	public DailyRollingFileAppender applicationFileAppender() throws IOException {
-		PatternLayout patternLayout = new PatternLayout(PATTERN);
-
-		DailyRollingFileAppender apiFileAppender = new DailyRollingFileAppender(patternLayout,
-				"./logs/liquid_democracy_application.log", DATE_PATTERN);
-		apiFileAppender.setThreshold(Level.ERROR);
-
-		return apiFileAppender;
+	public CollaboratorService collaboratorService(CollaboratorRepository collaboratorRepository) {
+		return new CollaboratorServiceStub(collaboratorRepository);
 	}
 
 	@Bean
@@ -71,6 +45,34 @@ public class TestConfiguration {
 		apiLogger.addAppender(consoleAppender());
 
 		return apiLogger;
+	}
+
+
+	private ConsoleAppender consoleAppender() {
+		PatternLayout patternLayout = new PatternLayout(PATTERN);
+		ConsoleAppender consoleAppender = new ConsoleAppender(patternLayout);
+		consoleAppender.setThreshold(Level.ALL);
+		return consoleAppender;
+	}
+
+	private DailyRollingFileAppender apiFileAppender() throws IOException {
+		PatternLayout patternLayout = new PatternLayout(PATTERN);
+
+		DailyRollingFileAppender apiFileAppender = new DailyRollingFileAppender(patternLayout,
+				"./logs/liquid_democracy_api.log", DATE_PATTERN);
+		apiFileAppender.setThreshold(Level.ALL);
+
+		return apiFileAppender;
+	}
+
+	private DailyRollingFileAppender applicationFileAppender() throws IOException {
+		PatternLayout patternLayout = new PatternLayout(PATTERN);
+
+		DailyRollingFileAppender apiFileAppender = new DailyRollingFileAppender(patternLayout,
+				"./logs/liquid_democracy_application.log", DATE_PATTERN);
+		apiFileAppender.setThreshold(Level.ERROR);
+
+		return apiFileAppender;
 	}
 
 }

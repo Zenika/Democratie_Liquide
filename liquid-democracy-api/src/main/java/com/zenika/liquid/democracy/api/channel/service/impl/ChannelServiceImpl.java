@@ -1,6 +1,8 @@
 package com.zenika.liquid.democracy.api.channel.service.impl;
 
-import com.zenika.liquid.democracy.api.channel.exception.*;
+import com.zenika.liquid.democracy.api.channel.exception.ExistingChannelException;
+import com.zenika.liquid.democracy.api.channel.exception.UnexistingChannelException;
+import com.zenika.liquid.democracy.api.channel.exception.UserNotInChannelException;
 import com.zenika.liquid.democracy.api.channel.persistence.ChannelRepository;
 import com.zenika.liquid.democracy.api.channel.service.ChannelService;
 import com.zenika.liquid.democracy.api.channel.util.ChannelUtil;
@@ -19,17 +21,20 @@ import java.util.stream.Collectors;
 @Service
 public class ChannelServiceImpl implements ChannelService {
 
-    @Autowired
-    private ChannelRepository channelRepository;
+    private final ChannelRepository channelRepository;
+
+    private final CollaboratorService collaboratorService;
+
+    private final MapperConfig mapper;
 
     @Autowired
-    private CollaboratorService collaboratorService;
+    public ChannelServiceImpl(ChannelRepository channelRepository, CollaboratorService collaboratorService, MapperConfig mapper) {
+        this.channelRepository = channelRepository;
+        this.collaboratorService = collaboratorService;
+        this.mapper = mapper;
+    }
 
-    @Autowired
-    MapperConfig mapper;
-
-    public ChannelDto addChannel(Channel newChannel) throws MalformedChannelException, UserAlreadyInChannelException, ExistingChannelException {
-
+    public ChannelDto addChannel(Channel newChannel) {
         // check channel not blank
         ChannelUtil.checkChannel(newChannel);
 
@@ -48,45 +53,36 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     public List<ChannelDto> getChannels() {
-        return channelRepository.findAll().stream().map(c -> prepareChannelForResponse(c)).collect(Collectors.toList());
+        return channelRepository.findAll().stream()
+                .map(this::prepareChannelForResponse)
+                .collect(Collectors.toList());
     }
 
-    public Channel getChannelByUuid(String channelUuid) throws UnexistingChannelException {
-        return getChannel(channelUuid);
+    public Channel getChannelByUuid(String channelUuid) {
+        return channelRepository.findChannelByUuid(channelUuid)
+                .orElseThrow(UnexistingChannelException::new);
     }
 
-    public ChannelDto getChannelDtoByUuid(String channelUuid) throws UnexistingChannelException {
-        return prepareChannelForResponse(getChannel(channelUuid));
+    public ChannelDto getChannelDtoByUuid(String channelUuid) {
+        return prepareChannelForResponse(getChannelByUuid(channelUuid));
     }
 
-    public void joinChannel(Channel c) throws UserAlreadyInChannelException {
-
+    public void joinChannel(Channel c) {
         ChannelUtil.checkChannelForJoin(c, collaboratorService.currentUser().getCollaboratorId());
         c.getCollaborators().add(collaboratorService.currentUser());
         channelRepository.save(c);
     }
 
-    public void quitChannel(Channel c) throws UserNotInChannelException {
-
-        ChannelUtil.checkChannelForQuit(c, collaboratorService.currentUser().getCollaboratorId());
-        Optional<Collaborator> collaborator = c.findCollaborator(collaboratorService.currentUser().getCollaboratorId());
-        c.removeCollaborator(collaborator.get());
+    public void quitChannel(Channel c) {
+        Collaborator collaborator = c.findCollaborator(collaboratorService.currentUser().getCollaboratorId())
+                .orElseThrow(UserNotInChannelException::new);
+        c.removeCollaborator(collaborator);
         channelRepository.save(c);
     }
 
 
     private ChannelDto prepareChannelForResponse(Channel c) {
         return mapper.map(c, ChannelDto.class);
-    }
-
-    private Channel getChannel(String uuid) throws UnexistingChannelException {
-        Optional<Channel> c = channelRepository.findChannelByUuid(uuid);
-
-        if (!c.isPresent()) {
-            throw new UnexistingChannelException();
-        }
-
-        return c.get();
     }
 
 }
