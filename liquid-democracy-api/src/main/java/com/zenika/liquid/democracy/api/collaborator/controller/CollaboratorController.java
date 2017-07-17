@@ -13,22 +13,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/collaborators")
 public class CollaboratorController {
+
+    private final CollaboratorService collaboratorService;
+
     @Autowired
-    private CollaboratorService collaboratorService;
+    public CollaboratorController(CollaboratorService collaboratorService) {
+        this.collaboratorService = collaboratorService;
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/me")
     public ResponseEntity<Collaborator> getCurrentUser() {
-
         Collaborator out = collaboratorService.currentUser();
-
         return ResponseEntity.ok(out);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Collaborator>> getUsers() {
-
         List<Collaborator> out = collaboratorService.getUsers();
-
         return ResponseEntity.ok(out);
     }
 

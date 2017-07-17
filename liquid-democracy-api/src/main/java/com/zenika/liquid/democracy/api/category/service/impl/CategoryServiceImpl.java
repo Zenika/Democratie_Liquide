@@ -1,7 +1,6 @@
 package com.zenika.liquid.democracy.api.category.service.impl;
 
 import com.zenika.liquid.democracy.api.category.exception.ExistingCategoryException;
-import com.zenika.liquid.democracy.api.category.exception.MalformedCategoryException;
 import com.zenika.liquid.democracy.api.category.exception.UnexistingCategoryException;
 import com.zenika.liquid.democracy.api.category.persistence.CategoryRepository;
 import com.zenika.liquid.democracy.api.category.service.CategoryService;
@@ -20,17 +19,20 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    private final CollaboratorService collaboratorService;
+
+    private final MapperConfig mapper;
 
     @Autowired
-    private CollaboratorService collaboratorService;
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CollaboratorService collaboratorService, MapperConfig mapper) {
+        this.categoryRepository = categoryRepository;
+        this.collaboratorService = collaboratorService;
+        this.mapper = mapper;
+    }
 
-    @Autowired
-    MapperConfig mapper;
-
-    public CategoryDto addCategory(Category newCategory) throws MalformedCategoryException, ExistingCategoryException {
-
+    public CategoryDto addCategory(Category newCategory) {
         // check category not blank
         CategoryUtil.checkCategory(newCategory);
 
@@ -51,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll().stream().map(c -> prepareCategoryForResponse(c, userId)).collect(Collectors.toList());
     }
 
-    public CategoryDto getCategoryByUuid(String categoryUuid) throws UnexistingCategoryException {
+    public CategoryDto getCategoryByUuid(String categoryUuid) {
         Optional<Category> c = categoryRepository.findCategoryByUuid(categoryUuid);
 
         if (!c.isPresent()) {
@@ -63,7 +65,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private CategoryDto prepareCategoryForResponse(Category c, String userId) {
-
         CategoryDto cdto = mapper.map(c, CategoryDto.class);
         cdto.setGivenDelegation(c.getGivenDelegation(userId));
         return cdto;

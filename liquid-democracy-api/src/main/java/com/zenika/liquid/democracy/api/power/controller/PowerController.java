@@ -1,72 +1,47 @@
 package com.zenika.liquid.democracy.api.power.controller;
 
+import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.power.exception.*;
+import com.zenika.liquid.democracy.api.power.service.PowerService;
+import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.model.Power;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingCategoryException;
-import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.DeleteNonExistingPowerException;
-import com.zenika.liquid.democracy.api.power.exception.DeletePowerOnNonExistingCategoryException;
-import com.zenika.liquid.democracy.api.power.exception.DeletePowerOnNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfException;
-import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
-import com.zenika.liquid.democracy.api.power.service.PowerService;
-import com.zenika.liquid.democracy.model.Power;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/powers")
 public class PowerController {
 
+	private final PowerService powerService;
+
 	@Autowired
-	private PowerService powerService;
+	public PowerController(PowerService powerService) {
+	    this.powerService = powerService;
+    }
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/subjects/{subjectUuid}")
-	public ResponseEntity<Void> addPowerOnSubject(@RequestBody Power p, @PathVariable String subjectUuid)
-	        throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
-
+	public ResponseEntity<Void> addPowerOnSubject(@RequestBody Power p, @PathVariable String subjectUuid) {
 		powerService.addPowerOnSubject(subjectUuid, p);
-
 		return ResponseEntity.ok().build();
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/categories/{categoryUuid}")
-	public ResponseEntity<Void> addPowerOnCategory(@RequestBody Power p, @PathVariable String categoryUuid)
-	        throws AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException,
-	        AddPowerOnNonExistingCategoryException {
-
+	public ResponseEntity<Void> addPowerOnCategory(@RequestBody Power p, @PathVariable String categoryUuid) {
 		powerService.addPowerOnCategory(categoryUuid, p);
-
 		return ResponseEntity.ok().build();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/subjects/{subjectUuid}")
-	public ResponseEntity<Void> deletePowerOnSubject(@PathVariable String subjectUuid)
-	        throws DeletePowerOnNonExistingSubjectException, DeleteNonExistingPowerException, CloseSubjectException,
-	        UserAlreadyVoteException {
-
+	public ResponseEntity<Void> deletePowerOnSubject(@PathVariable String subjectUuid) {
 		powerService.deletePowerOnSubject(subjectUuid);
-
 		return ResponseEntity.ok().build();
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/categories/{categoryUuid}")
-	public ResponseEntity<Void> deletePowerOnCategory(@PathVariable String categoryUuid)
-	        throws DeletePowerOnNonExistingCategoryException, DeleteNonExistingPowerException {
-
+	public ResponseEntity<Void> deletePowerOnCategory(@PathVariable String categoryUuid) {
 		powerService.deletePowerOnCategory(categoryUuid);
-
 		return ResponseEntity.ok().build();
 	}
 
@@ -80,13 +55,13 @@ public class PowerController {
 	public void addPowerOnNonExistingCategoryHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous ou la personne avez déjà donné votre délégation")
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous avez déjà donné votre délégation")
 	@ExceptionHandler(UserAlreadyGavePowerException.class)
 	public void userAlreadyGavePowerHandler() {
 	}
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Vous ne pouvez pas donner délégation à vous-même")
-	@ExceptionHandler(UserGivePowerToHimselfException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Cette délégation entraine une dépendance circulaire")
+	@ExceptionHandler(CircularPowerDependencyException.class)
 	public void userGivePowerToHimselfHandler() {
 	}
 

@@ -1,89 +1,101 @@
 package com.zenika.liquid.democracy.api.vote.util;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
 import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
 import com.zenika.liquid.democracy.api.vote.exception.TooManyPointsException;
 import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.api.vote.exception.VotePropositionIncorrectException;
-import com.zenika.liquid.democracy.model.Power;
-import com.zenika.liquid.democracy.model.Proposition;
-import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Vote;
-import com.zenika.liquid.democracy.model.WeightedChoice;
+import com.zenika.liquid.democracy.model.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class VoteUtil {
 
-	public static void checkVotes(Vote vote, Subject s, String userId) throws VotePropositionIncorrectException,
-	        TooManyPointsException, UserAlreadyVoteException, CloseSubjectException, UserAlreadyGavePowerException {
+    public static void checkVotes(final Vote vote, final Subject subject, final String userId) {
+        if (subject.isClosed()) {
+            throw new CloseSubjectException();
+        }
 
-		if (s.isClosed()) {
-			throw new CloseSubjectException();
-		}
+        final Optional<Vote> foundVote = subject.findVote(userId);
+        if (foundVote.isPresent()) {
+            throw new UserAlreadyVoteException();
+        }
 
-		Optional<Vote> foundVote = s.findVote(userId);
+        final Optional<Power> foundPower = subject.findPower(userId);
+        if (foundPower.isPresent()) {
+            throw new UserAlreadyGavePowerException();
+        }
 
-		if (foundVote.isPresent()) {
-			throw new UserAlreadyVoteException();
-		}
+        final int pointsVoted = vote.getChoices().stream()
+                .mapToInt(WeightedChoice::getPoints)
+                .sum();
+        if (pointsVoted > subject.getMaxPoints()) {
+            throw new TooManyPointsException();
+        }
 
-		Optional<Power> foundPower = s.findPower(userId);
+        for (WeightedChoice c : vote.getChoices()) {
+            final Optional<Proposition> propositionFound = subject.getPropositions().stream()
+                    .filter(p -> p.getId().equals(c.getPropositionId()))
+                    .findFirst();
 
-		if (foundPower.isPresent()) {
-			throw new UserAlreadyGavePowerException();
-		}
+            propositionFound.orElseThrow(VotePropositionIncorrectException::new);
 
-		int pointsVoted = vote.getChoices().stream().collect(Collectors.summingInt(WeightedChoice::getPoints));
+            final long count = vote.getChoices().stream()
+                    .filter(cTmp -> cTmp.getPropositionId().equals(c.getPropositionId()))
+                    .count();
 
-		if (pointsVoted > s.getMaxPoints()) {
-			throw new TooManyPointsException();
-		}
+            if (count != 1) {
+                throw new VotePropositionIncorrectException();
+            }
+        }
 
-		for (WeightedChoice c : vote.getChoices()) {
-			Optional<Proposition> propositionFound = s.getPropositions().stream()
-			        .filter(p -> p.getId().equals(c.getPropositionId())).findFirst();
+    }
 
-			propositionFound.orElseThrow(VotePropositionIncorrectException::new);
+    public static void prepareVotes(final Vote vote, final Subject subject, final String userId) {
+        final List<Vote> votes = new ArrayList<>();
 
-			Stream<WeightedChoice> propositionsFound = vote.getChoices().stream()
-			        .filter(cTmp -> cTmp.getPropositionId().equals(c.getPropositionId()));
+        final Deque<String> users = new ArrayDeque<>();
+        users.add(userId);
 
-			if (propositionsFound.count() != 1) {
-				throw new VotePropositionIncorrectException();
-			}
-		}
+        while (!users.isEmpty()) {
+            final String user = users.pop();
 
-	}
+            final List<String> dependencies = subject.getPowers().stream()
+                    .filter(p -> p.getCollaboratorIdTo().equals(user))
+                    .map(Power::getCollaboratorIdFrom)
+                    .collect(Collectors.toList());
 
-	public static void prepareVotes(Vote vote, Subject s, String userId) {
-		List<Vote> votes = s.getPowers().stream().filter(p -> p.getCollaboratorIdTo().equals(userId)).map(power -> {
-			Vote v = new Vote();
-			v.setCollaboratorId(power.getCollaboratorIdFrom());
-			v.setChoices(vote.getChoices());
-			return v;
-		}).collect(Collectors.toList());
+            votes.addAll(
+                    dependencies.stream().map(d -> {
+                        final Vote v = new Vote();
+                        v.setCollaboratorId(d);
+                        v.setChoices(vote.getChoices());
+                        return v;
+                    })
+                            .collect(Collectors.toList())
+            );
 
-		vote.setCollaboratorId(userId);
+            users.addAll(dependencies);
+        }
 
-		s.getVotes().add(vote);
-		s.getVotes().addAll(votes);
+        vote.setCollaboratorId(userId);
 
-		compileResults(s);
-	}
+        subject.getVotes().add(vote);
+        subject.getVotes().addAll(votes);
 
-	public static void compileResults(Subject s) {
-		for (Proposition p : s.getPropositions()) {
-			p.setPoints(0);
-			s.getVotes().stream().forEach(v -> {
-				int nbPointsVoted = v.getChoices().stream().filter(c -> {
-				    return p.getId().equals(c.getPropositionId());
-			    }).collect(Collectors.summingInt(WeightedChoice::getPoints));
-				p.setPoints(nbPointsVoted + p.getPoints());
-			});
-		}
-	}
+        compileResults(subject);
+    }
+
+    public static void compileResults(final Subject s) {
+        for (Proposition p : s.getPropositions()) {
+            p.setPoints(0);
+            s.getVotes().forEach(v -> {
+                final int nbPointsVoted = v.getChoices().stream()
+                        .filter(c -> p.getId().equals(c.getPropositionId()))
+                        .mapToInt(WeightedChoice::getPoints).sum();
+                p.setPoints(nbPointsVoted + p.getPoints());
+            });
+        }
+    }
 }

@@ -1,14 +1,8 @@
 package com.zenika.liquid.democracy.api.subject.controller;
 
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.exception.UndeletableSubjectException;
 import com.zenika.liquid.democracy.api.exception.UnexistingSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.AddPowerOnNonExistingSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfException;
 import com.zenika.liquid.democracy.api.subject.exception.MalformedSubjectException;
 import com.zenika.liquid.democracy.api.subject.service.SubjectService;
-import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
 import com.zenika.liquid.democracy.dto.SubjectDto;
 import com.zenika.liquid.democracy.model.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,27 +18,27 @@ import java.util.List;
 @RequestMapping("/api/subjects")
 public class SubjectController {
 
+    private final SubjectService subjectService;
+
     @Autowired
-    private SubjectService subjectService;
+    public SubjectController(SubjectService subjectService) {
+        this.subjectService = subjectService;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s)
-            throws MalformedSubjectException, AddPowerOnNonExistingSubjectException, UserAlreadyGavePowerException,
-            UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
-
+    public ResponseEntity<Void> addSubject(@Validated @RequestBody Subject s) {
         SubjectDto out = subjectService.addSubject(s);
-
         return ResponseEntity.created(
-                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(out.getUuid()).toUri())
-                .build();
+                ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(out.getUuid())
+                        .toUri()
+        ).build();
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{subjectUuid}")
-    public ResponseEntity<Void> deleteSubject(@PathVariable String subjectUuid)
-            throws UnexistingSubjectException, UndeletableSubjectException {
-
+    public ResponseEntity<Void> deleteSubject(@PathVariable String subjectUuid) {
         subjectService.deleteSubject(subjectUuid);
-
         return ResponseEntity.ok().build();
     }
 
@@ -54,21 +48,16 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/inprogress")
-    public ResponseEntity<List<SubjectDto>> getSubjectsInProgress() throws MalformedSubjectException {
-
+    public ResponseEntity<List<SubjectDto>> getSubjectsInProgress() {
         List<SubjectDto> out = subjectService.getSubjectsInProgress();
-
         if (out.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(out);
         }
-
         return ResponseEntity.ok(out);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{subjectUuid}")
-    public ResponseEntity<SubjectDto> getSubjectByUuid(@PathVariable String subjectUuid)
-            throws UnexistingSubjectException {
-
+    public ResponseEntity<SubjectDto> getSubjectByUuid(@PathVariable String subjectUuid) {
         SubjectDto s = subjectService.getSubjectByUuid(subjectUuid);
         return ResponseEntity.ok().body(s);
     }

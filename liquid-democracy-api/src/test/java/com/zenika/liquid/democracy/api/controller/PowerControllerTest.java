@@ -36,10 +36,10 @@ import com.zenika.liquid.democracy.model.Subject;
 public class PowerControllerTest {
 
 	@Autowired
-	SubjectRepository repository;
+	private SubjectRepository subjectRepository;
 
 	@Autowired
-	CategoryRepository repositoryC;
+	private CategoryRepository categoryRepository;
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -54,7 +54,7 @@ public class PowerControllerTest {
 				return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
 			}
 		});
-		repository.deleteAll();
+		subjectRepository.deleteAll();
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class PowerControllerTest {
 		s.getPropositions().add(p2);
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
-		repository.save(s);
+		subjectRepository.save(s);
 
 		Power p = new Power();
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
@@ -80,7 +80,7 @@ public class PowerControllerTest {
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 
-		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		Optional<Subject> savedSubject = subjectRepository.findSubjectByUuid(s.getUuid());
 		assertEquals(true, savedSubject.isPresent());
 		assertEquals(true, savedSubject.get().findPower("sandra.parlant@zenika.com").isPresent());
 	}
@@ -102,7 +102,7 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.PUT,
@@ -124,7 +124,7 @@ public class PowerControllerTest {
 		s.getPropositions().add(p2);
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
-		repository.save(s);
+		subjectRepository.save(s);
 
 		Power p = new Power();
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
@@ -149,7 +149,7 @@ public class PowerControllerTest {
 		s.getPropositions().add(p2);
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
-		repository.save(s);
+		subjectRepository.save(s);
 
 		Power p = new Power();
 		p.setCollaboratorIdTo("sandra.parlant@zenika.com");
@@ -160,14 +160,14 @@ public class PowerControllerTest {
 
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.BAD_REQUEST.value(), addResp.getStatusCode().value());
-		assertEquals(true, addResp.getBody().toString().contains("UserGivePowerToHimselfException"));
+		assertEquals(true, addResp.getBody().toString().contains("CircularPowerDependencyException"));
 	}
 
 	@Test
 	public void addPowerOnCategoryTest() {
 		Category c = new Category();
 		c.setTitle("c1");
-		repositoryC.save(c);
+		categoryRepository.save(c);
 
 		Subject s = new Subject();
 		s.setTitle("Title");
@@ -179,7 +179,7 @@ public class PowerControllerTest {
 		p1.setTitle("P1 title");
 		p2.setTitle("P2 title");
 		s.setCategory(c);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		Power p = new Power();
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
@@ -191,11 +191,11 @@ public class PowerControllerTest {
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 
-		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		Optional<Subject> savedSubject = subjectRepository.findSubjectByUuid(s.getUuid());
 		assertEquals(true, savedSubject.isPresent());
 		assertEquals(true, savedSubject.get().findPower("sandra.parlant@zenika.com").isPresent());
 
-		Optional<Category> savedCategory = repositoryC.findCategoryByUuid(c.getUuid());
+		Optional<Category> savedCategory = categoryRepository.findCategoryByUuid(c.getUuid());
 		assertEquals(true, savedCategory.isPresent());
 		assertEquals(true, savedCategory.get().findPower("sandra.parlant@zenika.com").isPresent());
 	}
@@ -217,7 +217,7 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.DELETE,
@@ -231,7 +231,7 @@ public class PowerControllerTest {
 	public void deletePowerOnCategoryTest() {
 		Category c = new Category();
 		c.setTitle("c1");
-		repositoryC.save(c);
+		categoryRepository.save(c);
 
 		Subject s = new Subject();
 		s.setTitle("Title");
@@ -249,10 +249,10 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		c.getPowers().add(p);
-		repositoryC.save(c);
+		categoryRepository.save(c);
 
 		s.getPowers().add(p);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/categories/" + c.getUuid(), HttpMethod.DELETE,
@@ -261,10 +261,10 @@ public class PowerControllerTest {
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 
-		Optional<Category> savedCategory = repositoryC.findCategoryByUuid(c.getUuid());
+		Optional<Category> savedCategory = categoryRepository.findCategoryByUuid(c.getUuid());
 		assertEquals(savedCategory.get().getPowers().size(), 0);
 
-		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		Optional<Subject> savedSubject = subjectRepository.findSubjectByUuid(s.getUuid());
 		assertEquals(savedSubject.get().getPowers().size(), 0);
 	}
 
@@ -272,7 +272,7 @@ public class PowerControllerTest {
 	public void deletePowerOnCategoryWithinPowerOnSubjectTest() {
 		Category c = new Category();
 		c.setTitle("c1");
-		repositoryC.save(c);
+		categoryRepository.save(c);
 
 		Subject s = new Subject();
 		s.setTitle("Title");
@@ -290,13 +290,13 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		c.getPowers().add(p);
-		repositoryC.save(c);
+		categoryRepository.save(c);
 
 		Power powerS = new Power();
 		powerS.setCollaboratorIdFrom("sandra.parlant@zenika.com");
 		powerS.setCollaboratorIdTo("guillaume.gerbaud@zenika.com");
 		s.getPowers().add(powerS);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/categories/" + c.getUuid(), HttpMethod.DELETE,
@@ -305,10 +305,10 @@ public class PowerControllerTest {
 		assertNotNull(addResp);
 		assertEquals(HttpStatus.OK.value(), addResp.getStatusCode().value());
 
-		Optional<Category> savedCategory = repositoryC.findCategoryByUuid(c.getUuid());
+		Optional<Category> savedCategory = categoryRepository.findCategoryByUuid(c.getUuid());
 		assertEquals(savedCategory.get().getPowers().size(), 0);
 
-		Optional<Subject> savedSubject = repository.findSubjectByUuid(s.getUuid());
+		Optional<Subject> savedSubject = subjectRepository.findSubjectByUuid(s.getUuid());
 		assertEquals(savedSubject.get().getPowers().size(), 1);
 	}
 
@@ -329,7 +329,7 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid(), HttpMethod.DELETE,
@@ -357,7 +357,7 @@ public class PowerControllerTest {
 		p.setCollaboratorIdTo("julie.bourhis@zenika.com");
 
 		s.getPowers().add(p);
-		repository.save(s);
+		subjectRepository.save(s);
 
 		ResponseEntity<Object> addResp = template.exchange(
 		        "http://localhost:" + serverPort + "api/powers/subjects/" + s.getUuid() + 1, HttpMethod.DELETE,

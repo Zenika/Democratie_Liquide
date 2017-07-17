@@ -1,5 +1,5 @@
 package com.zenika.liquid.democracy.api.channel.exception;
 
-public class UserAlreadyInChannelException extends Exception {
+public class UserAlreadyInChannelException extends RuntimeException {
 
 }

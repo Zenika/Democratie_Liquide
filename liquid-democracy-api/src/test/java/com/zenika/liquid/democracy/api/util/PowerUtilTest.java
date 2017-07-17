@@ -1,29 +1,23 @@
 package com.zenika.liquid.democracy.api.util;
 
-import static org.junit.Assert.assertTrue;
+import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
+import com.zenika.liquid.democracy.api.power.exception.CircularPowerDependencyException;
+import com.zenika.liquid.democracy.api.power.exception.DeleteNonExistingPowerException;
+import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
+import com.zenika.liquid.democracy.api.power.util.PowerUtil;
+import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
+import com.zenika.liquid.democracy.model.*;
+import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import com.zenika.liquid.democracy.api.power.util.PowerUtil;
-import org.junit.Test;
-
-import com.zenika.liquid.democracy.api.exception.CloseSubjectException;
-import com.zenika.liquid.democracy.api.power.exception.DeleteNonExistingPowerException;
-import com.zenika.liquid.democracy.api.power.exception.UserAlreadyGavePowerException;
-import com.zenika.liquid.democracy.api.power.exception.UserGivePowerToHimselfException;
-import com.zenika.liquid.democracy.api.vote.exception.UserAlreadyVoteException;
-import com.zenika.liquid.democracy.model.Power;
-import com.zenika.liquid.democracy.model.Proposition;
-import com.zenika.liquid.democracy.model.Subject;
-import com.zenika.liquid.democracy.model.Vote;
-import com.zenika.liquid.democracy.model.WeightedChoice;
+import static org.junit.Assert.assertTrue;
 
 public class PowerUtilTest {
 
 	@Test
-	public void testCheckPowerForAddition_OK() throws UserAlreadyGavePowerException, UserGivePowerToHimselfException,
-	        CloseSubjectException, UserAlreadyVoteException {
+	public void testCheckPowerForAddition_OK() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);
 		Date deadLine = calendar.getTime();
@@ -49,8 +43,7 @@ public class PowerUtilTest {
 	}
 
 	@Test(expected = CloseSubjectException.class)
-	public void testCheckPowerForAddition_DeadLineKO() throws UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+	public void testCheckPowerForAddition_DeadLineKO() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, -1);
 		Date deadLine = calendar.getTime();
@@ -74,8 +67,7 @@ public class PowerUtilTest {
 	}
 
 	@Test(expected = UserAlreadyGavePowerException.class)
-	public void testCheckPowerForAddition_UserFromKO() throws UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+	public void testCheckPowerForAddition_UserFromKO() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);
 		Date deadLine = calendar.getTime();
@@ -105,9 +97,8 @@ public class PowerUtilTest {
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
 	}
 
-	@Test(expected = UserGivePowerToHimselfException.class)
-	public void testCheckPowerForAddition_UserFromEqualsToKO() throws UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, CloseSubjectException, UserAlreadyVoteException {
+	@Test(expected = CircularPowerDependencyException.class)
+	public void testCheckPowerForAddition_UserFromEqualsToKO() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);
 		Date deadLine = calendar.getTime();
@@ -131,8 +122,7 @@ public class PowerUtilTest {
 	}
 
 	@Test(expected = UserAlreadyVoteException.class)
-	public void testCheckPowerForAddition_AlreadyVotedKO() throws UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
+	public void testCheckPowerForAddition_AlreadyVotedKO() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);
 		Date deadLine = calendar.getTime();
@@ -160,8 +150,7 @@ public class PowerUtilTest {
 	}
 
 	@Test
-	public void testCheckPowerForAddition_CollabAlreadyVotedKO() throws UserAlreadyGavePowerException,
-	        UserGivePowerToHimselfException, UserAlreadyVoteException, CloseSubjectException {
+	public void testCheckPowerForAddition_CollabAlreadyVotedKO() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.YEAR, 1);
 		Date deadLine = calendar.getTime();
@@ -191,7 +180,7 @@ public class PowerUtilTest {
 		s.getVotes().add(v);
 
 		PowerUtil.checkPowerForAddition(p, s, "sandra.parlant@zenika.com");
-		PowerUtil.preparePower(p, s, "sandra.parlant@zenika.com", true);
+		PowerUtil.preparePower(p, s, "sandra.parlant@zenika.com");
 
 		assertTrue(s.getPropositions().get(0).getPoints() == 2);
 	}
